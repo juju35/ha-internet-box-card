@@ -9,7 +9,7 @@ const { STRINGS, RATE_UNITS, lang, InternetBoxCardEditor } = load("internet-box-
   "InternetBoxCardEditor",
 ]);
 
-const LANGS = ["en", "fr", "de", "es", "sr", "sr-Latn"];
+const LANGS = ["en", "fr", "de", "es", "sr", "sr-Latn", "it", "nl", "pt", "pl"];
 const enKeys = Object.keys(STRINGS.en).sort();
 const placeholders = (v) => (String(v).match(/\{\w+\}/g) || []).sort();
 
@@ -51,11 +51,33 @@ test("I18N language resolution: full tag, then the part before the dash, then En
   assert.equal(lang(undefined, { language: "fr-FR" }), "fr");
   assert.equal(lang(undefined, { language: "sr-Latn" }), "sr-Latn");
   assert.equal(lang(undefined, { language: "sr" }), "sr");
-  assert.equal(lang(undefined, { language: "pt-BR" }), "en");
   // Home Assistant set to Serbian Latin: picked automatically, the card option still wins.
   assert.equal(lang({ locale: { language: "sr-Latn" }, language: "sr-Latn" }, {}), "sr-Latn");
   assert.equal(lang({ language: "sr" }, {}), "sr");
   assert.equal(lang({ locale: { language: "sr-Latn" } }, { language: "de" }), "de");
+});
+
+test("I18N language resolution: Italian, Dutch, Portuguese and Polish, other tags fall back to English", () => {
+  const resolve = (language) => lang(undefined, { language });
+  assert.equal(resolve("it-IT"), "it");
+  assert.equal(resolve("nl-BE"), "nl");
+  assert.equal(resolve("pt"), "pt");
+  // Brazilian Portuguese falls back to the European Portuguese translation, by design.
+  assert.equal(resolve("pt-BR"), "pt");
+  assert.equal(resolve("pl-PL"), "pl");
+  assert.equal(resolve("sr-Latn"), "sr-Latn");
+  assert.equal(resolve("ja"), "en");
+  assert.equal(lang({ locale: { language: "pl-PL" } }, {}), "pl");
+});
+
+test("I18N parity: every language has the English rate units, same lengths", () => {
+  assert.deepEqual(Object.keys(RATE_UNITS).sort(), [...LANGS].sort());
+  for (const l of LANGS) {
+    for (const kind of ["bytes", "bits"]) {
+      assert.equal(RATE_UNITS[l][kind].length, RATE_UNITS.en[kind].length, `${l}.${kind}`);
+      for (const u of RATE_UNITS[l][kind]) assert.ok(u.trim(), `${l}.${kind} has an empty unit`);
+    }
+  }
 });
 
 test("I18N editor: the language dropdown offers every translation", () => {
@@ -66,4 +88,8 @@ test("I18N editor: the language dropdown offers every translation", () => {
   assert.equal(options.map((o) => o.value).join(), ["", ...LANGS].join());
   assert.equal(options.find((o) => o.value === "sr").label, "Српски");
   assert.equal(options.find((o) => o.value === "sr-Latn").label, "Srpski (latinica)");
+  assert.equal(options.find((o) => o.value === "it").label, "Italiano");
+  assert.equal(options.find((o) => o.value === "nl").label, "Nederlands");
+  assert.equal(options.find((o) => o.value === "pt").label, "Português");
+  assert.equal(options.find((o) => o.value === "pl").label, "Polski");
 });

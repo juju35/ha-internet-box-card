@@ -156,7 +156,7 @@ language: fr
 | `show_services` | full | `true` | Wi-Fi, missed calls and connected devices |
 | `zoom` | mini | `true` | Detail button at the top right: shows the full card (every section) in place of the mini card, and back |
 | `rate_unit` | both | `bytes` | Rates unit: `bytes` (kB/s, MB/s) or `bits` (kb/s, Mb/s) |
-| `language` | both | Auto | Force language: `en`, `fr`, `de`, `es`, `sr` or `sr-Latn` (auto-detects from HA settings) |
+| `language` | both | Auto | Force language: `en`, `fr`, `de`, `es`, `sr`, `sr-Latn`, `it`, `nl`, `pt` or `pl` (auto-detects from HA settings) |
 
 ## Supported models
 
@@ -267,6 +267,10 @@ The cards auto-detect the language from your Home Assistant settings. Currently 
 | Español | `es` |
 | Српски (Serbian, Cyrillic) | `sr` |
 | Srpski (Serbian, Latin) | `sr-Latn` |
+| Italiano | `it` |
+| Nederlands | `nl` |
+| Português (European) | `pt` |
+| Polski | `pl` |
 
 Contributions for additional languages are welcome!
 
