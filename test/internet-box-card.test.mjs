@@ -436,3 +436,23 @@ test("the restart button is disabled while the reboot button is unavailable", as
   off._openDialog = () => assert.fail("dialog opened");
   off._confirmRestart();
 });
+
+test("connected devices are shown as unavailable when every client tracker is, not as 0 / n", async () => {
+  const mock = await import("../scripts/mock-states.mjs");
+  const trackers = Object.keys(mock.states).filter((id) => id.startsWith("device_tracker.") && id !== ROUTER_ID);
+  const tile = (html) => html.match(/<div class="tile svc[^"]*" data-key="devices">.*?<\/div><\/div><\/div>/s)[0];
+  for (const state of ["unavailable", "unknown"]) {
+    const t = tile((await mockCard(Object.fromEntries(trackers.map((id) => [id, state]))))._render());
+    assert.match(t, /<div class="v">Unavailable<\/div>/, state);
+    assert.match(t, /class="tile svc off"/, state);
+    assert.doesNotMatch(t, /0 \//, state);
+  }
+  // Some trackers still known: they are counted, the unavailable ones are left out of the total.
+  const some = tile((await mockCard({ [trackers[0]]: "unavailable" }))._render());
+  const home = trackers.slice(1).filter((id) => mock.states[id].state === "home").length;
+  assert.match(some, new RegExp(`<div class="v">${home} / ${trackers.length - 1}</div>`));
+  assert.match(some, /class="tile svc ok"/);
+  // Every tracker known: unchanged.
+  const all = tile((await mockCard({}))._render());
+  assert.match(all, new RegExp(`<div class="v">${trackers.filter((id) => mock.states[id].state === "home").length} / ${trackers.length}</div>`));
+});

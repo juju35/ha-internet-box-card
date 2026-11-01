@@ -25,23 +25,28 @@ before(async () => {
 });
 after(() => browser?.close());
 
-// Renders a card at a width and measures its header and tiles.
-async function measure(type, width, language) {
+// ha-card as in Home Assistant: a block, so that it is the size container of the card's queries.
+const HA_CARD = `customElements.define("ha-card", class extends HTMLElement {
+  constructor() { super(); this.attachShadow({ mode: "open" }).innerHTML = "<style>:host{display:block}</style><slot></slot>"; }
+});`;
+
+// Every entity unavailable (the box is off or its integration failed).
+const unavailableStates = Object.fromEntries(Object.entries(states).map(([id, s]) => [id, { ...s, state: "unavailable", attributes: {} }]));
+
+// Renders a card at a width and measures its header and tiles. `zoom`: the mini card in its full view (detail
+// button); `unavailable`: every entity unavailable.
+async function measure(type, width, language, { zoom = false, unavailable = false } = {}) {
   const page = await browser.newPage();
   await page.setContent(`<!doctype html><body style="margin:0;font-family:sans-serif"><div id=root style="width:${width}px"></div></body>`);
-  // ha-card as in Home Assistant: a block, so that it is the size container of the card's queries.
-  await page.addScriptTag({
-    content: `customElements.define("ha-card", class extends HTMLElement {
-      constructor() { super(); this.attachShadow({ mode: "open" }).innerHTML = "<style>:host{display:block}</style><slot></slot>"; }
-    });`,
-  });
+  await page.addScriptTag({ content: HA_CARD });
   await page.addScriptTag({ content: src });
   const res = await page.evaluate(
-    async ({ type, language, states, entities, devices }) => {
+    async ({ type, language, zoom, states, entities, devices }) => {
       const el = document.createElement(type);
       el.setConfig({ type: `custom:${type}`, language });
       el.hass = { states, entities, devices, language, config: { time_zone: "UTC" } };
       document.getElementById("root").appendChild(el);
+      if (zoom) el.shadowRoot.querySelector(".zoom").dispatchEvent(new MouseEvent("click", { bubbles: true, composed: true, detail: 1 }));
       // The box picture (a data: URI) takes its width once loaded; a hidden one may never load.
       const imgs = [...el.shadowRoot.querySelectorAll("img")];
       await Promise.all(imgs.map((i) => (i.complete ? 0 : new Promise((r) => { i.onload = i.onerror = r; setTimeout(r, 1000); }))));
@@ -67,6 +72,9 @@ async function measure(type, width, language) {
         .map((n) => n.textContent);
       const buttons = [...root.querySelectorAll(".action, .zoom")].map((n) => Math.round(rect(n).width));
       const pill = root.querySelector(".chip.status");
+      const txt = pill?.querySelector(".txt");
+      // Status text: "dot" when only the dot is shown, "cut" when truncated, else the text.
+      const pillText = !txt ? null : getComputedStyle(txt).display === "none" ? "dot" : txt.scrollWidth > txt.clientWidth + 0.5 ? "cut" : txt.textContent;
       const parts2 = [...root.querySelectorAll(".part")];
       const partition = parts2.map((n) => {
         const grow = rect(n.querySelector(".grow"));
@@ -81,11 +89,12 @@ async function measure(type, width, language) {
         clipped,
         buttons,
         pillLabel: pill?.getAttribute("aria-label") ?? null,
+        pillText,
         partition,
         minColumns: el.getGridOptions().min_columns,
       };
     },
-    { type, language, states, entities, devices }
+    { type, language, zoom, states: unavailable ? unavailableStates : states, entities, devices }
   );
   await page.close();
   return res;
@@ -144,4 +153,69 @@ test("the partition name stays readable next to the disk model and the used / fr
       }
     }
   }
+});
+
+// Every header button stays whole inside the card and the title keeps its 4 characters: the zoomed mini card (the full
+// card with the restart and detail buttons) from the mini's minimum width (6 columns of a 320 px section) up to 9
+// columns, the compact mini just above the 200 px step where its box picture comes back, the full card between 200 px
+// and its minimum width (in a horizontal stack), in the normal and unavailable states.
+test("no header button leaves the card in the zoomed mini card or around the 200 px step", async (t) => {
+  if (skip) return t.skip(skip);
+  const cases = [
+    ["internet-box-mini-card", true, [cols(6), 175, 201, 205, 220, cols(9), 245], [24, 24]],
+    ["internet-box-mini-card", false, [201, 203, 205, 210], [24]],
+    ["internet-box-card", false, [201, 204, 210, 220], [24]],
+  ];
+  for (const [type, zoom, widths, buttons] of cases)
+    for (const language of ["en", "pl", "sr-Latn"])
+      for (const width of widths)
+        for (const unavailable of [false, true]) {
+          const r = await measure(type, width, language, { zoom, unavailable });
+          const at = `${type}${zoom ? " (zoomed)" : ""} ${language} @ ${width}px${unavailable ? " unavailable" : ""}`;
+          assert.ok(r.name >= MIN_TITLE, `${at}: title ${r.name}px`);
+          assert.deepEqual(r.outside, [], `${at}: out of the card`);
+          assert.deepEqual(r.covering, [], `${at}: title covered`);
+          assert.deepEqual(r.clashes, [], `${at}: header parts overlap`);
+          assert.deepEqual(r.buttons, buttons, `${at}: buttons`);
+        }
+});
+
+// The status pill shows its whole text whenever the card is wide enough for it, from 245 px (9 columns of a phone
+// section) to a wide column, in the longest translations; only narrower cards fall back to its dot.
+test("the status pill shows its whole text from 245 px up", async (t) => {
+  if (skip) return t.skip(skip);
+  for (const language of ["en", "pl", "sr-Latn"])
+    for (const width of [245, 260, 300, 320, 380, 441, 460, 500])
+      for (const [type, zoom] of [["internet-box-card", false], ["internet-box-mini-card", true]])
+        for (const unavailable of [false, true]) {
+          const r = await measure(type, width, language, { zoom, unavailable });
+          const at = `${type}${zoom ? " (zoomed)" : ""} ${language} @ ${width}px${unavailable ? " unavailable" : ""}`;
+          assert.equal(r.pillText, r.pillLabel, `${at}: pill`);
+          assert.deepEqual(r.outside, [], `${at}: out of the card`);
+        }
+});
+
+// In a container that takes the width of its content (an inline-block, an `auto` grid column, as layout-card or
+// button-card do), the card keeps a usable width instead of collapsing around its size container.
+test("the cards keep their minimum width in a container sized by its content", async (t) => {
+  if (skip) return t.skip(skip);
+  for (const [type, min] of [["internet-box-card", cols(9)], ["internet-box-mini-card", cols(6)]])
+    for (const wrapper of ["display:inline-block", "display:grid;grid-template-columns:auto", "display:flex;align-items:flex-start"]) {
+      const page = await browser.newPage();
+      await page.setContent(`<!doctype html><body style="margin:0;font-family:sans-serif"><div style="${wrapper}"><div id=root></div></div></body>`);
+      await page.addScriptTag({ content: HA_CARD });
+      await page.addScriptTag({ content: src });
+      const width = await page.evaluate(
+        ({ type, states, entities, devices }) => {
+          const el = document.createElement(type);
+          el.setConfig({ type: `custom:${type}` });
+          el.hass = { states, entities, devices, language: "en", config: { time_zone: "UTC" } };
+          document.getElementById("root").appendChild(el);
+          return el.getBoundingClientRect().width;
+        },
+        { type, states, entities, devices }
+      );
+      await page.close();
+      assert.ok(width >= min, `${type} in ${wrapper}: ${width}px`);
+    }
 });

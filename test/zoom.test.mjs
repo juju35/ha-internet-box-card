@@ -185,3 +185,30 @@ test("the status pill sits right of the title, centred on its line, and the Wi-F
   assert.deepEqual(errors, []);
   await page.close();
 });
+
+// The focus put back after a re-render (detail button from the keyboard, confirm button of the restart popup) must
+// not scroll the page: in a long dashboard the card may be partly off screen.
+test("the focus moved after a re-render does not scroll the page", async (t) => {
+  if (skip) return t.skip(skip);
+  const { page, errors } = await open();
+  const res = await page.evaluate(async () => {
+    const calls = [];
+    const focus = HTMLElement.prototype.focus;
+    HTMLElement.prototype.focus = function (opts) {
+      calls.push([this.className, opts?.preventScroll === true]);
+      return focus.call(this, opts);
+    };
+    const root = window.card.shadowRoot;
+    // Keyboard activation (no click count) of the detail button, then the restart popup of the full view.
+    window.click(root.querySelector(".zoom"), 0);
+    window.click(root.querySelector(".action"));
+    HTMLElement.prototype.focus = focus;
+    return calls;
+  });
+  assert.deepEqual(res, [
+    ["zoom", true],
+    ["act danger", true],
+  ]);
+  assert.deepEqual(errors, []);
+  await page.close();
+});
