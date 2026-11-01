@@ -1,5 +1,15 @@
 # Changelog
 
+## 2.1.6 - 2026-11-01
+
+### Fixes
+- **Unavailable entities**: while the box restarts (or when an entity is unavailable or unknown), the card no longer shows "Wi-Fi Off", "0 missed" calls, "Offline", a RAID "OK" or a green dot on the partition: they read "Unavailable" in a neutral colour. The "mark as read" button is hidden and the restart button is disabled until the box's buttons are available again.
+- **Narrow cards**: at 6 columns of a narrow section the title disappeared behind the box picture and the status pill. The title now keeps a few characters, the box picture gets smaller then is hidden below 200 px, and the status pill shows only its coloured dot below 260 px. The rates stack one under the other, and the partition name no longer gives way to the disk model. The full card now needs at least 9 columns in the Sections view (the mini card still 6).
+- **Plurals**: "1 manqué" in French, "1 perdida" in Spanish, and the three Serbian forms ("1 пропуштен", "2 пропуштена", "5 пропуштених").
+
+### Maintenance
+- Tests for unavailable entities, the missed-call plurals of every language (1, 2, 5, 21, 22) and, in Chromium, the cards at their narrowest widths in English, Polish and Serbian.
+
 ## 2.1.5 - 2026-11-01
 
 ### New
