@@ -1,5 +1,16 @@
 # Changelog
 
+## 2.1.3 - 2026-10-29
+
+### Fixes
+- **Readable colours in dark and light themes**: the operator accent (the dark blue of the Bbox, the Freebox and SFR reds, the Livebox orange) and the state colours are blended with the theme text colour wherever they colour text or icons: download and upload icons, restart popup icon, status and Wi-Fi pills, missed calls and their "mark as read" button. Text now reaches a 4.5:1 contrast and icons 3:1 in Home Assistant's default themes; the Bbox download arrow was nearly invisible on a dark card. The restart confirmation button keeps its red tint with the theme text colour.
+- **Bbox Miami picture**: the top face shows its dark gradient again instead of a flat black.
+- **Reduced motion**: with "reduce motion" set in the system, the bars and gauges no longer animate (the fans already stopped spinning).
+
+### Maintenance
+- Dependabot also proposes pre-commit hook updates, and the Biome check reads its version from the pre-commit configuration.
+- Tests for the colour contrast in both themes, the box pictures' gradient references and reduced motion.
+
 ## 2.1.2 - 2026-10-29
 
 ### Fixes
