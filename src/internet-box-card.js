@@ -1603,9 +1603,14 @@ const BASE_STYLE = `
   @media (prefers-reduced-motion: reduce) { .bar > div { transition: none; } }
   .header { display: flex; align-items: center; gap: 10px; padding: 12px 12px 8px; }
   /* The status pill sits right of the title line, centred on it; the subtitle and chips stay under the title. */
-  .titles { flex: 1; min-width: 0; display: grid; grid-template-columns: minmax(0, 1fr) auto; }
+  /* Narrow cards: the title block shrinks but keeps about 4 characters of the 16 px title (48 px), the box picture
+     gets smaller (hidden below 200 px), the status pill truncates its text (only its dot below 260 px) and the icon
+     buttons never shrink. */
+  .titles { flex: 1 1 auto; min-width: 48px; display: grid; grid-template-columns: minmax(0, 1fr) auto; }
   .titles > * { grid-column: 1; }
-  .titles > .chip { grid-column: 2; grid-row: 1; align-self: center; margin-left: 10px; white-space: nowrap; }
+  .titles > .chip { grid-column: 2; grid-row: 1; align-self: center; margin-left: 10px; white-space: nowrap; min-width: 0; max-width: 100%; }
+  .chip.status { overflow: hidden; }
+  .chip.status .txt { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
   .titles .chips { margin-top: 4px; }
   .logo-link { display: flex; align-items: center; justify-content: center; flex: none; align-self: flex-start; width: 40px; height: 40px; border-radius: 10px;
                background: #fff; box-shadow: inset 0 0 0 1px var(--divider-color, rgba(0,0,0,.12)); }
@@ -1618,6 +1623,7 @@ const BASE_STYLE = `
   .sub .parts span { min-width: 0; max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .sub .parts span::before { content: "·"; display: inline-block; width: 10px; text-align: center; }
   .box-link { display: flex; flex: none; max-width: 40%; }
+  @container (max-width: 200px) { .box-link { display: none; } }
   .box { height: 48px; width: auto; max-width: 100%; object-fit: contain; filter: drop-shadow(0 4px 6px rgba(0,0,0,.25)); }
   .tile { display: flex; align-items: center; gap: 8px; padding: 6px 10px; border-radius: 10px; min-width: 0;
           background: var(--secondary-background-color, rgba(127,127,127,.08)); }
@@ -1971,6 +1977,7 @@ const FULL_STYLE = `
                    letter-spacing: .04em; color: var(--secondary-text-color); margin-bottom: 6px; }
   .section-title .icon { width: 16px; height: 16px; }
   .grid2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; }
+  @container (max-width: 260px) { .grid2 { grid-template-columns: minmax(0, 1fr); } }
   .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 6px; }
   .facts { display: flex; flex-wrap: wrap; gap: 4px 12px; font-size: 12px; margin-top: 6px; }
   .facts > span { display: inline-flex; align-items: center; gap: 4px; min-width: 0; }
@@ -1991,9 +1998,16 @@ const FULL_STYLE = `
   .part .row { grid-column: 1; grid-row: 1; }
   .part:last-child { margin-bottom: 0; }
   .row { display: flex; align-items: center; gap: 8px; font-size: 13px; }
-  .row .grow { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  /* The partition name is the row's identifier: it keeps 5em, the disk model gives way (ellipsis). */
+  .row .grow { flex: 1 1 auto; min-width: 5em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .row .muted { flex: 0 1 auto; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .part .bar { margin: 4px 0 0; grid-column: 1 / -1; grid-row: 2; }
   .part .detail { font-size: 11px; color: var(--secondary-text-color); display: flex; justify-content: flex-end; grid-column: 2; grid-row: 1; gap: 8px; }
+  /* Narrow card: used / free under the bar, so the partition name keeps the whole first line. */
+  @container (max-width: 300px) {
+    .part .row { grid-column: 1 / -1; }
+    .part .detail { grid-column: 1 / -1; grid-row: 3; justify-content: space-between; margin-top: 2px; }
+  }
   .tile.svc { --c: var(--secondary-text-color); }
   .tile.svc.ok { --c: var(--ibc-ok); } .tile.svc.warn { --c: var(--ibc-warn); }
   .tiles.svc-row { display: flex; flex-wrap: wrap; }
@@ -2009,15 +2023,25 @@ const FULL_STYLE = `
   @keyframes spin { to { transform: rotate(360deg); } }
   @media (prefers-reduced-motion: reduce) { .spin { animation: none; } .ring .value { transition: none; } }
   /* Full card only (and the zoomed mini, which uses this style): its header also carries the status pill and the
-     restart button, so on a narrow card the box picture shrinks to leave room for the title. It always stays
-     visible — never hidden — so the box is shown whenever the card is expanded. The compact mini keeps its full-size
-     picture (MINI_STYLE). */
+     restart button, so on a narrow card the box picture gets smaller to leave room for the title (it is only hidden
+     below 200 px, see .box-link). The compact mini keeps its full-size picture (MINI_STYLE). */
   @container (max-width: 460px) { .box { height: 38px; } }
   @container (max-width: 380px) { .box { height: 32px; } }
+  @container (max-width: 260px) { .box { height: 24px; } }
   /* On a narrow full card the status pill would squeeze the title on its line; move it below the title (in the
      first column, under the name) so the title keeps the full width. */
   @container (max-width: 440px) {
     .titles > .chip.status { grid-column: 1; grid-row: auto; align-self: start; justify-self: start; margin: 4px 0 0; }
+  }
+  /* Narrower still: only the pill's coloured dot, back on the title line (its text stays its tooltip and label). */
+  @container (max-width: 260px) {
+    .titles > .chip.status { grid-column: 2; grid-row: 1; align-self: center; justify-self: end; margin: 0 0 0 6px; padding: 5px; }
+    .chip.status .txt { display: none; }
+  }
+  /* At 6 columns of a narrow section: the dot goes to the subtitle line, the title takes the whole first line. */
+  @container (max-width: 200px) {
+    .titles > .name { grid-column: 1 / -1; }
+    .titles > .chip.status { grid-row: 2; }
   }
 `;
 
@@ -2035,8 +2059,9 @@ class InternetBoxCard extends InternetBoxBase {
     return 7;
   }
 
+  // Below 9 columns (about 240 px in a narrow section) the full card's tiles and gauges no longer fit.
   getGridOptions() {
-    return { columns: 12, min_columns: 6 };
+    return { columns: 12, min_columns: 9 };
   }
 
   _render() {
@@ -2188,9 +2213,12 @@ const MINI_STYLE = `
   .logo { width: 26px; }
   .box-link { max-width: 35%; }
   .box { height: 44px; }
+  @container (max-width: 260px) { .box { height: 28px; } }
   .name { font-size: 16px; }
   .content { padding: 0 12px 12px; display: flex; flex-direction: column; gap: 8px; }
   .grid2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+  /* Too narrow for two rates side by side: one under the other. */
+  @container (max-width: 260px) { .grid2 { grid-template-columns: minmax(0, 1fr); } }
   .tile { padding: 6px 8px; gap: 8px; }
   .tile .v { font-size: 14px; }
   .foot { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 4px 8px; font-size: 12px;
