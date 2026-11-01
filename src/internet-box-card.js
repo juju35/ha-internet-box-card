@@ -1207,6 +1207,7 @@ const BASE_STYLE = `
   .chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
   .bar { height: 4px; border-radius: 3px; background: var(--divider-color, rgba(127,127,127,.25)); overflow: hidden; }
   .bar > div { height: 100%; border-radius: 3px; background: var(--c, var(--ibc-accent)); transition: width .6s ease; }
+  @media (prefers-reduced-motion: reduce) { .bar > div { transition: none; } }
   .header { display: flex; align-items: center; gap: 10px; padding: 12px 12px 8px; }
   /* The status pill sits right of the title line, centred on it; the subtitle and chips stay under the title. */
   .titles { flex: 1; min-width: 0; display: grid; grid-template-columns: minmax(0, 1fr) auto; }
@@ -1599,7 +1600,7 @@ const FULL_STYLE = `
   .tile .reset .icon { width: 14px; height: 14px; }
   .spin { animation: spin 1.6s linear infinite; }
   @keyframes spin { to { transform: rotate(360deg); } }
-  @media (prefers-reduced-motion: reduce) { .spin { animation: none; } }
+  @media (prefers-reduced-motion: reduce) { .spin { animation: none; } .ring .value { transition: none; } }
   /* Full card only (and the zoomed mini, which uses this style): its header also carries the status pill and the
      restart button, so on a narrow card the box picture shrinks to leave room for the title. It always stays
      visible — never hidden — so the box is shown whenever the card is expanded. The compact mini keeps its full-size
