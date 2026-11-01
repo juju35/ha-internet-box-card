@@ -805,6 +805,243 @@ const STRINGS = {
     language: "Jezik",
     lang_auto: "Automatski",
   },
+  it: {
+    network: "Rete",
+    system: "Sistema",
+    storage: "Archiviazione",
+    services: "Servizi",
+    download: "Download",
+    upload: "Upload",
+    uptime: "Tempo di attività",
+    firmware: "Firmware",
+    devices_short: "Dispositivi",
+    wifi: "Wi-Fi",
+    wifi_on: "Wi-Fi attivato",
+    wifi_off: "Wi-Fi disattivato",
+    on: "Attivato",
+    off: "Disattivato",
+    mark_read: "Segna le chiamate come lette",
+    restart: "Riavvia il modem",
+    restart_confirm: "Riavviare il modem adesso? La connessione internet, il telefono e la TV saranno interrotti per qualche minuto.",
+    restart_btn: "Riavvia",
+    cancel: "Annulla",
+    calls: "Chiamate",
+    missed: "perse",
+    missed_one: "persa",
+    temperature: "Temp.",
+    used: "usato",
+    free: "libero",
+    raid_ok: "OK",
+    raid_degraded: "Degradato",
+    online: "Online",
+    offline: "Offline",
+    hours: "h",
+    days: "g",
+    minutes: "min",
+    rpm: "giri/min",
+    disk: "Disco",
+    no_box: "Nessun modem internet trovato. È installata un'integrazione compatibile (Freebox, Livebox, SFR Box, Bbox)?",
+    unknown_box: "Modem internet non trovato",
+    zoom_in: "Mostra la scheda completa",
+    zoom_out: "Torna alla vista compatta",
+    box: "Modem internet (dispositivo dell'integrazione)",
+    title: "Titolo (facoltativo, predefinito: modello del modem)",
+    model: "Modello del modem (immagine e titolo predefinito)",
+    model_auto: "Automatico",
+    show_image: "Mostra l'immagine del modem",
+    admin: "Apri l'interfaccia di amministrazione del modem",
+    admin_url: "Indirizzo di amministrazione del modem (facoltativo, aperto al clic sull'immagine)",
+    show_logo: "Mostra il logo dell'operatore",
+    show_network: "Mostra la rete",
+    show_system: "Mostra il sistema (temperature, ventole)",
+    show_storage: "Mostra l'archiviazione",
+    show_services: "Mostra i servizi (Wi-Fi, chiamate, dispositivi)",
+    zoom: "Pulsante dettagli",
+    zoom_helper: "Pulsante in alto a destra che mostra la scheda completa al posto della mini scheda, e viceversa",
+    rate_unit: "Unità di velocità",
+    unit_bytes: "Byte (kB/s, MB/s)",
+    unit_bits: "Bit (kb/s, Mb/s)",
+    language: "Lingua",
+    lang_auto: "Automatica",
+  },
+  nl: {
+    network: "Netwerk",
+    system: "Systeem",
+    storage: "Opslag",
+    services: "Diensten",
+    download: "Download",
+    upload: "Upload",
+    uptime: "Uptime",
+    firmware: "Firmware",
+    devices_short: "Apparaten",
+    wifi: "Wi-Fi",
+    wifi_on: "Wi-Fi aan",
+    wifi_off: "Wi-Fi uit",
+    on: "Aan",
+    off: "Uit",
+    mark_read: "Oproepen als gelezen markeren",
+    restart: "Modem herstarten",
+    restart_confirm: "Modem nu herstarten? De internet-, telefoon- en tv-verbinding wordt een paar minuten onderbroken.",
+    restart_btn: "Herstarten",
+    cancel: "Annuleren",
+    calls: "Oproepen",
+    missed: "gemist",
+    temperature: "Temp.",
+    used: "gebruikt",
+    free: "vrij",
+    raid_ok: "OK",
+    raid_degraded: "Gedegradeerd",
+    online: "Online",
+    offline: "Offline",
+    hours: "u",
+    days: "d",
+    minutes: "min",
+    rpm: "tpm",
+    disk: "Schijf",
+    no_box: "Geen internetmodem gevonden. Is er een ondersteunde integratie (Freebox, Livebox, SFR Box, Bbox) geïnstalleerd?",
+    unknown_box: "Internetmodem niet gevonden",
+    zoom_in: "Volledige kaart tonen",
+    zoom_out: "Terug naar de compacte weergave",
+    box: "Internetmodem (apparaat van de integratie)",
+    title: "Titel (optioneel, standaard het model van de modem)",
+    model: "Model van de modem (afbeelding en standaardtitel)",
+    model_auto: "Automatisch",
+    show_image: "Afbeelding van de modem tonen",
+    admin: "Beheerinterface van de modem openen",
+    admin_url: "Beheeradres van de modem (optioneel, geopend bij klikken op de afbeelding)",
+    show_logo: "Logo van de provider tonen",
+    show_network: "Netwerk tonen",
+    show_system: "Systeem tonen (temperaturen, ventilatoren)",
+    show_storage: "Opslag tonen",
+    show_services: "Diensten tonen (Wi-Fi, oproepen, apparaten)",
+    zoom: "Detailknop",
+    zoom_helper: "Knop rechtsboven die de volledige kaart toont in plaats van de minikaart, en terug",
+    rate_unit: "Eenheid van snelheid",
+    unit_bytes: "Bytes (kB/s, MB/s)",
+    unit_bits: "Bits (kb/s, Mb/s)",
+    language: "Taal",
+    lang_auto: "Automatisch",
+  },
+  pt: {
+    network: "Rede",
+    system: "Sistema",
+    storage: "Armazenamento",
+    services: "Serviços",
+    download: "Transferência",
+    upload: "Envio",
+    uptime: "Tempo ligado",
+    firmware: "Firmware",
+    devices_short: "Dispositivos",
+    wifi: "Wi-Fi",
+    wifi_on: "Wi-Fi ligado",
+    wifi_off: "Wi-Fi desligado",
+    on: "Ligado",
+    off: "Desligado",
+    mark_read: "Marcar as chamadas como lidas",
+    restart: "Reiniciar o router",
+    restart_confirm: "Reiniciar o router agora? A ligação à internet, ao telefone e à TV será interrompida durante alguns minutos.",
+    restart_btn: "Reiniciar",
+    cancel: "Cancelar",
+    calls: "Chamadas",
+    missed: "perdidas",
+    missed_one: "perdida",
+    temperature: "Temp.",
+    used: "usado",
+    free: "livre",
+    raid_ok: "OK",
+    raid_degraded: "Degradado",
+    online: "Online",
+    offline: "Offline",
+    hours: "h",
+    days: "d",
+    minutes: "min",
+    rpm: "rpm",
+    disk: "Disco",
+    no_box: "Nenhum router de internet encontrado. Está instalada uma integração compatível (Freebox, Livebox, SFR Box, Bbox)?",
+    unknown_box: "Router de internet não encontrado",
+    zoom_in: "Mostrar o cartão completo",
+    zoom_out: "Voltar à vista compacta",
+    box: "Router de internet (dispositivo da integração)",
+    title: "Título (opcional, por predefinição o modelo do router)",
+    model: "Modelo do router (imagem e título predefinido)",
+    model_auto: "Automático",
+    show_image: "Mostrar a imagem do router",
+    admin: "Abrir a interface de administração do router",
+    admin_url: "Endereço de administração do router (opcional, aberto ao clicar na imagem)",
+    show_logo: "Mostrar o logótipo do operador",
+    show_network: "Mostrar a rede",
+    show_system: "Mostrar o sistema (temperaturas, ventoinhas)",
+    show_storage: "Mostrar o armazenamento",
+    show_services: "Mostrar os serviços (Wi-Fi, chamadas, dispositivos)",
+    zoom: "Botão de detalhe",
+    zoom_helper: "Botão no canto superior direito que mostra o cartão completo em vez do minicartão, e vice-versa",
+    rate_unit: "Unidade de velocidade",
+    unit_bytes: "Bytes (kB/s, MB/s)",
+    unit_bits: "Bits (kb/s, Mb/s)",
+    language: "Idioma",
+    lang_auto: "Automático",
+  },
+  pl: {
+    network: "Sieć",
+    system: "System",
+    storage: "Pamięć masowa",
+    services: "Usługi",
+    download: "Pobieranie",
+    upload: "Wysyłanie",
+    uptime: "Czas pracy",
+    firmware: "Firmware",
+    devices_short: "Urządzenia",
+    wifi: "Wi-Fi",
+    wifi_on: "Wi-Fi włączone",
+    wifi_off: "Wi-Fi wyłączone",
+    on: "Włączone",
+    off: "Wyłączone",
+    mark_read: "Oznacz połączenia jako odczytane",
+    restart: "Uruchom ponownie router",
+    restart_confirm: "Uruchomić teraz ponownie router? Połączenie z internetem, telefon i telewizja zostaną przerwane na kilka minut.",
+    restart_btn: "Uruchom ponownie",
+    cancel: "Anuluj",
+    calls: "Połączenia",
+    missed: "nieodebrane",
+    missed_one: "nieodebrane",
+    missed_few: "nieodebrane",
+    missed_many: "nieodebranych",
+    temperature: "Temp.",
+    used: "zajęte",
+    free: "wolne",
+    raid_ok: "OK",
+    raid_degraded: "Zdegradowany",
+    online: "Online",
+    offline: "Offline",
+    hours: "h",
+    days: "d",
+    minutes: "min",
+    rpm: "obr./min",
+    disk: "Dysk",
+    no_box: "Nie znaleziono routera internetowego. Czy zainstalowano obsługiwaną integrację (Freebox, Livebox, SFR Box, Bbox)?",
+    unknown_box: "Nie znaleziono routera internetowego",
+    zoom_in: "Pokaż pełną kartę",
+    zoom_out: "Wróć do widoku kompaktowego",
+    box: "Router internetowy (urządzenie integracji)",
+    title: "Tytuł (opcjonalny, domyślnie model routera)",
+    model: "Model routera (obraz i domyślny tytuł)",
+    model_auto: "Automatycznie",
+    show_image: "Pokaż obraz routera",
+    admin: "Otwórz interfejs administracyjny routera",
+    admin_url: "Adres panelu administracyjnego routera (opcjonalny, otwierany po kliknięciu obrazu)",
+    show_logo: "Pokaż logo operatora",
+    show_network: "Pokaż sieć",
+    show_system: "Pokaż system (temperatury, wentylatory)",
+    show_storage: "Pokaż pamięć masową",
+    show_services: "Pokaż usługi (Wi-Fi, połączenia, urządzenia)",
+    zoom: "Przycisk szczegółów",
+    zoom_helper: "Przycisk w prawym górnym rogu, który pokazuje pełną kartę zamiast minikarty, i z powrotem",
+    rate_unit: "Jednostka prędkości",
+    unit_bytes: "Bajty (kB/s, MB/s)",
+    unit_bits: "Bity (kb/s, Mb/s)",
+    language: "Język",
+    lang_auto: "Automatycznie",
+  },
 };
 
 const RATE_UNITS = {
@@ -814,6 +1051,10 @@ const RATE_UNITS = {
   es: { bytes: ["B/s", "kB/s", "MB/s", "GB/s"], bits: ["b/s", "kb/s", "Mb/s", "Gb/s"] },
   sr: { bytes: ["B/s", "kB/s", "MB/s", "GB/s"], bits: ["b/s", "kb/s", "Mb/s", "Gb/s"] },
   "sr-Latn": { bytes: ["B/s", "kB/s", "MB/s", "GB/s"], bits: ["b/s", "kb/s", "Mb/s", "Gb/s"] },
+  it: { bytes: ["B/s", "kB/s", "MB/s", "GB/s"], bits: ["b/s", "kb/s", "Mb/s", "Gb/s"] },
+  nl: { bytes: ["B/s", "kB/s", "MB/s", "GB/s"], bits: ["b/s", "kb/s", "Mb/s", "Gb/s"] },
+  pt: { bytes: ["B/s", "kB/s", "MB/s", "GB/s"], bits: ["b/s", "kb/s", "Mb/s", "Gb/s"] },
+  pl: { bytes: ["B/s", "kB/s", "MB/s", "GB/s"], bits: ["b/s", "kb/s", "Mb/s", "Gb/s"] },
 };
 
 // Freebox models supported by the Freebox integration (Freebox OS), with their commercial name, detected
@@ -886,6 +1127,18 @@ const lang = (hass, config) => {
 };
 
 const t = (hass, config, key) => STRINGS[lang(hass, config)][key] ?? STRINGS.en[key] ?? key;
+
+/** Text agreeing with the count n: the `key_one/_few/_many` variant picked by Intl.PluralRules when the
+ *  language defines it, else the plain key (which serves as the `_other` form). */
+const tn = (hass, config, key, n) => {
+  const l = lang(hass, config);
+  let form = "other";
+  try {
+    // The Portuguese texts are European Portuguese: 0 takes the plural there (pt alone means pt-BR to Intl).
+    form = new Intl.PluralRules(l === "pt" ? "pt-PT" : l).select(n);
+  } catch (_) {}
+  return STRINGS[l][`${key}_${form}`] ?? t(hass, config, key);
+};
 
 const num = (s) => {
   if (!s) return null;
@@ -1294,10 +1547,12 @@ const boxModel = (box, config) => {
   return models.find((m) => m.id === config?.model) ?? detectModel(box);
 };
 
-/** Label of a partition: its friendly name without the device name and the "free space" words. */
+/** Label of a partition: its friendly name without the device name and the "free space" words, as the core
+ *  Freebox integration names them (partition_free_space). Italian, Dutch and Polish have no translation of
+ *  that name in core and fall back to the English one. */
 const partitionLabel = (hass, p, fallback = "Disk") =>
   shortName(hass, p.id, p.device)
-    .replace(/\s*(free space|espace libre( de| sur)?|freier speicher|espacio libre( de| en)?)\s*/gi, " ")
+    .replace(/\s*(free space|espace libre( de| sur)?|freier speicher(platz)?|espacio libre( de| en)?|espaço livre( em| de)?)\s*/gi, " ")
     .trim() || deviceName(p.device) || fallback;
 
 // ---------------------------------------------------------------------------
@@ -1518,6 +1773,10 @@ class InternetBoxBase extends HTMLElement {
 
   _t(key) {
     return t(this._hass, this._config, key);
+  }
+
+  _tn(key, n) {
+    return tn(this._hass, this._config, key, n);
   }
 
   _s(id) {
@@ -1867,7 +2126,7 @@ class InternetBoxCard extends InternetBoxBase {
       // a role="button" element. A click anywhere on the tile still opens the more-info dialog (data-entity).
       tiles.push(`<div class="tile svc clickable ${n > 0 ? "warn" : ""}" data-key="${missed.entity_id}" data-entity="${missed.entity_id}">${svgIcon(
         n > 0 ? ICONS.phone_missed : ICONS.phone
-      )}<div role="button" tabindex="0"><div class="k">${this._t("calls")}</div><div class="v">${n} ${this._t("missed")}</div></div>${reset}</div>`);
+      )}<div role="button" tabindex="0"><div class="k">${this._t("calls")}</div><div class="v">${n} ${this._tn("missed", n)}</div></div>${reset}</div>`);
     }
     if (box.trackers.length) {
       const home = box.trackers.filter((id) => this._s(id)?.state === "home").length;
@@ -2012,7 +2271,7 @@ class InternetBoxMiniCard extends InternetBoxCard {
       const { missed, n, reset } = calls;
       // Same as the tile of the full card: the "mark as read" button stays outside the role="button" element.
       foot.push(`<span class="clickable ${n > 0 ? "warn" : ""}" data-key="${missed.entity_id}" data-entity="${missed.entity_id}" title="${esc(
-        `${this._t("calls")} · ${n} ${this._t("missed")}`
+        `${this._t("calls")} · ${n} ${this._tn("missed", n)}`
       )}"><span role="button" tabindex="0">${svgIcon(n > 0 ? ICONS.phone_missed : ICONS.phone)}${n}</span>${reset}</span>`);
     }
     const up = this._uptime(router);
@@ -2106,6 +2365,10 @@ class InternetBoxEditorBase extends HTMLElement {
               { value: "es", label: "Español" },
               { value: "sr", label: "Српски" },
               { value: "sr-Latn", label: "Srpski (latinica)" },
+              { value: "it", label: "Italiano" },
+              { value: "nl", label: "Nederlands" },
+              { value: "pt", label: "Português (Portugal)" },
+              { value: "pl", label: "Polski" },
             ],
           },
         },
