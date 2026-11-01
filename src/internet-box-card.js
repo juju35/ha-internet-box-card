@@ -1612,7 +1612,7 @@ const BASE_STYLE = `
   .header { display: flex; align-items: center; gap: 10px; padding: 12px 12px 8px; }
   /* The status pill sits right of the title line, centred on it; the subtitle and chips stay under the title. */
   /* Narrow cards: the title block shrinks but keeps about 4 characters of the 16 px title (48 px), the box picture
-     gets smaller (hidden below 200 px), the status pill truncates its text (only its dot below 260 px) and the icon
+     gets smaller (hidden up to 340 px on the full card), the status pill truncates its text (only its dot below 245 px) and the icon
      buttons never shrink. */
   .titles { flex: 1 1 0; min-width: 48px; display: grid; grid-template-columns: minmax(0, 1fr) auto; }
   .titles > * { grid-column: 1; }
@@ -2037,10 +2037,10 @@ const FULL_STYLE = `
      The compact mini keeps its full-size picture (MINI_STYLE). */
   @container (max-width: 460px) { .box { height: 38px; } }
   @container (max-width: 380px) { .box { height: 32px; } }
-  /* Below 9 columns of a phone section the title, the pill and the restart button need the whole header; the zoomed
-     mini card, which also has its detail button, needs it up to 340 px for the whole pill text. */
-  @container (max-width: 260px) { .box-link { display: none; } }
-  @container (max-width: 340px) { .header:has(.zoom) .box-link { display: none; } }
+  /* Up to 340 px (9 to 12 columns of a phone section) the title, the status pill under it and the restart button
+     need the whole header: with the picture the title block would be narrower than the whole pill text (up to
+     135 px, "Fuera de línea · FTTH"). */
+  @container (max-width: 340px) { .box-link { display: none; } }
   /* On a narrow full card the status pill would squeeze the title on its line; move it below the title (in the
      first column, under the name) so the title keeps the full width. */
   @container (max-width: 440px) {
