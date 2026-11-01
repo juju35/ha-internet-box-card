@@ -1749,7 +1749,8 @@ class InternetBoxBase extends HTMLElement {
   _openDialog(dialog) {
     this._dialog = dialog;
     this._update();
-    this.shadowRoot.querySelector(".modal .danger")?.focus();
+    // After a re-render: no scroll of the page towards the card.
+    this.shadowRoot.querySelector(".modal .danger")?.focus({ preventScroll: true });
   }
 
   _closeDialog() {
@@ -2250,7 +2251,8 @@ class InternetBoxMiniCard extends InternetBoxCard {
       ev.stopPropagation();
       this._zoom(!this._zoomed);
       // Keyboard use (Enter / Space: no click count) keeps the focus on the button of the new view.
-      if (ev.detail === 0) this.shadowRoot.querySelector(".zoom")?.focus();
+      // The button is a new element after the re-render: moving the focus to it must not scroll the page.
+      if (ev.detail === 0) this.shadowRoot.querySelector(".zoom")?.focus({ preventScroll: true });
     });
     this._onOutside = (ev) => {
       const path = ev.composedPath();
