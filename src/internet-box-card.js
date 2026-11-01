@@ -485,6 +485,7 @@ const STRINGS = {
     raid_degraded: "Degraded",
     online: "Online",
     offline: "Offline",
+    unavailable: "Unavailable",
     hours: "h",
     days: "d",
     minutes: "min",
@@ -537,6 +538,7 @@ const STRINGS = {
     cancel: "Annuler",
     calls: "Appels",
     missed: "manqués",
+    missed_one: "manqué",
     temperature: "Temp.",
     used: "utilisés",
     free: "libres",
@@ -544,6 +546,7 @@ const STRINGS = {
     raid_degraded: "Dégradé",
     online: "En ligne",
     offline: "Hors ligne",
+    unavailable: "Indisponible",
     hours: "h",
     days: "j",
     minutes: "min",
@@ -602,6 +605,7 @@ const STRINGS = {
     raid_degraded: "Beeinträchtigt",
     online: "Verbunden",
     offline: "Getrennt",
+    unavailable: "Nicht verfügbar",
     hours: "h",
     days: "Tg.",
     minutes: "Min.",
@@ -653,6 +657,7 @@ const STRINGS = {
     cancel: "Cancelar",
     calls: "Llamadas",
     missed: "perdidas",
+    missed_one: "perdida",
     temperature: "Temp.",
     used: "usado",
     free: "libre",
@@ -660,6 +665,7 @@ const STRINGS = {
     raid_degraded: "Degradado",
     online: "En línea",
     offline: "Fuera de línea",
+    unavailable: "No disponible",
     hours: "h",
     days: "d",
     minutes: "min",
@@ -710,7 +716,9 @@ const STRINGS = {
     restart_btn: "Поново покрени",
     cancel: "Откажи",
     calls: "Позиви",
-    missed: "пропуштено",
+    missed: "пропуштених",
+    missed_one: "пропуштен",
+    missed_few: "пропуштена",
     temperature: "Темп.",
     used: "искоришћено",
     free: "слободно",
@@ -718,6 +726,7 @@ const STRINGS = {
     raid_degraded: "Деградирано",
     online: "На мрежи",
     offline: "Ван мреже",
+    unavailable: "Недоступно",
     hours: "h",
     days: "d",
     minutes: "min",
@@ -768,7 +777,9 @@ const STRINGS = {
     restart_btn: "Ponovo pokreni",
     cancel: "Otkaži",
     calls: "Pozivi",
-    missed: "propušteno",
+    missed: "propuštenih",
+    missed_one: "propušten",
+    missed_few: "propuštena",
     temperature: "Temp.",
     used: "iskorišćeno",
     free: "slobodno",
@@ -776,6 +787,7 @@ const STRINGS = {
     raid_degraded: "Degradirano",
     online: "Na mreži",
     offline: "Van mreže",
+    unavailable: "Nedostupno",
     hours: "h",
     days: "d",
     minutes: "min",
@@ -835,6 +847,7 @@ const STRINGS = {
     raid_degraded: "Degradato",
     online: "Online",
     offline: "Offline",
+    unavailable: "Non disponibile",
     hours: "h",
     days: "g",
     minutes: "min",
@@ -893,6 +906,7 @@ const STRINGS = {
     raid_degraded: "Gedegradeerd",
     online: "Online",
     offline: "Offline",
+    unavailable: "Niet beschikbaar",
     hours: "u",
     days: "d",
     minutes: "min",
@@ -952,6 +966,7 @@ const STRINGS = {
     raid_degraded: "Degradado",
     online: "Online",
     offline: "Offline",
+    unavailable: "Indisponível",
     hours: "h",
     days: "d",
     minutes: "min",
@@ -1013,6 +1028,7 @@ const STRINGS = {
     raid_degraded: "Zdegradowany",
     online: "Online",
     offline: "Offline",
+    unavailable: "Niedostępne",
     hours: "h",
     days: "d",
     minutes: "min",
@@ -1145,6 +1161,10 @@ const num = (s) => {
   const v = parseFloat(s.state);
   return Number.isFinite(v) ? v : null;
 };
+
+/** True when Home Assistant has no value for the entity (unavailable, e.g. while the box restarts, or unknown):
+ *  the card then shows it as unavailable, never as a real state (Wi-Fi off, 0 missed calls, offline, RAID OK). */
+const noValue = (s) => !s || s.state === "unavailable" || s.state === "unknown";
 
 const RATE_FACTORS = {
   "b/s": 1, "bit/s": 1 / 8, "kbit/s": 125, "mbit/s": 125e3, "gbit/s": 125e6,
@@ -1619,6 +1639,8 @@ const BASE_STYLE = `
   .action .icon { width: 16px; height: 16px; }
   .action:hover { background: color-mix(in srgb, var(--ibc-red) 16%, transparent); color: var(--ibc-accent); }
   .action:focus-visible { outline: 2px solid var(--primary-color, #03a9f4); outline-offset: 1px; }
+  .action:disabled { cursor: default; opacity: .4; }
+  .action:disabled:hover { background: none; color: var(--secondary-text-color); }
 `;
 
 // In-card confirmation popup, at the top of the card so it stays in view when the card is long.
@@ -1709,7 +1731,7 @@ class InternetBoxBase extends HTMLElement {
   _confirmRestart() {
     const box = discover(this._hass, this._config.box);
     const reboot = box.scalars.reboot;
-    if (!reboot) return;
+    if (!reboot || this._s(reboot)?.state === "unavailable") return;
     this._openDialog({
       body: `<h3>${svgIcon(ICONS.restart)}${esc(this._t("restart"))}</h3>
         <div class="hint">${esc(this._t("restart_confirm"))}</div>`,
@@ -1745,10 +1767,12 @@ class InternetBoxBase extends HTMLElement {
   }
 
   // Round restart button for the header: shown only when the box exposes a reboot button.
+  // Disabled while the reboot button is unavailable (a button never pressed is "unknown": that is its normal state).
   _restartBtn(box) {
     if (!box.scalars.reboot) return "";
     const label = esc(this._t("restart"));
-    return `<button class="action" data-action="restart" title="${label}" aria-label="${label}">${svgIcon(ICONS.restart)}</button>`;
+    const disabled = this._s(box.scalars.reboot)?.state === "unavailable" ? " disabled" : "";
+    return `<button class="action" data-action="restart" title="${label}" aria-label="${label}"${disabled}>${svgIcon(ICONS.restart)}</button>`;
   }
 
   set hass(hass) {
@@ -1787,12 +1811,14 @@ class InternetBoxBase extends HTMLElement {
     return fmtRate(toBps(this._s(id)), this._hass, this._config);
   }
 
-  // Missed calls sensor, its count and the "mark as read" button (only when there are some), or null without the sensor.
+  // Missed calls sensor, its count (null while unavailable) and the "mark as read" button (only when there are some
+  // and the button is available), or null without the sensor.
   _missedCalls(sc) {
     const missed = this._s(sc.missed);
     if (!missed) return null;
-    const n = num(missed) ?? 0;
-    const markRead = n > 0 && this._s(sc.mark_read);
+    const n = num(missed);
+    const button = this._s(sc.mark_read);
+    const markRead = n > 0 && button?.state !== "unavailable" && button;
     const reset = markRead
       ? `<button class="reset" data-press="${markRead.entity_id}" title="${esc(this._t("mark_read"))}" aria-label="${esc(
           this._t("mark_read")
@@ -1850,9 +1876,12 @@ class InternetBoxBase extends HTMLElement {
     if (!router) return "";
     const online = router.state === "home";
     const type = router.attributes.connection_type;
-    return `<span class="chip status clickable ${online ? "ok" : "crit"}" role="button" tabindex="0" data-entity="${router.entity_id}"><span class="dot"></span>${esc(
-      online ? this._t("online") : this._t("offline")
-    )}${type ? ` · ${esc(String(type).toUpperCase())}` : ""}</span>`;
+    const unknown = noValue(router);
+    const text = unknown ? this._t("unavailable") : `${online ? this._t("online") : this._t("offline")}${type ? ` · ${String(type).toUpperCase()}` : ""}`;
+    // The text is also the tooltip and accessible name: on a narrow card only the coloured dot is shown.
+    return `<span class="chip status clickable ${unknown ? "off" : online ? "ok" : "crit"}" role="button" tabindex="0" data-entity="${
+      router.entity_id
+    }" title="${esc(text)}" aria-label="${esc(text)}"><span class="dot"></span><span class="txt">${esc(text)}</span></span>`;
   }
 
   // Info chips under the title (Wi-Fi state). The Services section (shown unless disabled) already has a Wi-Fi
@@ -1863,9 +1892,10 @@ class InternetBoxBase extends HTMLElement {
     const wifi = this._s(sc.wifi);
     if (wifi && this._config.show_services === false) {
       const on = wifi.state === "on";
+      const text = noValue(wifi) ? `${this._t("wifi")} · ${this._t("unavailable")}` : on ? this._t("wifi_on") : this._t("wifi_off");
       chips.push(
         `<span class="chip clickable ${on ? "ok" : "off"}" role="button" tabindex="0" data-entity="${wifi.entity_id}">${svgIcon(on ? ICONS.wifi : ICONS.wifi_off)}${esc(
-          on ? this._t("wifi_on") : this._t("wifi_off")
+          text
         )}</span>`
       );
     }
@@ -2092,7 +2122,7 @@ class InternetBoxCard extends InternetBoxBase {
       const used = free === null ? null : Math.max(0, Math.min(100, 100 - free));
       const cls = level(used, 80, 90);
       return `<div class="part clickable ${cls}" role="button" tabindex="0" data-key="${p.id}" data-entity="${p.id}">
-        <div class="row"><span class="dot ${cls || "ok"}"></span><span class="grow">${esc(partitionLabel(this._hass, p, this._t("disk")))}</span>
+        <div class="row"><span class="dot ${used === null ? "off" : cls || "ok"}"></span><span class="grow">${esc(partitionLabel(this._hass, p, this._t("disk")))}</span>
           <span class="muted">${esc(p.device?.model || "")}</span></div>
         <div class="bar"><div style="width:${used ?? 0}%"></div></div>
         <div class="detail"><span>${used === null ? "—" : `${used.toFixed(0)}% ${this._t("used")}`}</span>
@@ -2101,9 +2131,11 @@ class InternetBoxCard extends InternetBoxBase {
     });
     for (const id of box.raids) {
       const degraded = this._s(id)?.state === "on";
-      rows.push(`<div class="row clickable" role="button" tabindex="0" data-key="${id}" data-entity="${id}"><span class="dot ${degraded ? "crit" : "ok"}"></span>
+      const cls = noValue(this._s(id)) ? "off" : degraded ? "crit" : "ok";
+      const text = cls === "off" ? "unavailable" : degraded ? "raid_degraded" : "raid_ok";
+      rows.push(`<div class="row clickable" role="button" tabindex="0" data-key="${id}" data-entity="${id}"><span class="dot ${cls}"></span>
         <span class="grow">${esc(shortName(this._hass, id, box.device))}</span>
-        <span class="chip ${degraded ? "crit" : "ok"}">${this._t(degraded ? "raid_degraded" : "raid_ok")}</span></div>`);
+        <span class="chip ${cls}">${this._t(text)}</span></div>`);
     }
     if (!rows.length) return "";
     return `<div><div class="section-title">${svgIcon(ICONS.database)}${this._t("storage")}</div>${rows.join("")}</div>`;
@@ -2115,18 +2147,24 @@ class InternetBoxCard extends InternetBoxBase {
     const wifi = this._s(sc.wifi);
     if (wifi) {
       const on = wifi.state === "on";
-      tiles.push(`<div class="tile svc clickable ${on ? "ok" : ""}" role="button" tabindex="0" data-key="${wifi.entity_id}" data-entity="${wifi.entity_id}">${svgIcon(
-        on ? ICONS.wifi : ICONS.wifi_off
-      )}<div><div class="k">${this._t("wifi")}</div><div class="v">${this._t(on ? "on" : "off")}</div></div></div>`);
+      const unknown = noValue(wifi);
+      tiles.push(`<div class="tile svc clickable ${on ? "ok" : unknown ? "off" : ""}" role="button" tabindex="0" data-key="${wifi.entity_id}" data-entity="${
+        wifi.entity_id
+      }">${svgIcon(on || unknown ? ICONS.wifi : ICONS.wifi_off)}<div><div class="k">${this._t("wifi")}</div><div class="v">${this._t(
+        unknown ? "unavailable" : on ? "on" : "off"
+      )}</div></div></div>`);
     }
     const calls = this._missedCalls(sc);
     if (calls) {
       const { missed, n, reset } = calls;
       // The keyboard target is the label, not the whole tile: the "mark as read" button must not sit inside
       // a role="button" element. A click anywhere on the tile still opens the more-info dialog (data-entity).
-      tiles.push(`<div class="tile svc clickable ${n > 0 ? "warn" : ""}" data-key="${missed.entity_id}" data-entity="${missed.entity_id}">${svgIcon(
-        n > 0 ? ICONS.phone_missed : ICONS.phone
-      )}<div role="button" tabindex="0"><div class="k">${this._t("calls")}</div><div class="v">${n} ${this._tn("missed", n)}</div></div>${reset}</div>`);
+      const value = n === null ? this._t("unavailable") : `${n} ${this._tn("missed", n)}`;
+      tiles.push(`<div class="tile svc clickable ${n > 0 ? "warn" : n === null ? "off" : ""}" data-key="${missed.entity_id}" data-entity="${
+        missed.entity_id
+      }">${svgIcon(n > 0 ? ICONS.phone_missed : ICONS.phone)}<div role="button" tabindex="0"><div class="k">${this._t(
+        "calls"
+      )}</div><div class="v">${value}</div></div>${reset}</div>`);
     }
     if (box.trackers.length) {
       const home = box.trackers.filter((id) => this._s(id)?.state === "home").length;
@@ -2244,9 +2282,11 @@ class InternetBoxMiniCard extends InternetBoxCard {
     const router = this._s(sc.router);
     if (router) {
       const online = router.state === "home";
-      foot.push(`<span class="clickable ${online ? "ok" : "crit"}" role="button" tabindex="0" data-key="router" data-entity="${router.entity_id}"><span class="dot"></span>&nbsp;${esc(
-        String(router.attributes.connection_type || this._t(online ? "online" : "offline")).toUpperCase()
-      )}</span>`);
+      const unknown = noValue(router);
+      const text = unknown ? this._t("unavailable") : String(router.attributes.connection_type || this._t(online ? "online" : "offline")).toUpperCase();
+      foot.push(`<span class="clickable ${unknown ? "off" : online ? "ok" : "crit"}" role="button" tabindex="0" data-key="router" data-entity="${
+        router.entity_id
+      }"><span class="dot"></span>&nbsp;${esc(text)}</span>`);
     }
     if (c.show_system !== false && box.temps.length) {
       let hottest = null;
@@ -2260,19 +2300,25 @@ class InternetBoxMiniCard extends InternetBoxCard {
         )}${esc(hottest.unit)}</span>`);
     }
     const wifi = this._s(sc.wifi);
-    if (wifi)
-      foot.push(`<span class="clickable ${wifi.state === "on" ? "ok" : ""}" role="button" tabindex="0" data-key="${wifi.entity_id}" data-entity="${wifi.entity_id}">${svgIcon(
-        wifi.state === "on" ? ICONS.wifi : ICONS.wifi_off
-      )}${this._t("wifi")}</span>`);
+    if (wifi) {
+      // Unavailable: a neutral Wi-Fi icon and "—", the state in the tooltip and accessible name.
+      const on = wifi.state === "on";
+      const unknown = noValue(wifi);
+      const label = unknown ? ` title="${esc(`${this._t("wifi")} · ${this._t("unavailable")}`)}" aria-label="${esc(`${this._t("wifi")} · ${this._t("unavailable")}`)}"` : "";
+      foot.push(`<span class="clickable ${on ? "ok" : unknown ? "off" : ""}" role="button" tabindex="0" data-key="${wifi.entity_id}" data-entity="${
+        wifi.entity_id
+      }"${label}>${svgIcon(on || unknown ? ICONS.wifi : ICONS.wifi_off)}${this._t("wifi")}${unknown ? " —" : ""}</span>`);
+    }
     // Missed calls, always shown when the box reports them: in orange with "mark as read" when there are some,
     // plain at 0, as on the Calls tile of the full card.
     const calls = this._missedCalls(sc);
     if (calls) {
       const { missed, n, reset } = calls;
       // Same as the tile of the full card: the "mark as read" button stays outside the role="button" element.
-      foot.push(`<span class="clickable ${n > 0 ? "warn" : ""}" data-key="${missed.entity_id}" data-entity="${missed.entity_id}" title="${esc(
-        `${this._t("calls")} · ${n} ${this._tn("missed", n)}`
-      )}"><span role="button" tabindex="0">${svgIcon(n > 0 ? ICONS.phone_missed : ICONS.phone)}${n}</span>${reset}</span>`);
+      const label = `${this._t("calls")} · ${n === null ? this._t("unavailable") : `${n} ${this._tn("missed", n)}`}`;
+      foot.push(`<span class="clickable ${n > 0 ? "warn" : n === null ? "off" : ""}" data-key="${missed.entity_id}" data-entity="${missed.entity_id}" title="${esc(
+        label
+      )}"><span role="button" tabindex="0" aria-label="${esc(label)}">${svgIcon(n > 0 ? ICONS.phone_missed : ICONS.phone)}${n ?? "—"}</span>${reset}</span>`);
     }
     const up = this._uptime(router);
     if (up !== null) foot.push(`<span data-key="uptime">${svgIcon(ICONS.timer)}${fmtUptime(up, this._hass, this._config)}</span>`);
