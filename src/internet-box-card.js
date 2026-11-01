@@ -1580,12 +1580,16 @@ const partitionLabel = (hass, p, fallback = "Disk") =>
 // ---------------------------------------------------------------------------
 
 const BASE_STYLE = `
+  /* A block that may shrink (min-width: 0) to its grid or flex track; its intrinsic width (inline-block, a grid column
+     sized "auto") comes from ha-card's contain-intrinsic-inline-size, not from the content of the size container,
+     which counts for 0. */
+  :host { display: block; min-width: 0; }
   :host { --ibc-red: #cd1e25; --ibc-ok: var(--success-color, #43a047); --ibc-warn: var(--warning-color, #ffa600); --ibc-crit: var(--error-color, #db4437); }
   /* Readable colours: the operator accent and the state colours stay as they are on fills, dots and tints; icons
      and graphics mix 40 % of the theme text colour (3:1), text 50 % (4.5:1). Mixing with --primary-text-color darkens
      them in a light theme and lightens them in a dark one (e.g. the dark blue Bbox accent on a dark card). Declared on
      ha-card, which carries the operator's --ibc-red. */
-  ha-card { overflow: hidden; position: relative; container-type: inline-size;
+  ha-card { overflow: hidden; position: relative; container-type: inline-size; contain-intrinsic-inline-size: 240px;
             --ibc-accent: color-mix(in srgb, var(--ibc-red) 60%, var(--primary-text-color)); }
   .icon { width: 18px; height: 18px; fill: currentColor; flex: none; }
   .muted { color: var(--secondary-text-color); }
@@ -1606,7 +1610,7 @@ const BASE_STYLE = `
   /* Narrow cards: the title block shrinks but keeps about 4 characters of the 16 px title (48 px), the box picture
      gets smaller (hidden below 200 px), the status pill truncates its text (only its dot below 260 px) and the icon
      buttons never shrink. */
-  .titles { flex: 1 1 auto; min-width: 48px; display: grid; grid-template-columns: minmax(0, 1fr) auto; }
+  .titles { flex: 1 1 0; min-width: 48px; display: grid; grid-template-columns: minmax(0, 1fr) auto; }
   .titles > * { grid-column: 1; }
   .titles > .chip { grid-column: 2; grid-row: 1; align-self: center; margin-left: 10px; white-space: nowrap; min-width: 0; max-width: 100%; }
   .chip.status { overflow: hidden; }
@@ -1622,7 +1626,8 @@ const BASE_STYLE = `
   .sub .parts { display: flex; flex-wrap: wrap; margin-left: -10px; }
   .sub .parts span { min-width: 0; max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .sub .parts span::before { content: "·"; display: inline-block; width: 10px; text-align: center; }
-  .box-link { display: flex; flex: none; max-width: 40%; }
+  /* The box picture gives way before the buttons: it shrinks (object-fit) rather than push them out of the card. */
+  .box-link { display: flex; flex: 0 1 auto; min-width: 0; max-width: 40%; }
   @container (max-width: 200px) { .box-link { display: none; } }
   .box { height: 48px; width: auto; max-width: 100%; object-fit: contain; filter: drop-shadow(0 4px 6px rgba(0,0,0,.25)); }
   .tile { display: flex; align-items: center; gap: 8px; padding: 6px 10px; border-radius: 10px; min-width: 0;
@@ -2024,18 +2029,22 @@ const FULL_STYLE = `
   @keyframes spin { to { transform: rotate(360deg); } }
   @media (prefers-reduced-motion: reduce) { .spin { animation: none; } .ring .value { transition: none; } }
   /* Full card only (and the zoomed mini, which uses this style): its header also carries the status pill and the
-     restart button, so on a narrow card the box picture gets smaller to leave room for the title (it is only hidden
-     below 200 px, see .box-link). The compact mini keeps its full-size picture (MINI_STYLE). */
+     restart button, so on a narrow card the box picture gets smaller to leave room for the title, then is hidden.
+     The compact mini keeps its full-size picture (MINI_STYLE). */
   @container (max-width: 460px) { .box { height: 38px; } }
   @container (max-width: 380px) { .box { height: 32px; } }
-  @container (max-width: 260px) { .box { height: 24px; } }
+  /* Below 9 columns of a phone section the title, the pill and the restart button need the whole header; the zoomed
+     mini card, which also has its detail button, needs it up to 340 px for the whole pill text. */
+  @container (max-width: 260px) { .box-link { display: none; } }
+  @container (max-width: 340px) { .header:has(.zoom) .box-link { display: none; } }
   /* On a narrow full card the status pill would squeeze the title on its line; move it below the title (in the
      first column, under the name) so the title keeps the full width. */
   @container (max-width: 440px) {
     .titles > .chip.status { grid-column: 1; grid-row: auto; align-self: start; justify-self: start; margin: 4px 0 0; }
   }
-  /* Narrower still: only the pill's coloured dot, back on the title line (its text stays its tooltip and label). */
-  @container (max-width: 260px) {
+  /* Narrower still (below 9 columns of a phone section): only the pill's coloured dot, back on the title line (its
+     text stays its tooltip and label). */
+  @container (max-width: 244px) {
     .titles > .chip.status { grid-column: 2; grid-row: 1; align-self: center; justify-self: end; margin: 0 0 0 6px; padding: 5px; }
     .chip.status .txt { display: none; }
   }
@@ -2043,6 +2052,8 @@ const FULL_STYLE = `
   @container (max-width: 200px) {
     .titles > .name { grid-column: 1 / -1; }
     .titles > .chip.status { grid-row: 2; }
+    /* The zoomed mini card has both the restart and the detail buttons: the logo gives them its place. */
+    .header:has(.zoom) .logo-link { display: none; }
   }
 `;
 
@@ -2212,6 +2223,7 @@ class InternetBoxCard extends InternetBoxBase {
 // ---------------------------------------------------------------------------
 
 const MINI_STYLE = `
+  ha-card { contain-intrinsic-inline-size: 160px; }
   .logo-link { width: 32px; height: 32px; border-radius: 8px; }
   .logo { width: 26px; }
   .box-link { max-width: 35%; }

@@ -4,11 +4,16 @@
 
 ### Fixes
 - **Unavailable entities**: while the box restarts (or when an entity is unavailable or unknown), the card no longer shows "Wi-Fi Off", "0 missed" calls, "Offline", a RAID "OK" or a green dot on the partition: they read "Unavailable" in a neutral colour. The "mark as read" button is hidden and the restart button is disabled until the box's buttons are available again.
-- **Narrow cards**: at 6 columns of a narrow section the title disappeared behind the box picture and the status pill. The title now keeps a few characters, the box picture gets smaller then is hidden below 200 px, and the status pill shows only its coloured dot below 260 px. The rates stack one under the other, and the partition name no longer gives way to the disk model. The full card now needs at least 9 columns in the Sections view (the mini card still 6).
+- **Narrow cards**: at 6 columns of a narrow section the title disappeared behind the box picture and the status pill. The title now keeps a few characters, the box picture gets smaller then is hidden, and the status pill shows only its coloured dot below 245 px (9 columns of a phone section); above that it shows its whole text. The rates stack one under the other, and the partition name no longer gives way to the disk model. The full card now needs at least 9 columns in the Sections view (the mini card still 6).
+- **Mini card detail view**: on a narrow mini card (6 columns), the detail and restart buttons of the zoomed view were pushed out of the card; they now always stay inside it.
+- **Connected devices**: when every client tracker is unavailable the tile reads "Unavailable" instead of "0 / 6"; unavailable trackers are left out of the count.
+- **Layout card, button card**: in a container sized by its content (an inline block, an `auto` grid column) the card no longer collapses to a few pixels, and side by side in two columns it still shares the width.
+- **Keyboard**: moving the focus to the detail button or the restart confirmation no longer scrolls the page.
 - **Plurals**: "1 manqué" in French, "1 perdida" in Spanish, and the three Serbian forms ("1 пропуштен", "2 пропуштена", "5 пропуштених").
 
 ### Maintenance
-- Tests for unavailable entities, the missed-call plurals of every language (1, 2, 5, 21, 22) and, in Chromium, the cards at their narrowest widths in English, Polish and Serbian.
+- Tests for unavailable entities, the missed-call plurals of every language (1, 2, 5, 21, 22) and, in Chromium, the cards at their narrowest widths in English, Polish and Serbian, the zoomed mini card, the status pill text, content-sized and two-column containers and the focus.
+- The GIF screenshots are now identical from one run to the next, and unchanged screenshots are no longer rewritten.
 
 ## 2.1.5 - 2026-11-01
 
