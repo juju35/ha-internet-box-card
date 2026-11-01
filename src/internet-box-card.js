@@ -2193,10 +2193,12 @@ class InternetBoxCard extends InternetBoxBase {
       )}</div><div class="v">${value}</div></div>${reset}</div>`);
     }
     if (box.trackers.length) {
-      const home = box.trackers.filter((id) => this._s(id)?.state === "home").length;
-      tiles.push(`<div class="tile svc ok" data-key="devices"><span>${svgIcon(ICONS.devices)}</span><div><div class="k">${this._t(
+      // Unavailable / unknown trackers are left out of the count; when none is known, the tile says so.
+      const known = box.trackers.filter((id) => !noValue(this._s(id)));
+      const home = known.filter((id) => this._s(id).state === "home").length;
+      tiles.push(`<div class="tile svc ${known.length ? "ok" : "off"}" data-key="devices"><span>${svgIcon(ICONS.devices)}</span><div><div class="k">${this._t(
         "devices_short"
-      )}</div><div class="v">${home} / ${box.trackers.length}</div></div></div>`);
+      )}</div><div class="v">${known.length ? `${home} / ${known.length}` : this._t("unavailable")}</div></div></div>`);
     }
     if (!tiles.length) return "";
     return `<div><div class="section-title">${svgIcon(ICONS.services)}${this._t("services")}</div><div class="tiles svc-row">${tiles.join(
