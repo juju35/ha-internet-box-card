@@ -254,3 +254,80 @@ test("two cards side by side in 1fr 1fr columns share the width without overflow
       }
     }
 });
+
+// Contexts that size the card from its content (inline-block, grid auto column: button-card, layout-card) or squeeze
+// it (grid 1fr 1fr: grid card, horizontal-stack, layout-card), with the card placed directly or wrapped in a <div>
+// (as layout-card's hui-card, whose min-width stays auto): the full card, the compact mini card and the zoomed mini
+// card keep a usable width in the first two, and never overflow their column nor collapse to 0 px in the last.
+test("in a container sized by its content or a 1fr 1fr grid, direct or in a div, the cards never overflow", { timeout: 120000 }, async (t) => {
+  if (skip) return t.skip(skip);
+  const page = await browser.newPage({ viewport: { width: 1200, height: 900 } });
+  await page.setContent("<!doctype html><body style='margin:0;font-family:sans-serif'></body>");
+  await page.addScriptTag({ content: HA_CARD });
+  await page.addScriptTag({ content: src });
+  const results = await page.evaluate(
+    ({ states, entities, devices }) => {
+      const out = [];
+      const contexts = [
+        ["inline-block", "display:inline-block", 1],
+        ["grid auto", "display:grid;grid-template-columns:auto", 1],
+        ...[320, 360, 500].map((w) => [`grid 1fr 1fr ${w}px`, `display:grid;grid-template-columns:1fr 1fr;gap:8px;width:${w}px`, 2]),
+      ];
+      for (const [type, zoom, min] of [
+        ["internet-box-card", false, 240],
+        ["internet-box-mini-card", false, 160],
+        ["internet-box-mini-card", true, 240],
+      ])
+        for (const wrapped of [false, true])
+          for (const [name, css, n] of contexts) {
+            const box = document.createElement("div");
+            box.style.cssText = css;
+            document.body.appendChild(box);
+            const cards = [];
+            for (let i = 0; i < n; i++) {
+              const el = document.createElement(type);
+              el.setConfig({ type: `custom:${type}` });
+              el.hass = { states, entities, devices, language: "en", config: { time_zone: "UTC" } };
+              if (wrapped) {
+                const div = document.createElement("div");
+                div.appendChild(el);
+                box.appendChild(div);
+              } else box.appendChild(el);
+              cards.push(el);
+            }
+            // The zoomed mini card in its full view. Not through the detail button: the click on the second card's
+            // button would close the first one (outside click).
+            if (zoom) for (const el of cards) el._zoom(true);
+            const boxRect = box.getBoundingClientRect();
+            const rects = cards.map((el) => el.shadowRoot.querySelector("ha-card").getBoundingClientRect());
+            const overflow = Math.max(
+              box.scrollWidth - box.clientWidth,
+              ...rects.map((r, i) => {
+                const cellRight = n === 2 ? boxRect.left + ((i + 1) * (boxRect.width - 8)) / 2 + i * 8 : boxRect.right;
+                return Math.max(r.right - cellRight, r.right - boxRect.right);
+              })
+            );
+            out.push({
+              label: `${type}${zoom ? " (zoomed)" : ""} ${wrapped ? "in a div" : "direct"} ${name}`,
+              n,
+              min,
+              boxWidth: boxRect.width,
+              widths: rects.map((r) => r.width),
+              overflow,
+            });
+            box.remove();
+          }
+      return out;
+    },
+    { states, entities, devices }
+  );
+  await page.close();
+  const failures = [];
+  for (const r of results) {
+    const ws = r.widths.map((w) => w.toFixed(0)).join("/");
+    if (r.overflow > 0.5) failures.push(`${r.label}: overflows by ${r.overflow.toFixed(0)} px (widths ${ws})`);
+    else if (r.n === 1 ? r.widths[0] < r.min : r.widths.some((w) => Math.abs(w - (r.boxWidth - 8) / 2) > 0.5))
+      failures.push(`${r.label}: ${ws} px in ${r.boxWidth} px`);
+  }
+  assert.deepEqual(failures, []);
+});

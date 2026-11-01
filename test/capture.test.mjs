@@ -81,3 +81,32 @@ test("a capture replaces the file only when its pixels change", (t) => {
     rmSync(dir, { recursive: true });
   }
 });
+
+// The comparison sees every channel: two opaque pictures of other colours (same alpha), or one that differs from the
+// other in a single channel by one level, are different pixels and replace the file; a difference in alpha alone too.
+test("a capture that differs in any one channel replaces the file", (t) => {
+  if (!hasFfmpeg) return t.skip("ffmpeg not on PATH");
+  const dir = mkdtempSync(join(tmpdir(), "ibc-capture-"));
+  const png = (name, rgba) => {
+    const f = join(dir, name);
+    execFileSync("ffmpeg", ["-y", "-loglevel", "error", "-f", "lavfi", "-i", `color=0x${rgba}:s=16x16,format=rgba`, "-frames:v", "1", f]);
+    return f;
+  };
+  try {
+    for (const [base, other] of [
+      ["ff0000ff", "0000ffff"],
+      ["808080ff", "818080ff"],
+      ["808080ff", "808180ff"],
+      ["808080ff", "808081ff"],
+      ["808080ff", "808080fe"],
+    ]) {
+      const dest = png(`dest-${base}.png`, base);
+      const fresh = png(`fresh-${other}.png`, other);
+      const bytes = readFileSync(fresh);
+      assert.equal(saveIfChanged(fresh, dest), true, `${base} → ${other} kept the old file`);
+      assert.deepEqual(readFileSync(dest), bytes);
+    }
+  } finally {
+    rmSync(dir, { recursive: true });
+  }
+});
