@@ -827,6 +827,7 @@ const STRINGS = {
     cancel: "Annulla",
     calls: "Chiamate",
     missed: "perse",
+    missed_one: "persa",
     temperature: "Temp.",
     used: "usato",
     free: "libero",
@@ -844,7 +845,7 @@ const STRINGS = {
     zoom_in: "Mostra la scheda completa",
     zoom_out: "Torna alla vista compatta",
     box: "Modem internet (dispositivo dell'integrazione)",
-    title: "Titolo (facoltativo, per impostazione predefinita il modello del modem)",
+    title: "Titolo (facoltativo, predefinito: modello del modem)",
     model: "Modello del modem (immagine e titolo predefinito)",
     model_auto: "Automatico",
     show_image: "Mostra l'immagine del modem",
@@ -943,6 +944,7 @@ const STRINGS = {
     cancel: "Cancelar",
     calls: "Chamadas",
     missed: "perdidas",
+    missed_one: "perdida",
     temperature: "Temp.",
     used: "usado",
     free: "livre",
@@ -1001,6 +1003,9 @@ const STRINGS = {
     cancel: "Anuluj",
     calls: "Połączenia",
     missed: "nieodebrane",
+    missed_one: "nieodebrane",
+    missed_few: "nieodebrane",
+    missed_many: "nieodebranych",
     temperature: "Temp.",
     used: "zajęte",
     free: "wolne",
@@ -1030,7 +1035,7 @@ const STRINGS = {
     show_storage: "Pokaż pamięć masową",
     show_services: "Pokaż usługi (Wi-Fi, połączenia, urządzenia)",
     zoom: "Przycisk szczegółów",
-    zoom_helper: "Przycisk w prawym górnym rogu, który pokazuje pełną kartę zamiast mini karty, i z powrotem",
+    zoom_helper: "Przycisk w prawym górnym rogu, który pokazuje pełną kartę zamiast minikarty, i z powrotem",
     rate_unit: "Jednostka prędkości",
     unit_bytes: "Bajty (kB/s, MB/s)",
     unit_bits: "Bity (kb/s, Mb/s)",
@@ -1122,6 +1127,18 @@ const lang = (hass, config) => {
 };
 
 const t = (hass, config, key) => STRINGS[lang(hass, config)][key] ?? STRINGS.en[key] ?? key;
+
+/** Text agreeing with the count n: the `key_one/_few/_many` variant picked by Intl.PluralRules when the
+ *  language defines it, else the plain key (which serves as the `_other` form). */
+const tn = (hass, config, key, n) => {
+  const l = lang(hass, config);
+  let form = "other";
+  try {
+    // The Portuguese texts are European Portuguese: 0 takes the plural there (pt alone means pt-BR to Intl).
+    form = new Intl.PluralRules(l === "pt" ? "pt-PT" : l).select(n);
+  } catch (_) {}
+  return STRINGS[l][`${key}_${form}`] ?? t(hass, config, key);
+};
 
 const num = (s) => {
   if (!s) return null;
@@ -1756,6 +1773,10 @@ class InternetBoxBase extends HTMLElement {
     return t(this._hass, this._config, key);
   }
 
+  _tn(key, n) {
+    return tn(this._hass, this._config, key, n);
+  }
+
   _s(id) {
     return id ? this._hass.states[id] : undefined;
   }
@@ -2103,7 +2124,7 @@ class InternetBoxCard extends InternetBoxBase {
       // a role="button" element. A click anywhere on the tile still opens the more-info dialog (data-entity).
       tiles.push(`<div class="tile svc clickable ${n > 0 ? "warn" : ""}" data-key="${missed.entity_id}" data-entity="${missed.entity_id}">${svgIcon(
         n > 0 ? ICONS.phone_missed : ICONS.phone
-      )}<div role="button" tabindex="0"><div class="k">${this._t("calls")}</div><div class="v">${n} ${this._t("missed")}</div></div>${reset}</div>`);
+      )}<div role="button" tabindex="0"><div class="k">${this._t("calls")}</div><div class="v">${n} ${this._tn("missed", n)}</div></div>${reset}</div>`);
     }
     if (box.trackers.length) {
       const home = box.trackers.filter((id) => this._s(id)?.state === "home").length;
@@ -2248,7 +2269,7 @@ class InternetBoxMiniCard extends InternetBoxCard {
       const { missed, n, reset } = calls;
       // Same as the tile of the full card: the "mark as read" button stays outside the role="button" element.
       foot.push(`<span class="clickable ${n > 0 ? "warn" : ""}" data-key="${missed.entity_id}" data-entity="${missed.entity_id}" title="${esc(
-        `${this._t("calls")} · ${n} ${this._t("missed")}`
+        `${this._t("calls")} · ${n} ${this._tn("missed", n)}`
       )}"><span role="button" tabindex="0">${svgIcon(n > 0 ? ICONS.phone_missed : ICONS.phone)}${n}</span>${reset}</span>`);
     }
     const up = this._uptime(router);
@@ -2344,7 +2365,7 @@ class InternetBoxEditorBase extends HTMLElement {
               { value: "sr-Latn", label: "Srpski (latinica)" },
               { value: "it", label: "Italiano" },
               { value: "nl", label: "Nederlands" },
-              { value: "pt", label: "Português" },
+              { value: "pt", label: "Português (Portugal)" },
               { value: "pl", label: "Polski" },
             ],
           },
