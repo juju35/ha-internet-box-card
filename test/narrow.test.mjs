@@ -219,3 +219,38 @@ test("the cards keep their minimum width in a container sized by its content", a
       assert.ok(width >= min, `${type} in ${wrapper}: ${width}px`);
     }
 });
+
+// Side by side in two `1fr` columns (layout-card, a grid of cards; the cards are the grid items, as in Home
+// Assistant's stacks where hui-card is `display: contents`): each card takes half of the width, never its intrinsic
+// width (it would overflow), never 0 px.
+test("two cards side by side in 1fr 1fr columns share the width without overflowing", async (t) => {
+  if (skip) return t.skip(skip);
+  for (const type of ["internet-box-card", "internet-box-mini-card"])
+    for (const total of [320, 360, 500]) {
+      const page = await browser.newPage();
+      await page.setContent(
+        `<!doctype html><body style="margin:0;font-family:sans-serif"><div id=root style="width:${total}px;display:grid;grid-template-columns:1fr 1fr;gap:8px"></div></body>`
+      );
+      await page.addScriptTag({ content: HA_CARD });
+      await page.addScriptTag({ content: src });
+      const widths = await page.evaluate(
+        ({ type, states, entities, devices }) => {
+          const root = document.getElementById("root");
+          for (let i = 0; i < 2; i++) {
+            const el = document.createElement(type);
+            el.setConfig({ type: `custom:${type}` });
+            el.hass = { states, entities, devices, language: "en", config: { time_zone: "UTC" } };
+            root.appendChild(el);
+          }
+          return [...root.children].map((el) => [el.getBoundingClientRect().width, el.getBoundingClientRect().right]);
+        },
+        { type, states, entities, devices }
+      );
+      await page.close();
+      const half = (total - 8) / 2;
+      for (const [width, right] of widths) {
+        assert.ok(Math.abs(width - half) < 1, `${type} in 1fr 1fr @ ${total}px: ${width}px, expected ${half}px`);
+        assert.ok(right <= total + 0.5, `${type} in 1fr 1fr @ ${total}px: overflows to ${right}px`);
+      }
+    }
+});
