@@ -1547,10 +1547,12 @@ const boxModel = (box, config) => {
   return models.find((m) => m.id === config?.model) ?? detectModel(box);
 };
 
-/** Label of a partition: its friendly name without the device name and the "free space" words. */
+/** Label of a partition: its friendly name without the device name and the "free space" words, as the core
+ *  Freebox integration names them (partition_free_space). Italian, Dutch and Polish have no translation of
+ *  that name in core and fall back to the English one. */
 const partitionLabel = (hass, p, fallback = "Disk") =>
   shortName(hass, p.id, p.device)
-    .replace(/\s*(free space|espace libre( de| sur)?|freier speicher|espacio libre( de| en)?)\s*/gi, " ")
+    .replace(/\s*(free space|espace libre( de| sur)?|freier speicher(platz)?|espacio libre( de| en)?|espaço livre( em| de)?)\s*/gi, " ")
     .trim() || deviceName(p.device) || fallback;
 
 // ---------------------------------------------------------------------------

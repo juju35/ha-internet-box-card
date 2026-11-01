@@ -2,11 +2,12 @@ import assert from "node:assert/strict";
 import { test } from "node:test";
 import { load } from "./load.mjs";
 
-const { STRINGS, RATE_UNITS, lang, tn, InternetBoxCardEditor } = load("internet-box-card.js", [
+const { STRINGS, RATE_UNITS, lang, tn, partitionLabel, InternetBoxCardEditor } = load("internet-box-card.js", [
   "STRINGS",
   "RATE_UNITS",
   "lang",
   "tn",
+  "partitionLabel",
   "InternetBoxCardEditor",
 ]);
 
@@ -116,4 +117,25 @@ test("I18N plurals: missed calls agree with the count in Polish, Italian and Por
   // Languages without plural variants keep their single text.
   assert.deepEqual([0, 1, 5].map((n) => missed("en", n)), ["missed", "missed", "missed"]);
   assert.deepEqual([1, 5].map((n) => missed("fr", n)), ["manqués", "manqués"]);
+});
+
+test("I18N plurals: Portuguese from HA uses the European rules, the language option stays first", () => {
+  const hass = (language) => ({ language, locale: { language } });
+  assert.equal(tn(hass("pt"), {}, "missed", 0), "perdidas"); // pt-PT: 0 is plural (pt-BR would say "perdida")
+  assert.equal(tn(hass("pt"), { language: "pl" }, "missed", 5), "nieodebranych");
+  assert.equal(tn(hass("pl"), { language: "pt" }, "missed", 1), "perdida");
+});
+
+test("I18N partitions: the core Freebox 'free space' words are stripped in every translated form", () => {
+  const dev = { name: "Freebox Server" };
+  const label = (friendly_name) =>
+    partitionLabel({ states: { "sensor.p": { attributes: { friendly_name } } } }, { id: "sensor.p", device: dev });
+  // Names from homeassistant/components/freebox translations (partition_free_space); it, nl and pl
+  // have no translation in core and use the English name.
+  assert.equal(label("Freebox Server Disque dur free space"), "Disque dur");
+  assert.equal(label("Freebox Server Espace libre Disque dur"), "Disque dur");
+  assert.equal(label("Freebox Server Disque dur Freier Speicherplatz"), "Disque dur");
+  assert.equal(label("Freebox Server espacio libre de Disque dur"), "Disque dur");
+  assert.equal(label("Freebox Server Espaço livre em Disque dur"), "Disque dur");
+  assert.equal(label("Freebox Server free space"), "Freebox Server");
 });
