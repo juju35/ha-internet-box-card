@@ -32,10 +32,13 @@ const HA_CARD = `customElements.define("ha-card", class extends HTMLElement {
 
 // Every entity unavailable (the box is off or its integration failed).
 const unavailableStates = Object.fromEntries(Object.entries(states).map(([id, s]) => [id, { ...s, state: "unavailable", attributes: {} }]));
+// The box is offline (its tracker is away): the longest status texts ("Fuera de línea · FTTH").
+const ROUTER_TRACKER = "device_tracker.freebox_v9_r1";
+const offlineStates = { ...states, [ROUTER_TRACKER]: { ...states[ROUTER_TRACKER], state: "not_home" } };
 
 // Renders a card at a width and measures its header and tiles. `zoom`: the mini card in its full view (detail
 // button); `unavailable`: every entity unavailable.
-async function measure(type, width, language, { zoom = false, unavailable = false } = {}) {
+async function measure(type, width, language, { zoom = false, unavailable = false, offline = false } = {}) {
   const page = await browser.newPage();
   await page.setContent(`<!doctype html><body style="margin:0;font-family:sans-serif"><div id=root style="width:${width}px"></div></body>`);
   await page.addScriptTag({ content: HA_CARD });
@@ -94,7 +97,7 @@ async function measure(type, width, language, { zoom = false, unavailable = fals
         minColumns: el.getGridOptions().min_columns,
       };
     },
-    { type, language, zoom, states: unavailable ? unavailableStates : states, entities, devices }
+    { type, language, zoom, states: unavailable ? unavailableStates : offline ? offlineStates : states, entities, devices }
   );
   await page.close();
   return res;
@@ -181,11 +184,12 @@ test("no header button leaves the card in the zoomed mini card or around the 200
 });
 
 // The status pill shows its whole text whenever the card is wide enough for it, from 245 px (9 columns of a phone
-// section) to a wide column, in the longest translations; only narrower cards fall back to its dot.
+// section) to a wide column, in the longest translations; only narrower cards fall back to its dot. 261-280 px is
+// 9 columns of a 352-374 px phone section, where the box picture comes back next to the title.
 test("the status pill shows its whole text from 245 px up", async (t) => {
   if (skip) return t.skip(skip);
-  for (const language of ["en", "pl", "sr-Latn"])
-    for (const width of [245, 260, 300, 320, 380, 441, 460, 500])
+  for (const language of ["en", "pl", "sr-Latn", "fr"])
+    for (const width of [245, 260, 261, 265, 270, 276, 280, 300, 320, 380, 441, 460, 500])
       for (const [type, zoom] of [["internet-box-card", false], ["internet-box-mini-card", true]])
         for (const unavailable of [false, true]) {
           const r = await measure(type, width, language, { zoom, unavailable });
@@ -193,6 +197,13 @@ test("the status pill shows its whole text from 245 px up", async (t) => {
           assert.equal(r.pillText, r.pillLabel, `${at}: pill`);
           assert.deepEqual(r.outside, [], `${at}: out of the card`);
         }
+  // The longest status texts, while the box is offline, also fit whole next to the box picture.
+  for (const language of ["es", "de", "sr", "fr"])
+    for (const width of [245, 261, 280, 300, 322, 340, 341, 380, 441])
+      for (const offline of [false, true]) {
+        const r = await measure("internet-box-card", width, language, { offline });
+        assert.equal(r.pillText, r.pillLabel, `${language} @ ${width}px${offline ? " offline" : ""}: pill`);
+      }
 });
 
 // In a container that takes the width of its content (an inline-block, an `auto` grid column, as layout-card or
