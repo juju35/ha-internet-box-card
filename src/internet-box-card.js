@@ -1580,16 +1580,20 @@ const partitionLabel = (hass, p, fallback = "Disk") =>
 // ---------------------------------------------------------------------------
 
 const BASE_STYLE = `
-  /* A block that may shrink (min-width: 0) to its grid or flex track; its intrinsic width (inline-block, a grid column
-     sized "auto") comes from ha-card's contain-intrinsic-inline-size, not from the content of the size container,
-     which counts for 0. */
-  :host { display: block; min-width: 0; }
+  :host { display: block; }
+  /* ha-card is the size container of the width queries: its content gives it no width, so in a parent that sizes to
+     its content (inline-block, grid auto column: button-card, layout-card) the card would fall to a few pixels. This
+     empty, zero-height grid gives the card a natural (max-content) width of 400 px (240 px for the compact mini card)
+     without any minimum (its min-content width is 0): in a "1fr 1fr" grid (grid card, horizontal-stack,
+     layout-card), wrapped in a <div> or not, the card still shrinks to its column. contain-intrinsic-inline-size or a
+     min-width on the host would be a minimum and overflow there. */
+  :host::before { content: ""; display: grid; grid-template-columns: minmax(0, 400px); height: 0; }
   :host { --ibc-red: #cd1e25; --ibc-ok: var(--success-color, #43a047); --ibc-warn: var(--warning-color, #ffa600); --ibc-crit: var(--error-color, #db4437); }
   /* Readable colours: the operator accent and the state colours stay as they are on fills, dots and tints; icons
      and graphics mix 40 % of the theme text colour (3:1), text 50 % (4.5:1). Mixing with --primary-text-color darkens
      them in a light theme and lightens them in a dark one (e.g. the dark blue Bbox accent on a dark card). Declared on
      ha-card, which carries the operator's --ibc-red. */
-  ha-card { overflow: hidden; position: relative; container-type: inline-size; contain-intrinsic-inline-size: 240px;
+  ha-card { overflow: hidden; position: relative; container-type: inline-size;
             --ibc-accent: color-mix(in srgb, var(--ibc-red) 60%, var(--primary-text-color)); }
   .icon { width: 18px; height: 18px; fill: currentColor; flex: none; }
   .muted { color: var(--secondary-text-color); }
@@ -2223,7 +2227,7 @@ class InternetBoxCard extends InternetBoxBase {
 // ---------------------------------------------------------------------------
 
 const MINI_STYLE = `
-  ha-card { contain-intrinsic-inline-size: 160px; }
+  :host::before { grid-template-columns: minmax(0, 240px); }
   .logo-link { width: 32px; height: 32px; border-radius: 8px; }
   .logo { width: 26px; }
   .box-link { max-width: 35%; }

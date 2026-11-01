@@ -7,13 +7,13 @@
 - **Narrow cards**: at 6 columns of a narrow section the title disappeared behind the box picture and the status pill. The title now keeps a few characters, the box picture gets smaller then is hidden, and the status pill shows only its coloured dot below 245 px (9 columns of a phone section); above that it shows its whole text. The rates stack one under the other, and the partition name no longer gives way to the disk model. The full card now needs at least 9 columns in the Sections view (the mini card still 6).
 - **Mini card detail view**: on a narrow mini card (6 columns), the detail and restart buttons of the zoomed view were pushed out of the card; they now always stay inside it.
 - **Connected devices**: when every client tracker is unavailable the tile reads "Unavailable" instead of "0 / 6"; unavailable trackers are left out of the count.
-- **Layout card, button card**: in a container sized by its content (an inline block, an `auto` grid column) the card no longer collapses to a few pixels, and side by side in two columns it still shares the width.
+- **Layout card, button card**: in a container sized by its content (an inline block, an `auto` grid column) the card no longer collapses to a few pixels, and side by side in two columns it still shares the width, also when each card is wrapped in its own block (as layout-card does) instead of overflowing its column.
 - **Keyboard**: moving the focus to the detail button or the restart confirmation no longer scrolls the page.
 - **Plurals**: "1 manqué" in French, "1 perdida" in Spanish, and the three Serbian forms ("1 пропуштен", "2 пропуштена", "5 пропуштених").
 
 ### Maintenance
-- Tests for unavailable entities, the missed-call plurals of every language (1, 2, 5, 21, 22) and, in Chromium, the cards at their narrowest widths in English, Polish and Serbian, the zoomed mini card, the status pill text, content-sized and two-column containers and the focus.
-- The GIF screenshots are now identical from one run to the next, and unchanged screenshots are no longer rewritten.
+- Tests for unavailable entities, the missed-call plurals of every language (1, 2, 5, 21, 22) and, in Chromium, the cards at their narrowest widths in English, Polish and Serbian, the zoomed mini card, the status pill text, content-sized and two-column containers (card placed directly or wrapped in a block) and the focus.
+- The GIF screenshots are now identical from one run to the next, and unchanged screenshots are no longer rewritten (the comparison checks every colour channel, not only transparency).
 
 ## 2.1.5 - 2026-11-01
 
