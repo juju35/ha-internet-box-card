@@ -41,7 +41,9 @@ Entities are **discovered automatically**, you don't have to pick them one by on
 - Click any value (except the connected devices count, a total over several trackers) to open its Home Assistant history (more-info dialog)
 - Click the operator logo to open its website, and the box picture to open the box admin interface
 - Visual editor in the dashboard UI for both cards (no YAML needed)
-- Light and dark mode, English, French, German and Spanish
+- Light and dark mode, 10 languages (English, French, German, Spanish, Serbian Cyrillic and Latin, Italian, Dutch, European Portuguese and Polish, see [Translations](#translations))
+- Unavailable entities (for example while the box restarts) are shown as unavailable, not as Wi-Fi off or 0 missed calls; the restart button is disabled meanwhile
+- Sections view: the full card needs at least 9 columns, the mini card 6; on a narrow card the box picture gets smaller then hidden, and the status pill shows only its coloured dot
 - Single file, no external dependency: the box pictures and operator logos are embedded
 
 ## Supported integrations
