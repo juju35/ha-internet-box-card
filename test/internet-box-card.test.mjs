@@ -348,3 +348,91 @@ test("a legacy Bbox missing its upload sensor does not borrow another box's uplo
   const one = { states: { "sensor.bbox_currently_used_download_bandwidth": st("1") }, entities: {}, devices: {} };
   assert.deepEqual([...listBoxes(one)].map((b) => b.label), ["Bbox"]);
 });
+
+// Card rendered from the mock Freebox (scripts/mock-states.mjs) with some states replaced, in English.
+const mockCard = async (overrides, config = {}, Kind = "InternetBoxCard") => {
+  const mock = await import("../scripts/mock-states.mjs");
+  const { [Kind]: Card } = load("internet-box-card.js", [Kind]);
+  const states = structuredClone(mock.states);
+  for (const [id, state] of Object.entries(overrides)) states[id] = { ...states[id], state, attributes: state === "unavailable" ? {} : states[id].attributes };
+  const el = new Card();
+  el._config = { zoom: false, ...config };
+  el._hass = { states, entities: mock.entities, devices: mock.devices, language: "en", config: { time_zone: "UTC" } };
+  return el;
+};
+const WIFI = "switch.freebox_wifi";
+const MISSED = "sensor.freebox_missed_calls";
+const REBOOT = "button.freebox_reboot";
+const PART = "sensor.disk_1000_freebox_free_space";
+const ROUTER_ID = "device_tracker.freebox_v9_r1";
+
+test("an unavailable Wi-Fi switch or missed-calls sensor is shown as unavailable, not as Off or 0 missed", async () => {
+  for (const state of ["unavailable", "unknown"]) {
+    const el = await mockCard({ [WIFI]: state, [MISSED]: state });
+    const html = el._render();
+    const wifiTile = html.match(/<div class="tile svc[^"]*"[^>]*data-entity="switch\.freebox_wifi">.*?<\/div><\/div><\/div>/s)[0];
+    assert.match(wifiTile, /<div class="v">Unavailable<\/div>/, state);
+    assert.match(wifiTile, /class="tile svc clickable off"/, state);
+    assert.doesNotMatch(wifiTile, />Off</, state);
+    const callsTile = html.match(/<div class="tile svc[^"]*"[^>]*data-entity="sensor\.freebox_missed_calls">.*?<\/div><\/div>(<button.*?<\/button>)?<\/div>/s)[0];
+    assert.match(callsTile, /<div class="v">Unavailable<\/div>/, state);
+    assert.doesNotMatch(callsTile, /0 missed|class="reset"|svc clickable warn/, state);
+
+    // Header chip, shown when the Services section is hidden.
+    const chip = (await mockCard({ [WIFI]: state }, { show_services: false }))._chips(
+      { scalars: { wifi: WIFI } }
+    );
+    assert.match(chip, /class="chip clickable off"/, state);
+    assert.match(chip, /Wi-Fi · Unavailable/, state);
+    assert.doesNotMatch(chip, /Wi-Fi off/, state);
+
+    // Footer of the mini card.
+    const mini = (await mockCard({ [WIFI]: state, [MISSED]: state }, {}, "InternetBoxMiniCard"))._renderMini();
+    const wifiFoot = mini.match(/<span class="clickable[^"]*"[^>]*data-entity="switch\.freebox_wifi"[^>]*>.*?<\/span>/s)[0];
+    assert.match(wifiFoot, /class="clickable off"/, state);
+    assert.match(wifiFoot, /title="Wi-Fi · Unavailable"/, state);
+    const callsFoot = mini.match(/<span class="clickable[^"]*"[^>]*data-entity="sensor\.freebox_missed_calls".*?<\/span><\/span>/s)[0];
+    assert.match(callsFoot, /title="Calls · Unavailable"/, state);
+    assert.match(callsFoot, /—<\/span>/, state);
+    assert.doesNotMatch(callsFoot, /class="reset"|clickable warn|svg[^>]*>.*?<\/svg>0</s, state);
+  }
+});
+
+test("real Wi-Fi off and 0 missed calls are still shown as such", async () => {
+  const el = await mockCard({ [WIFI]: "off", [MISSED]: "0" });
+  const html = el._render();
+  assert.match(html, /<div class="k">Wi-Fi<\/div><div class="v">Off<\/div>/);
+  assert.match(html, /<div class="v">0 missed<\/div>/);
+  const on = (await mockCard({}))._render();
+  assert.match(on, /<div class="k">Wi-Fi<\/div><div class="v">On<\/div>/);
+  assert.match(on, /<div class="v">2 missed<\/div><\/div><button class="reset"/);
+});
+
+test("an unavailable router, RAID or partition is not shown as offline, OK or healthy", async () => {
+  const el = await mockCard({ [ROUTER_ID]: "unavailable", [PART]: "unavailable" });
+  const html = el._render();
+  assert.match(html, /class="chip status clickable off"[^>]*>.*Unavailable/s);
+  assert.doesNotMatch(html, /Offline/);
+  assert.match(html, /<span class="dot off"><\/span><span class="grow">/);
+  const mini = (await mockCard({ [ROUTER_ID]: "unavailable" }, {}, "InternetBoxMiniCard"))._renderMini();
+  assert.match(mini, /class="clickable off"[^>]*data-key="router"[^>]*>.*?Unavailable/s);
+  assert.doesNotMatch(mini, /OFFLINE/);
+  // RAID binary sensor (the mock has none): an unavailable one is neither "OK" nor "Degraded".
+  const raid = await mockCard({});
+  raid._hass.states["binary_sensor.raid"] = { entity_id: "binary_sensor.raid", state: "unavailable", attributes: {} };
+  const rows = raid._storage({ partitions: [], raids: ["binary_sensor.raid"], device: null });
+  assert.match(rows, /<span class="chip off">Unavailable<\/span>/);
+  assert.doesNotMatch(rows, /class="dot ok"|>OK</);
+});
+
+test("the restart button is disabled while the reboot button is unavailable", async () => {
+  // A button that was never pressed is "unknown": that is its normal state.
+  const ok = (await mockCard({ [REBOOT]: "unknown" }))._render();
+  assert.match(ok, /<button class="action" data-action="restart"[^>]*>/);
+  assert.doesNotMatch(ok, /data-action="restart"[^>]*disabled/);
+  const off = await mockCard({ [REBOOT]: "unavailable" });
+  assert.match(off._render(), /<button class="action" data-action="restart"[^>]* disabled>/);
+  // And no confirmation is opened for it.
+  off._openDialog = () => assert.fail("dialog opened");
+  off._confirmRestart();
+});

@@ -116,7 +116,8 @@ test("I18N plurals: missed calls agree with the count in Polish, Italian and Por
   assert.deepEqual([0, 1, 2].map((n) => missed("pt-BR", n)), ["perdidas", "perdida", "perdidas"]);
   // Languages without plural variants keep their single text.
   assert.deepEqual([0, 1, 5].map((n) => missed("en", n)), ["missed", "missed", "missed"]);
-  assert.deepEqual([1, 5].map((n) => missed("fr", n)), ["manqués", "manqués"]);
+  // French: 0 and 1 are singular.
+  assert.deepEqual([0, 1, 2, 5].map((n) => missed("fr", n)), ["manqué", "manqué", "manqués", "manqués"]);
 });
 
 test("I18N plurals: Portuguese from HA uses the European rules, the language option stays first", () => {
@@ -138,4 +139,32 @@ test("I18N partitions: the core Freebox 'free space' words are stripped in every
   assert.equal(label("Freebox Server espacio libre de Disque dur"), "Disque dur");
   assert.equal(label("Freebox Server Espaço livre em Disque dur"), "Disque dur");
   assert.equal(label("Freebox Server free space"), "Freebox Server");
+});
+
+test("I18N plurals: missed calls agree with the count in every language", () => {
+  const missed = (language, n) => `${n} ${tn(undefined, { language }, "missed", n)}`;
+  const expected = {
+    en: ["1 missed", "2 missed", "5 missed", "21 missed", "22 missed"],
+    fr: ["1 manqué", "2 manqués", "5 manqués", "21 manqués", "22 manqués"],
+    de: ["1 verpasst", "2 verpasst", "5 verpasst", "21 verpasst", "22 verpasst"],
+    es: ["1 perdida", "2 perdidas", "5 perdidas", "21 perdidas", "22 perdidas"],
+    sr: ["1 пропуштен", "2 пропуштена", "5 пропуштених", "21 пропуштен", "22 пропуштена"],
+    "sr-Latn": ["1 propušten", "2 propuštena", "5 propuštenih", "21 propušten", "22 propuštena"],
+    it: ["1 persa", "2 perse", "5 perse", "21 perse", "22 perse"],
+    nl: ["1 gemist", "2 gemist", "5 gemist", "21 gemist", "22 gemist"],
+    pt: ["1 perdida", "2 perdidas", "5 perdidas", "21 perdidas", "22 perdidas"],
+    pl: ["1 nieodebrane", "2 nieodebrane", "5 nieodebranych", "21 nieodebranych", "22 nieodebrane"],
+  };
+  assert.deepEqual(Object.keys(expected).sort(), [...LANGS].sort());
+  for (const [l, want] of Object.entries(expected)) {
+    assert.deepEqual([1, 2, 5, 21, 22].map((n) => missed(l, n)), want, l);
+  }
+  // 0 takes the singular in French, the plural in the others.
+  assert.equal(missed("fr", 0), "0 manqué");
+  assert.equal(missed("es", 0), "0 perdidas");
+});
+
+test("I18N: every language translates the unavailable state", () => {
+  for (const l of LANGS) assert.notEqual(STRINGS[l].unavailable, undefined, l);
+  for (const l of LANGS.filter((l) => l !== "en")) assert.notEqual(STRINGS[l].unavailable, STRINGS.en.unavailable, l);
 });
