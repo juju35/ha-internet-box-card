@@ -9,6 +9,7 @@ import { fileURLToPath } from "node:url";
 import { states, entities, devices, NOW } from "./mock-states.mjs";
 import { operators } from "./mock-operators.mjs";
 import { load } from "../test/load.mjs";
+import { freezeAnimations, saveIfChanged } from "./capture.mjs";
 
 const root = fileURLToPath(new URL("..", import.meta.url));
 const cardJs = readFileSync(`${root}dist/internet-box-card.js`, "utf8");
@@ -104,17 +105,21 @@ for (const s of shots) {
   const page = await openCard(browser, s);
   await page.waitForTimeout(800);
   const box = await page.locator("#root").boundingBox();
+  // Written to a temporary file first: the screenshot is only replaced when its pixels change.
+  const tmp = join(tmpdir(), `ibc-${process.pid}-${s.file}.png`);
   await page.screenshot({
-    path: `${root}screenshots/${s.file}.png`,
+    path: tmp,
     clip: { x: 0, y: 0, width: s.width + 32, height: Math.ceil(box.height) + 32 },
     animations: "disabled",
   });
-  console.log(`screenshots/${s.file}.png`);
+  console.log(`screenshots/${s.file}.png${saveIfChanged(tmp, `${root}screenshots/${s.file}.png`) ? "" : " (unchanged)"}`);
   await page.close();
 }
 
-// The running box as a GIF (the cooling fan spinning at its live speed). Needs ffmpeg on PATH. Every animation is
-// paused and stepped frame by frame, so the GIF is identical whatever the machine's speed.
+// The running box as a GIF (the cooling fan spinning at its live speed). Needs ffmpeg on PATH. Every animation, the
+// card's in its shadow root included, is paused and stepped frame by frame, and the palette and its ordered dither are
+// computed from the frames alone, so the GIF is identical whatever the machine's speed; it is only replaced when its
+// frames change.
 // Recorded in both themes with the same setup: fan.gif light, fan-dark.gif dark.
 const gifs = [
   { file: "fan", type: "internet-box-card", theme: "light", width: 460, config: {} },
@@ -130,17 +135,18 @@ for (const gif of gifs) {
   const dir = mkdtempSync(join(tmpdir(), "fb-frames-"));
   const frames = Math.round(FPS * SECONDS);
   for (let i = 0; i < frames; i++) {
-    await page.evaluate((t) => { for (const a of document.getAnimations()) { a.pause(); a.currentTime = t; } }, (i * 1000) / FPS);
+    await freezeAnimations(page, (i * 1000) / FPS);
     await page.screenshot({ path: join(dir, `f${String(i).padStart(3, "0")}.png`), clip });
   }
   await page.close();
-  const out = `${root}screenshots/${gif.file}.gif`;
+  const out = join(dir, `${gif.file}.gif`);
   execFileSync("ffmpeg", [
     "-y", "-loglevel", "error", "-framerate", String(FPS), "-i", join(dir, "f%03d.png"),
     "-vf", `scale=${clip.width}:-1:flags=lanczos,split[a][b];[a]palettegen=max_colors=128[p];[b][p]paletteuse=dither=bayer:bayer_scale=4`,
     "-loop", "0", out,
   ]);
+  const written = saveIfChanged(out, `${root}screenshots/${gif.file}.gif`);
   rmSync(dir, { recursive: true });
-  console.log(`screenshots/${gif.file}.gif`);
+  console.log(`screenshots/${gif.file}.gif${written ? "" : " (unchanged)"}`);
 }
 await browser.close();
