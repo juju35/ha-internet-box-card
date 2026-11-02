@@ -2228,8 +2228,6 @@ class InternetBoxCard extends InternetBoxBase {
 
 const MINI_STYLE = `
   :host::before { grid-template-columns: minmax(0, 240px); }
-  .logo-link { width: 32px; height: 32px; border-radius: 8px; }
-  .logo { width: 26px; }
   .box-link { max-width: 35%; }
   .box { height: 44px; }
   @container (max-width: 260px) { .box { height: 28px; } }
