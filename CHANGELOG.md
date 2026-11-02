@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 2.1.7 - 2026-11-02
 
 ### Fixes
 - **Mini card**: the box brand logo keeps its full size (40 px) in the compact view, like the full card.
