@@ -1,6 +1,6 @@
 // Screenshot helpers shared by scripts/screenshots.mjs (and tested by test/capture.test.mjs).
 import { execFileSync } from "node:child_process";
-import { existsSync, renameSync, rmSync } from "node:fs";
+import { copyFileSync, existsSync, rmSync } from "node:fs";
 
 // Pauses every running animation of the page at `time` ms, those inside shadow roots included (the card's fan:
 // document.getAnimations() leaves them out), so a frame depends only on `time`, never on the machine's speed.
@@ -34,6 +34,8 @@ export function saveIfChanged(tmp, dest) {
     rmSync(tmp);
     return false;
   }
-  renameSync(tmp, dest);
+  // Copy then remove, not rename: the temporary file is on /tmp, often another device than the repository (EXDEV).
+  copyFileSync(tmp, dest);
+  rmSync(tmp);
   return true;
 }
