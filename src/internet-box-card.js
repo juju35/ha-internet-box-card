@@ -1264,6 +1264,19 @@ const temperature = (s) => {
 
 const level = (v, warn, crit) => (v === null ? "" : v >= crit ? "crit" : v >= warn ? "warn" : "ok");
 
+// Header icon of the kind of connection (fibre, xDSL, 4G / 5G, else a generic box): a box body with what feeds it.
+const BOX_BODY = '<rect x="3" y="12" width="18" height="8" rx="2"/><circle class="led" cx="7" cy="16" r="1.1"/><circle class="led" cx="10.5" cy="16" r="1.1"/>';
+const LINE_ICONS = {
+  box: '<path class="ln" d="M7 12V5M17 12V5"/>',
+  fibre: '<circle cx="12" cy="6" r="2"/><path class="ln" d="M12 12V8.5M8 6H6M18 6h-2M9.2 3.2 8 2M14.8 3.2 16 2"/>',
+  dsl: '<path class="ln" d="M12 12v-1.5l-2.5-1.8 5-2-5-2 2.5-1.7V1.5"/>',
+  mobile: '<path class="ln" d="M12 12V6.5M8.6 5.6a4.8 4.8 0 0 1 6.8 0M6.2 3.2a8.2 8.2 0 0 1 11.6 0"/>',
+};
+const lineOf = (type, model) => {
+  const t = `${type || ""} ${model || ""}`.toLowerCase();
+  return /ftth|fib/.test(t) ? "fibre" : /dsl/.test(t) ? "dsl" : /\b(4g|5g|lte|mobile|cell)/.test(t) ? "mobile" : "box";
+};
+const lineIcon = (kind) => `<svg class="icon type" viewBox="0 0 24 24" aria-hidden="true">${BOX_BODY}${LINE_ICONS[kind]}</svg>`;
 const svgIcon = (path, cls = "") => `<svg class="icon ${cls}" viewBox="0 0 24 24"><path d="${path}"/></svg>`;
 
 // Same values, compared by identity: used to skip a render when nothing the card shows has changed.
@@ -1620,9 +1633,14 @@ const BASE_STYLE = `
   .chip.status { overflow: hidden; }
   .chip.status .txt { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
   .titles .chips { margin-top: 4px; }
-  .logo-link { display: flex; align-items: center; justify-content: center; flex: none; align-self: flex-start; width: 40px; height: 40px; border-radius: 10px;
-               background: #fff; box-shadow: inset 0 0 0 1px var(--divider-color, rgba(0,0,0,.12)); }
-  .logo { display: block; width: 34px; height: auto; }
+  .logo-link { position: relative; display: flex; align-items: center; justify-content: center; flex: none; align-self: flex-start;
+               width: 40px; height: 40px; border-radius: 50%; background: color-mix(in srgb, var(--ibc-red) 16%, transparent); }
+  .logo-link .icon.type { width: 24px; height: 24px; fill: var(--ibc-accent); stroke: var(--ibc-accent); stroke-width: 0; }
+  .logo-link .icon.type .ln { fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .logo-link .icon.type .led { fill: color-mix(in srgb, var(--ibc-red) 16%, var(--card-background-color, #fff)); }
+  .logo { position: absolute; right: -4px; bottom: -4px; display: block; width: 18px; height: 18px; object-fit: contain; border-radius: 5px; padding: 1px;
+          box-sizing: border-box; background: #fff;
+          box-shadow: 0 0 0 1px var(--divider-color, rgba(0,0,0,.12)), 0 0 0 3px var(--card-background-color, #fff); }
   .name { font-size: 16px; font-weight: 500; line-height: 1.25; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .sub { font-size: 12px; color: var(--secondary-text-color); overflow: hidden; }
   /* Device name and firmware on one line when they fit, else one per line: the "·" separator that starts a line
@@ -1928,10 +1946,12 @@ class InternetBoxBase extends HTMLElement {
     const name = c.title || model?.name || devName || op.name;
     const adminUrl = /^https?:\/\//i.test(c.admin_url || "") ? c.admin_url : op.admin;
     const sub = [devName && devName !== name ? devName : null, firmware ? `${this._t("firmware")} ${firmware}` : null].filter(Boolean);
-    // The operator logo (every supported operator has one), opening its website.
-    const brand = op.logo
-      ? `<a class="logo-link" href="${esc(op.website)}" target="_blank" rel="noopener noreferrer" title="${esc(op.name)}"><img class="logo" src="${op.logo}" alt="${esc(op.name)}"></a>`
-      : "";
+    // Icon of the kind of connection, tinted with the operator colour, with the operator logo (every supported
+    // operator has one) as a badge, opening its website.
+    const line = lineIcon(lineOf(router?.attributes?.connection_type, model?.name));
+    const brand = `<a class="logo-link" href="${esc(op.website)}" target="_blank" rel="noopener noreferrer" title="${esc(op.name)}">${
+      op.logo ? `<img class="logo" src="${op.logo}" alt="${esc(op.name)}">` : ""
+    }${line}</a>`;
     // The box picture only when the operator has a matching model drawing.
     const boxImg = model && IMG_BOX[model.id] ? IMG_BOX[model.id] : null;
     return `

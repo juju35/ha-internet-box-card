@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.2.0 - 2026-11-03
+
+### Features
+- **Header**: the operator logo becomes an icon of the kind of connection (fibre, xDSL, 4G / 5G, else a generic box), tinted with the operator colour, with the operator logo as a badge, on the full card and the mini card. The connection comes from the box's `connection_type`, else from the model name (Bbox Fibre). The box picture is unchanged.
+
 ## 2.1.7 - 2026-11-02
 
 ### Fixes

@@ -29,7 +29,7 @@ Entities are **discovered automatically**, you don't have to pick them one by on
 - Two cards: a full **Internet Box Card** and a compact **Internet Box Mini Card**
 - Detail button at the top right of the mini card: it shows the full card in its place (same box and options), and the collapse button, or a click anywhere outside the card, brings the compact view back (`zoom: false` removes it)
 - Automatic discovery of the box entities, whatever the language of the entity ids (several boxes supported)
-- Operator logo, accent colour, website and admin links follow the detected operator
+- Header icon of the kind of connection (fibre, xDSL, 4G / 5G, else a box) in the operator colour, with the operator logo as a badge; accent colour, website and admin links follow the detected operator
 - Picture and commercial name of the box model, detected automatically or set with the `model` option, and firmware version
 - Connection status and type (FTTH, xDSL…), public IPv4 (IPv6 on hover) and uptime
 - Download / upload rates, in bytes (kB/s, MB/s) or bits (kb/s, Mb/s)
@@ -152,7 +152,7 @@ language: fr
 | `model` | both | Detected | Box model, for its picture and the default title (see [Supported models](#supported-models)). Needed for the Bbox, whose integration exposes no model |
 | `admin_url` | both | Operator default | Admin interface opened when clicking the box picture (Freebox: `https://mafreebox.freebox.fr`, Livebox: `http://livebox.home`, SFR: `http://192.168.1.1`, Bbox: `https://mabbox.bytel.fr`) |
 | `show_image` | both | `true` | Show the box picture |
-| `show_logo` | both | `true` | Show the operator logo (opens the operator website when clicked) |
+| `show_logo` | both | `true` | Show the header icon of the connection with the operator logo (opens the operator website when clicked) |
 | `show_network` | both | `true` | Download / upload rates (and IPv4, uptime on the full card) |
 | `show_system` | both | `true` | Temperatures and fans (hottest temperature on the mini card) |
 | `show_storage` | full | `true` | Disk partitions and RAID status |

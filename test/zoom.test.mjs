@@ -186,7 +186,7 @@ test("the status pill sits right of the title, centred on its line, and the Wi-F
   await page.close();
 });
 
-test("the brand logo of the mini card keeps the full card's size (40 px, logo 34 px)", async (t) => {
+test("the brand logo of the mini card keeps the full card's size (40 px, logo badge 18 px)", async (t) => {
   if (skip) return t.skip(skip);
   const { page, errors } = await open();
   const res = await page.evaluate(() => {
@@ -199,7 +199,7 @@ test("the brand logo of the mini card keeps the full card's size (40 px, logo 34
     window.click(root.querySelector(".zoom"));
     return { mini, full: size() };
   });
-  assert.deepEqual(res.mini, { link: [40, 40], logo: 34 });
+  assert.deepEqual(res.mini, { link: [40, 40], logo: 18 });
   assert.deepEqual(res.mini, res.full);
   assert.deepEqual(errors, []);
   await page.close();

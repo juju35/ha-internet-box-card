@@ -2,7 +2,8 @@ import assert from "node:assert/strict";
 import { test } from "node:test";
 import { load } from "./load.mjs";
 
-const { discover, listBoxes, parseDate, uptimeSec, InternetBoxCard, sameSig } = load("internet-box-card.js", [
+const { discover, listBoxes, parseDate, uptimeSec, InternetBoxCard, sameSig, lineOf } = load("internet-box-card.js", [
+  "lineOf",
   "discover",
   "listBoxes",
   "parseDate",
@@ -455,4 +456,12 @@ test("connected devices are shown as unavailable when every client tracker is, n
   // Every tracker known: unchanged.
   const all = tile((await mockCard({}))._render());
   assert.match(all, new RegExp(`<div class="v">${trackers.filter((id) => mock.states[id].state === "home").length} / ${trackers.length}</div>`));
+});
+
+test("lineOf: the header icon follows the connection type, else the model", () => {
+  assert.equal(lineOf("ftth"), "fibre");
+  assert.equal(lineOf("xdsl"), "dsl");
+  assert.equal(lineOf("4G"), "mobile");
+  assert.equal(lineOf(undefined, "Bbox Fibre"), "fibre");
+  assert.equal(lineOf(undefined, "Livebox 7"), "box");
 });
