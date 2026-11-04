@@ -4,7 +4,7 @@
 
 ### New
 - Added Romanian, Danish, Swedish, Bulgarian, Russian, Ukrainian, Hungarian, Slovak, Czech, Slovenian, Latvian and Greek translations: `ro`, `da`, `sv`, `bg`, `ru`, `uk`, `hu`, `sk`, `cs`, `sl`, `lv` and `el`, picked automatically from the Home Assistant language and offered in the visual editor.
-- The missed calls agree with the count in the new languages that have a singular or dual form ("1 пропущенный", "2 zgrešena", "1 αναπάντητη"…); Hungarian keeps a single form.
+- The missed calls agree with the count in the new languages that have a singular or dual form ("1 непринятый", "2 zgrešena", "1 αναπάντητη"…); Hungarian keeps a single form.
 - Partition names: the "free space" words of the core Freebox integration are also stripped in Swedish, Hungarian, Slovak and Czech.
 
 ### Maintenance

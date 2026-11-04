@@ -181,7 +181,7 @@ test("I18N plurals: missed calls agree with the count in every language", () => 
     da: ["1 ubesvaret", "2 ubesvarede", "5 ubesvarede", "21 ubesvarede", "22 ubesvarede"],
     sv: ["1 missat", "2 missade", "5 missade", "21 missade", "22 missade"],
     bg: ["1 пропуснато", "2 пропуснати", "5 пропуснати", "21 пропуснати", "22 пропуснати"],
-    ru: ["1 пропущенный", "2 пропущенных", "5 пропущенных", "21 пропущенный", "22 пропущенных"],
+    ru: ["1 непринятый", "2 непринятых", "5 непринятых", "21 непринятый", "22 непринятых"],
     uk: ["1 пропущений", "2 пропущені", "5 пропущених", "21 пропущений", "22 пропущені"],
     hu: ["1 nem fogadott", "2 nem fogadott", "5 nem fogadott", "21 nem fogadott", "22 nem fogadott"],
     sk: ["1 zmeškaný", "2 zmeškané", "5 zmeškaných", "21 zmeškaných", "22 zmeškaných"],

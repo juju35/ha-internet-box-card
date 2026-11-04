@@ -8,7 +8,7 @@ import { after, before, test } from "node:test";
 import { devices, entities, states } from "../scripts/mock-states.mjs";
 
 const src = readFileSync(new URL("../src/internet-box-card.js", import.meta.url), "utf8");
-const LANGS = ["en", "pl", "sr-Latn", "sr"];
+const LANGS = ["en", "pl", "sr-Latn", "sr", "el", "sl", "uk"];
 // Width of n columns of a 320 px section (12 columns, 8 px gaps).
 const cols = (n) => Math.floor(((320 + 8) * n) / 12 - 8);
 
