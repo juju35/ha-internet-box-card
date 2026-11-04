@@ -5,14 +5,14 @@
 [![Validate](https://github.com/juju35/ha-internet-box-card/actions/workflows/validate.yml/badge.svg)](https://github.com/juju35/ha-internet-box-card/actions/workflows/validate.yml)
 [![Lint](https://github.com/juju35/ha-internet-box-card/actions/workflows/lint.yml/badge.svg)](https://github.com/juju35/ha-internet-box-card/actions/workflows/lint.yml)
 [![Release](https://img.shields.io/github/v/release/juju35/ha-internet-box-card)](https://github.com/juju35/ha-internet-box-card/releases/latest)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/juju35/ha-internet-box-card/blob/main/LICENSE)
 [![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-FFDD00?logo=buymeacoffee&logoColor=black)](https://buymeacoffee.com/julienstep9)
 
 <p align="center">
-  <img src="images/free.svg" alt="Free" height="48">&nbsp;&nbsp;&nbsp;
-  <img src="images/orange.svg" alt="Orange" height="48">&nbsp;&nbsp;&nbsp;
-  <img src="images/sfr.svg" alt="SFR" height="48">&nbsp;&nbsp;&nbsp;
-  <img src="images/bbox.svg" alt="Bouygues Telecom" height="48">
+  <img src="https://raw.githubusercontent.com/juju35/ha-internet-box-card/main/images/free.svg" alt="Free" height="48">&nbsp;&nbsp;&nbsp;
+  <img src="https://raw.githubusercontent.com/juju35/ha-internet-box-card/main/images/orange.svg" alt="Orange" height="48">&nbsp;&nbsp;&nbsp;
+  <img src="https://raw.githubusercontent.com/juju35/ha-internet-box-card/main/images/sfr.svg" alt="SFR" height="48">&nbsp;&nbsp;&nbsp;
+  <img src="https://raw.githubusercontent.com/juju35/ha-internet-box-card/main/images/bbox.svg" alt="Bouygues Telecom" height="48">
 </p>
 
 Lovelace cards for Home Assistant to monitor an internet box at a glance: download / upload rates, connection, temperatures, fans, storage, Wi-Fi, missed calls and connected devices. They work with the **Freebox**, **Livebox** (Orange), **SFR Box** and **Bbox** (Bouygues Telecom) integrations; each section shows only what the box's integration exposes.
@@ -172,21 +172,21 @@ Without a detected model or `model` option, no box picture is shown.
 
 | Freebox Ultra | Freebox Pop | Freebox Delta | Freebox Revolution | Freebox mini 4K |
 |:---:|:---:|:---:|:---:|:---:|
-| <img src="images/freebox-ultra.svg" alt="Freebox Ultra" width="120"> | <img src="images/freebox-pop.svg" alt="Freebox Pop" width="120"> | <img src="images/freebox-delta.svg" alt="Freebox Delta" width="120"> | <img src="images/freebox-revolution.svg" alt="Freebox Revolution" width="120"> | <img src="images/freebox-mini-4k.svg" alt="Freebox mini 4K" width="120"> |
+| <img src="https://raw.githubusercontent.com/juju35/ha-internet-box-card/main/images/freebox-ultra.svg" alt="Freebox Ultra" width="120"> | <img src="https://raw.githubusercontent.com/juju35/ha-internet-box-card/main/images/freebox-pop.svg" alt="Freebox Pop" width="120"> | <img src="https://raw.githubusercontent.com/juju35/ha-internet-box-card/main/images/freebox-delta.svg" alt="Freebox Delta" width="120"> | <img src="https://raw.githubusercontent.com/juju35/ha-internet-box-card/main/images/freebox-revolution.svg" alt="Freebox Revolution" width="120"> | <img src="https://raw.githubusercontent.com/juju35/ha-internet-box-card/main/images/freebox-mini-4k.svg" alt="Freebox mini 4K" width="120"> |
 | `ultra` (v9) | `pop` (v8) | `delta` (v7) | `revolution` (v6) | `mini_4k` |
 
 ### Livebox (Orange)
 
 | Livebox 7 | Livebox 6 | Livebox 5 | Livebox 4 | Livebox S |
 |:---:|:---:|:---:|:---:|:---:|
-| <img src="images/livebox-7.svg" alt="Livebox 7" width="120"> | <img src="images/livebox-6.svg" alt="Livebox 6" width="120"> | <img src="images/livebox-5.svg" alt="Livebox 5" width="120"> | <img src="images/livebox-4.svg" alt="Livebox 4" width="120"> | <img src="images/livebox-s.svg" alt="Livebox S" width="120"> |
+| <img src="https://raw.githubusercontent.com/juju35/ha-internet-box-card/main/images/livebox-7.svg" alt="Livebox 7" width="120"> | <img src="https://raw.githubusercontent.com/juju35/ha-internet-box-card/main/images/livebox-6.svg" alt="Livebox 6" width="120"> | <img src="https://raw.githubusercontent.com/juju35/ha-internet-box-card/main/images/livebox-5.svg" alt="Livebox 5" width="120"> | <img src="https://raw.githubusercontent.com/juju35/ha-internet-box-card/main/images/livebox-4.svg" alt="Livebox 4" width="120"> | <img src="https://raw.githubusercontent.com/juju35/ha-internet-box-card/main/images/livebox-s.svg" alt="Livebox S" width="120"> |
 | `livebox_7` | `livebox_6` | `livebox_5` | `livebox_4` | `livebox_s` |
 
 ### SFR Box
 
 | SFR Box 8 | SFR Box 7 | SFR Box (NB6VAC) |
 |:---:|:---:|:---:|
-| <img src="images/sfr-box-8.svg" alt="SFR Box 8" width="120"> | <img src="images/sfr-box-7.svg" alt="SFR Box 7" width="120"> | <img src="images/sfr-nb6vac.svg" alt="SFR Box NB6VAC" width="120"> |
+| <img src="https://raw.githubusercontent.com/juju35/ha-internet-box-card/main/images/sfr-box-8.svg" alt="SFR Box 8" width="120"> | <img src="https://raw.githubusercontent.com/juju35/ha-internet-box-card/main/images/sfr-box-7.svg" alt="SFR Box 7" width="120"> | <img src="https://raw.githubusercontent.com/juju35/ha-internet-box-card/main/images/sfr-nb6vac.svg" alt="SFR Box NB6VAC" width="120"> |
 | `sfr_box_8` | `sfr_box_7` | `sfr_nb6vac` |
 
 ### Bbox (Bouygues Telecom)
@@ -195,7 +195,7 @@ The Bbox integration exposes no device model: set the picture with the `model` o
 
 | Bbox Fibre | Bbox Ultym | Bbox Miami |
 |:---:|:---:|:---:|
-| <img src="images/bbox-fibre.svg" alt="Bbox Fibre" width="120"> | <img src="images/bbox-ultym.svg" alt="Bbox Ultym" width="120"> | <img src="images/bbox-miami.svg" alt="Bbox Miami" width="120"> |
+| <img src="https://raw.githubusercontent.com/juju35/ha-internet-box-card/main/images/bbox-fibre.svg" alt="Bbox Fibre" width="120"> | <img src="https://raw.githubusercontent.com/juju35/ha-internet-box-card/main/images/bbox-ultym.svg" alt="Bbox Ultym" width="120"> | <img src="https://raw.githubusercontent.com/juju35/ha-internet-box-card/main/images/bbox-miami.svg" alt="Bbox Miami" width="120"> |
 | `bbox_fibre` | `bbox_ultym` | `bbox_miami` |
 
 ## Screenshots
@@ -204,7 +204,7 @@ While the box is running, the card animates: the cooling fan spins at its live s
 
 | Light | Dark |
 |---|---|
-| ![fan](screenshots/fan.gif) | ![fan, dark theme](screenshots/fan-dark.gif) |
+| ![fan](https://raw.githubusercontent.com/juju35/ha-internet-box-card/main/screenshots/fan.gif) | ![fan, dark theme](https://raw.githubusercontent.com/juju35/ha-internet-box-card/main/screenshots/fan-dark.gif) |
 
 ### Operators
 
@@ -212,17 +212,17 @@ The full card with what each integration exposes: the Freebox shows every sectio
 
 | Operator | Light | Dark |
 |---|---|---|
-| Freebox (Free) | ![Freebox card](screenshots/card.png) | ![Freebox card dark](screenshots/card-dark.png) |
-| Livebox (Orange) | ![Livebox card](screenshots/card-livebox.png) | ![Livebox card dark](screenshots/card-livebox-dark.png) |
-| SFR Box | ![SFR Box card](screenshots/card-sfr.png) | ![SFR Box card dark](screenshots/card-sfr-dark.png) |
-| Bbox (Bouygues Telecom) | ![Bbox card](screenshots/card-bbox.png) | ![Bbox card dark](screenshots/card-bbox-dark.png) |
+| Freebox (Free) | ![Freebox card](https://raw.githubusercontent.com/juju35/ha-internet-box-card/main/screenshots/card.png) | ![Freebox card dark](https://raw.githubusercontent.com/juju35/ha-internet-box-card/main/screenshots/card-dark.png) |
+| Livebox (Orange) | ![Livebox card](https://raw.githubusercontent.com/juju35/ha-internet-box-card/main/screenshots/card-livebox.png) | ![Livebox card dark](https://raw.githubusercontent.com/juju35/ha-internet-box-card/main/screenshots/card-livebox-dark.png) |
+| SFR Box | ![SFR Box card](https://raw.githubusercontent.com/juju35/ha-internet-box-card/main/screenshots/card-sfr.png) | ![SFR Box card dark](https://raw.githubusercontent.com/juju35/ha-internet-box-card/main/screenshots/card-sfr-dark.png) |
+| Bbox (Bouygues Telecom) | ![Bbox card](https://raw.githubusercontent.com/juju35/ha-internet-box-card/main/screenshots/card-bbox.png) | ![Bbox card dark](https://raw.githubusercontent.com/juju35/ha-internet-box-card/main/screenshots/card-bbox-dark.png) |
 
 ### Mini card
 
 | Light | Dark |
 |---|---|
-| ![mini card](screenshots/mini-card.png) | ![mini card dark](screenshots/mini-card-dark.png) |
-| ![mini card, detail view](screenshots/mini-card-zoom.png) | ![mini card dark, detail view](screenshots/mini-card-zoom-dark.png) |
+| ![mini card](https://raw.githubusercontent.com/juju35/ha-internet-box-card/main/screenshots/mini-card.png) | ![mini card dark](https://raw.githubusercontent.com/juju35/ha-internet-box-card/main/screenshots/mini-card-dark.png) |
+| ![mini card, detail view](https://raw.githubusercontent.com/juju35/ha-internet-box-card/main/screenshots/mini-card-zoom.png) | ![mini card dark, detail view](https://raw.githubusercontent.com/juju35/ha-internet-box-card/main/screenshots/mini-card-zoom-dark.png) |
 
 The second row is the mini card after a click on its detail button (top right): the full card, with the collapse button in the same place.
 
@@ -256,7 +256,7 @@ npm run screenshots  # renders the cards with mock data (scripts/mock-states.mjs
 ### Releasing
 
 1. Bump `version` in `package.json`
-2. Add a `## <version>` section at the top of [CHANGELOG.md](CHANGELOG.md)
+2. Add a `## <version>` section at the top of [CHANGELOG.md](https://github.com/juju35/ha-internet-box-card/blob/main/CHANGELOG.md)
 3. Push to `main`: the **Release** workflow builds the card, creates the tag and the GitHub release with the changelog section as notes, and attaches `internet-box-card.js` (and its `freebox-card.js` copy)
 
 ## Translations
@@ -292,7 +292,7 @@ Contributions for additional languages are welcome!
 
 ## License
 
-[MIT](LICENSE)
+[MIT](https://github.com/juju35/ha-internet-box-card/blob/main/LICENSE)
 
 Freebox and Free are trademarks of Free SAS, Livebox and Orange of Orange SA, SFR of SFR SA, Bbox and Bouygues Telecom of Bouygues Telecom SA. This project is not affiliated with any of them.
 
