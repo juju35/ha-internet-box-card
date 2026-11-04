@@ -42,7 +42,7 @@ Entities are **discovered automatically**, you don't have to pick them one by on
 - Click any value (except the connected devices count, a total over several trackers) to open its Home Assistant history (more-info dialog)
 - Click the operator logo to open its website, and the box picture to open the box admin interface
 - Visual editor in the dashboard UI for both cards (no YAML needed)
-- Light and dark mode, 10 languages (English, French, German, Spanish, Serbian Cyrillic and Latin, Italian, Dutch, European Portuguese and Polish, see [Translations](#translations))
+- Light and dark mode, 24 languages (English, French, German, Spanish, Serbian Cyrillic and Latin, Italian, Dutch, European Portuguese, Polish, Romanian, Danish, Swedish, Bulgarian, Russian, Ukrainian, Hungarian, Irish, Slovak, Czech, Slovenian, Maltese, Latvian and Greek, see [Translations](#translations))
 - Unavailable entities (for example while the box restarts) are shown as unavailable, not as Wi-Fi off or 0 missed calls; the restart button is disabled meanwhile
 - Sections view: the full card needs at least 9 columns, the mini card 6; on a narrow card the box picture gets smaller then hidden, and the status pill shows only its coloured dot
 - Single file, no external dependency: the box pictures and operator logos are embedded
@@ -159,7 +159,7 @@ language: fr
 | `show_services` | full | `true` | Wi-Fi, missed calls and connected devices |
 | `zoom` | mini | `true` | Detail button at the top right: shows the full card (every section) in place of the mini card, and back |
 | `rate_unit` | both | `bytes` | Rates unit: `bytes` (kB/s, MB/s) or `bits` (kb/s, Mb/s) |
-| `language` | both | Auto | Force language: `en`, `fr`, `de`, `es`, `sr`, `sr-Latn`, `it`, `nl`, `pt` or `pl` (auto-detects from HA settings) |
+| `language` | both | Auto | Force language: `en`, `fr`, `de`, `es`, `sr`, `sr-Latn`, `it`, `nl`, `pt`, `pl`, `ro`, `da`, `sv`, `bg`, `ru`, `uk`, `hu`, `ga`, `sk`, `cs`, `sl`, `mt`, `lv` or `el` (auto-detects from HA settings) |
 
 ## Supported models
 
@@ -274,6 +274,20 @@ The cards auto-detect the language from your Home Assistant settings. Currently 
 | Nederlands | `nl` |
 | Português (European) | `pt` |
 | Polski | `pl` |
+| Română | `ro` |
+| Dansk | `da` |
+| Svenska | `sv` |
+| Български | `bg` |
+| Русский | `ru` |
+| Українська | `uk` |
+| Magyar | `hu` |
+| Gaeilge | `ga` |
+| Slovenčina | `sk` |
+| Čeština | `cs` |
+| Slovenščina | `sl` |
+| Malti | `mt` |
+| Latviešu | `lv` |
+| Ελληνικά | `el` |
 
 Contributions for additional languages are welcome!
 

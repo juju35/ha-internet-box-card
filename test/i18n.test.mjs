@@ -11,9 +11,12 @@ const { STRINGS, RATE_UNITS, lang, tn, partitionLabel, InternetBoxCardEditor } =
   "InternetBoxCardEditor",
 ]);
 
-const LANGS = ["en", "fr", "de", "es", "sr", "sr-Latn", "it", "nl", "pt", "pl"];
-// Plural variants (key_one/_few/_many) are optional: a language without them uses the plain key.
-const PLURAL = /_(one|few|many)$/;
+const LANGS = [
+  "en", "fr", "de", "es", "sr", "sr-Latn", "it", "nl", "pt", "pl",
+  "ro", "da", "sv", "bg", "ru", "uk", "hu", "ga", "sk", "cs", "sl", "mt", "lv", "el",
+];
+// Plural variants (key_one/_two/_few/_many) are optional: a language without them uses the plain key.
+const PLURAL = /_(one|two|few|many)$/;
 const baseKeys = (l) => Object.keys(STRINGS[l]).filter((k) => !PLURAL.test(k)).sort();
 const enKeys = Object.keys(STRINGS.en).sort();
 const placeholders = (v) => (String(v).match(/\{\w+\}/g) || []).sort();
@@ -81,6 +84,17 @@ test("I18N language resolution: Italian, Dutch, Portuguese and Polish, other tag
   assert.equal(lang({ locale: { language: "pl-PL" } }, {}), "pl");
 });
 
+test("I18N language resolution: the 14 languages added in 2.2.1 from their regional tags", () => {
+  const resolve = (language) => lang(undefined, { language });
+  const tags = {
+    "ro-RO": "ro", "da-DK": "da", "sv-SE": "sv", "sv-FI": "sv", "bg-BG": "bg", "ru-RU": "ru", "uk-UA": "uk",
+    "hu-HU": "hu", "ga-IE": "ga", "sk-SK": "sk", "cs-CZ": "cs", "sl-SI": "sl", "mt-MT": "mt", "lv-LV": "lv", "el-GR": "el",
+  };
+  for (const [tag, want] of Object.entries(tags)) assert.equal(resolve(tag), want, tag);
+  assert.equal(lang({ locale: { language: "el" } }, {}), "el");
+  assert.equal(lang({ locale: { language: "ru" } }, { language: "uk" }), "uk");
+});
+
 test("I18N parity: every language has the English rate units, same lengths", () => {
   assert.deepEqual(Object.keys(RATE_UNITS).sort(), [...LANGS].sort());
   for (const l of LANGS) {
@@ -103,6 +117,11 @@ test("I18N editor: the language dropdown offers every translation", () => {
   assert.equal(options.find((o) => o.value === "nl").label, "Nederlands");
   assert.equal(options.find((o) => o.value === "pt").label, "Português (Portugal)");
   assert.equal(options.find((o) => o.value === "pl").label, "Polski");
+  const natives = {
+    ro: "Română", da: "Dansk", sv: "Svenska", bg: "Български", ru: "Русский", uk: "Українська", hu: "Magyar",
+    ga: "Gaeilge", sk: "Slovenčina", cs: "Čeština", sl: "Slovenščina", mt: "Malti", lv: "Latviešu", el: "Ελληνικά",
+  };
+  for (const [l, label] of Object.entries(natives)) assert.equal(options.find((o) => o.value === l).label, label, l);
 });
 
 test("I18N plurals: missed calls agree with the count in Polish, Italian and Portuguese", () => {
@@ -138,6 +157,11 @@ test("I18N partitions: the core Freebox 'free space' words are stripped in every
   assert.equal(label("Freebox Server Disque dur Freier Speicherplatz"), "Disque dur");
   assert.equal(label("Freebox Server espacio libre de Disque dur"), "Disque dur");
   assert.equal(label("Freebox Server Espaço livre em Disque dur"), "Disque dur");
+  assert.equal(label("Freebox Server Disque dur fritt utrymme"), "Disque dur");
+  assert.equal(label("Freebox Server Disque dur szabad hely"), "Disque dur");
+  assert.equal(label("Freebox Server spás saor in aisce Disque dur"), "Disque dur");
+  assert.equal(label("Freebox Server Disque dur voľný priestor"), "Disque dur");
+  assert.equal(label("Freebox Server Disque dur - volné místo"), "Disque dur");
   assert.equal(label("Freebox Server free space"), "Freebox Server");
 });
 
@@ -154,6 +178,20 @@ test("I18N plurals: missed calls agree with the count in every language", () => 
     nl: ["1 gemist", "2 gemist", "5 gemist", "21 gemist", "22 gemist"],
     pt: ["1 perdida", "2 perdidas", "5 perdidas", "21 perdidas", "22 perdidas"],
     pl: ["1 nieodebrane", "2 nieodebrane", "5 nieodebranych", "21 nieodebranych", "22 nieodebrane"],
+    ro: ["1 pierdut", "2 pierdute", "5 pierdute", "21 pierdute", "22 pierdute"],
+    da: ["1 ubesvaret", "2 ubesvarede", "5 ubesvarede", "21 ubesvarede", "22 ubesvarede"],
+    sv: ["1 missat", "2 missade", "5 missade", "21 missade", "22 missade"],
+    bg: ["1 пропуснато", "2 пропуснати", "5 пропуснати", "21 пропуснати", "22 пропуснати"],
+    ru: ["1 пропущенный", "2 пропущенных", "5 пропущенных", "21 пропущенный", "22 пропущенных"],
+    uk: ["1 пропущений", "2 пропущені", "5 пропущених", "21 пропущений", "22 пропущені"],
+    hu: ["1 nem fogadott", "2 nem fogadott", "5 nem fogadott", "21 nem fogadott", "22 nem fogadott"],
+    ga: ["1 caillte", "2 caillte", "5 caillte", "21 caillte", "22 caillte"],
+    sk: ["1 zmeškaný", "2 zmeškané", "5 zmeškaných", "21 zmeškaných", "22 zmeškaných"],
+    cs: ["1 zmeškaný", "2 zmeškané", "5 zmeškaných", "21 zmeškaných", "22 zmeškaných"],
+    sl: ["1 zgrešen", "2 zgrešena", "5 zgrešenih", "21 zgrešenih", "22 zgrešenih"],
+    mt: ["1 mitlufa", "2 mitlufin", "5 mitlufin", "21 mitlufin", "22 mitlufin"],
+    lv: ["1 neatbildēts", "2 neatbildēti", "5 neatbildēti", "21 neatbildēts", "22 neatbildēti"],
+    el: ["1 αναπάντητη", "2 αναπάντητες", "5 αναπάντητες", "21 αναπάντητες", "22 αναπάντητες"],
   };
   assert.deepEqual(Object.keys(expected).sort(), [...LANGS].sort());
   for (const [l, want] of Object.entries(expected)) {
@@ -162,6 +200,10 @@ test("I18N plurals: missed calls agree with the count in every language", () => 
   // 0 takes the singular in French, the plural in the others.
   assert.equal(missed("fr", 0), "0 manqué");
   assert.equal(missed("es", 0), "0 perdidas");
+  // Slovenian: 101 and 102 take the singular and the dual again; Latvian: 0 takes the plural.
+  assert.equal(missed("sl", 101), "101 zgrešen");
+  assert.equal(missed("sl", 102), "102 zgrešena");
+  assert.equal(missed("lv", 0), "0 neatbildēti");
 });
 
 test("I18N: every language translates the unavailable state", () => {

@@ -170,7 +170,7 @@ test("no header button leaves the card in the zoomed mini card or around the 200
     ["internet-box-card", false, [201, 204, 210, 220], [24]],
   ];
   for (const [type, zoom, widths, buttons] of cases)
-    for (const language of ["en", "pl", "sr-Latn"])
+    for (const language of ["en", "pl", "sr-Latn", "el"])
       for (const width of widths)
         for (const unavailable of [false, true]) {
           const r = await measure(type, width, language, { zoom, unavailable });
@@ -188,7 +188,7 @@ test("no header button leaves the card in the zoomed mini card or around the 200
 // 9 columns of a 352-374 px phone section, where the box picture comes back next to the title.
 test("the status pill shows its whole text from 245 px up", async (t) => {
   if (skip) return t.skip(skip);
-  for (const language of ["en", "pl", "sr-Latn", "fr"])
+  for (const language of ["en", "pl", "sr-Latn", "fr", "el"])
     for (const width of [245, 260, 261, 265, 270, 276, 280, 300, 320, 380, 441, 460, 500])
       for (const [type, zoom] of [["internet-box-card", false], ["internet-box-mini-card", true]])
         for (const unavailable of [false, true]) {
@@ -198,7 +198,7 @@ test("the status pill shows its whole text from 245 px up", async (t) => {
           assert.deepEqual(r.outside, [], `${at}: out of the card`);
         }
   // The longest status texts, while the box is offline, also fit whole next to the box picture.
-  for (const language of ["es", "de", "sr", "fr"])
+  for (const language of ["es", "de", "sr", "fr", "el", "bg", "uk", "sl"])
     for (const width of [245, 261, 280, 300, 322, 340, 341, 380, 441])
       for (const offline of [false, true]) {
         const r = await measure("internet-box-card", width, language, { offline });
