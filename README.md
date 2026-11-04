@@ -23,7 +23,7 @@ Entities are **discovered automatically**, you don't have to pick them one by on
 
 | Internet Box Card | Internet Box Mini Card |
 |---|---|
-| ![internet-box-card](https://raw.githubusercontent.com/juju35/ha-internet-box-card/main/screenshots/card.png) | ![internet-box-mini-card](https://raw.githubusercontent.com/juju35/ha-internet-box-card/main/screenshots/mini-card.png) |
+| <img src="https://raw.githubusercontent.com/juju35/ha-internet-box-card/main/screenshots/card.png" alt="internet-box-card" width="400"> | <img src="https://raw.githubusercontent.com/juju35/ha-internet-box-card/main/screenshots/mini-card.png" alt="internet-box-mini-card" width="400"> |
 
 ## Features
 
@@ -204,7 +204,7 @@ While the box is running, the card animates: the cooling fan spins at its live s
 
 | Light | Dark |
 |---|---|
-| ![fan](https://raw.githubusercontent.com/juju35/ha-internet-box-card/main/screenshots/fan.gif) | ![fan, dark theme](https://raw.githubusercontent.com/juju35/ha-internet-box-card/main/screenshots/fan-dark.gif) |
+| <img src="https://raw.githubusercontent.com/juju35/ha-internet-box-card/main/screenshots/fan.gif" alt="fan" width="400"> | <img src="https://raw.githubusercontent.com/juju35/ha-internet-box-card/main/screenshots/fan-dark.gif" alt="fan, dark theme" width="400"> |
 
 ### Operators
 
@@ -212,17 +212,17 @@ The full card with what each integration exposes: the Freebox shows every sectio
 
 | Operator | Light | Dark |
 |---|---|---|
-| Freebox (Free) | ![Freebox card](https://raw.githubusercontent.com/juju35/ha-internet-box-card/main/screenshots/card.png) | ![Freebox card dark](https://raw.githubusercontent.com/juju35/ha-internet-box-card/main/screenshots/card-dark.png) |
-| Livebox (Orange) | ![Livebox card](https://raw.githubusercontent.com/juju35/ha-internet-box-card/main/screenshots/card-livebox.png) | ![Livebox card dark](https://raw.githubusercontent.com/juju35/ha-internet-box-card/main/screenshots/card-livebox-dark.png) |
-| SFR Box | ![SFR Box card](https://raw.githubusercontent.com/juju35/ha-internet-box-card/main/screenshots/card-sfr.png) | ![SFR Box card dark](https://raw.githubusercontent.com/juju35/ha-internet-box-card/main/screenshots/card-sfr-dark.png) |
-| Bbox (Bouygues Telecom) | ![Bbox card](https://raw.githubusercontent.com/juju35/ha-internet-box-card/main/screenshots/card-bbox.png) | ![Bbox card dark](https://raw.githubusercontent.com/juju35/ha-internet-box-card/main/screenshots/card-bbox-dark.png) |
+| Freebox (Free) | <img src="https://raw.githubusercontent.com/juju35/ha-internet-box-card/main/screenshots/card.png" alt="Freebox card" width="400"> | <img src="https://raw.githubusercontent.com/juju35/ha-internet-box-card/main/screenshots/card-dark.png" alt="Freebox card dark" width="400"> |
+| Livebox (Orange) | <img src="https://raw.githubusercontent.com/juju35/ha-internet-box-card/main/screenshots/card-livebox.png" alt="Livebox card" width="400"> | <img src="https://raw.githubusercontent.com/juju35/ha-internet-box-card/main/screenshots/card-livebox-dark.png" alt="Livebox card dark" width="400"> |
+| SFR Box | <img src="https://raw.githubusercontent.com/juju35/ha-internet-box-card/main/screenshots/card-sfr.png" alt="SFR Box card" width="400"> | <img src="https://raw.githubusercontent.com/juju35/ha-internet-box-card/main/screenshots/card-sfr-dark.png" alt="SFR Box card dark" width="400"> |
+| Bbox (Bouygues Telecom) | <img src="https://raw.githubusercontent.com/juju35/ha-internet-box-card/main/screenshots/card-bbox.png" alt="Bbox card" width="400"> | <img src="https://raw.githubusercontent.com/juju35/ha-internet-box-card/main/screenshots/card-bbox-dark.png" alt="Bbox card dark" width="400"> |
 
 ### Mini card
 
 | Light | Dark |
 |---|---|
-| ![mini card](https://raw.githubusercontent.com/juju35/ha-internet-box-card/main/screenshots/mini-card.png) | ![mini card dark](https://raw.githubusercontent.com/juju35/ha-internet-box-card/main/screenshots/mini-card-dark.png) |
-| ![mini card, detail view](https://raw.githubusercontent.com/juju35/ha-internet-box-card/main/screenshots/mini-card-zoom.png) | ![mini card dark, detail view](https://raw.githubusercontent.com/juju35/ha-internet-box-card/main/screenshots/mini-card-zoom-dark.png) |
+| <img src="https://raw.githubusercontent.com/juju35/ha-internet-box-card/main/screenshots/mini-card.png" alt="mini card" width="400"> | <img src="https://raw.githubusercontent.com/juju35/ha-internet-box-card/main/screenshots/mini-card-dark.png" alt="mini card dark" width="400"> |
+| <img src="https://raw.githubusercontent.com/juju35/ha-internet-box-card/main/screenshots/mini-card-zoom.png" alt="mini card, detail view" width="400"> | <img src="https://raw.githubusercontent.com/juju35/ha-internet-box-card/main/screenshots/mini-card-zoom-dark.png" alt="mini card dark, detail view" width="400"> |
 
 The second row is the mini card after a click on its detail button (top right): the full card, with the collapse button in the same place.
 
