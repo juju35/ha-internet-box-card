@@ -6,6 +6,7 @@
 [![Lint](https://github.com/juju35/ha-internet-box-card/actions/workflows/lint.yml/badge.svg)](https://github.com/juju35/ha-internet-box-card/actions/workflows/lint.yml)
 [![Release](https://img.shields.io/github/v/release/juju35/ha-internet-box-card)](https://github.com/juju35/ha-internet-box-card/releases/latest)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-FFDD00?logo=buymeacoffee&logoColor=black)](https://buymeacoffee.com/julienstep9)
 
 <p align="center">
   <img src="images/free.svg" alt="Free" height="48">&nbsp;&nbsp;&nbsp;
