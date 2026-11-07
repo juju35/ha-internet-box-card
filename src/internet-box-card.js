@@ -2102,6 +2102,16 @@ const toBps = (s) => {
   return v * (RATE_FACTORS[unit] ?? 1e3);
 };
 
+/** Locale for numbers: the card's language, refined by Home Assistant's own locale when they agree ("fr-CA"). The
+ *  Portuguese texts are European Portuguese (pt alone means pt-BR to Intl). */
+const numLang = (hass, config) => {
+  const l = lang(hass, config);
+  const ha = hass && (hass.locale?.language || hass.language);
+  const loc = ha && ha.split("-")[0] === l ? ha : l;
+  return loc === "pt" ? "pt-PT" : loc;
+};
+
+/** Rate with the language's units and decimal separator ("1,5 Mo/s" in French). */
 const fmtRate = (bps, hass, config) => {
   if (bps === null || bps === undefined) return "—";
   const bits = config.rate_unit === "bits";
@@ -2112,7 +2122,9 @@ const fmtRate = (bps, hass, config) => {
     v /= 1000;
     i++;
   }
-  return `${v >= 100 || i === 0 ? v.toFixed(0) : v.toFixed(1)} ${units[i]}`;
+  const d = v >= 100 || i === 0 ? 0 : 1;
+  const n = new Intl.NumberFormat(numLang(hass, config), { minimumFractionDigits: d, maximumFractionDigits: d, useGrouping: false }).format(v);
+  return `${n} ${units[i]}`;
 };
 
 const fmtUptime = (sec, hass, config) => {
@@ -2271,6 +2283,10 @@ const morph = (root, html) => {
   tpl.innerHTML = html;
   patchChildren(root, tpl.content);
 };
+
+// After the confirmation popup closes, clicks on the card are ignored for this long: the second click of a double
+// click on its button would otherwise land on what lies under it.
+const CONFIRM_GUARD_MS = 400;
 
 // A click inside a dialog (more-info opened from the card, say) is not a click outside the card.
 const inDialog = (path) => path.some((n) => ["ha-more-info-dialog", "ha-dialog", "dialog"].includes(n.localName));
@@ -2690,6 +2706,11 @@ class InternetBoxBase extends HTMLElement {
     this._html = "";
     this._dialog = null;
     this.shadowRoot.addEventListener("click", (ev) => {
+      // Just closed: the rest of a double click on the popup's button does nothing.
+      if (!this._dialog && Date.now() - (this._dialogClosedAt ?? 0) < CONFIRM_GUARD_MS) {
+        ev.stopImmediatePropagation();
+        return;
+      }
       const path = ev.composedPath();
       const action = path.find((n) => n.dataset?.action);
       // While the confirmation popup is open, only its own buttons and the backdrop act; any other click closes it.
@@ -2719,28 +2740,42 @@ class InternetBoxBase extends HTMLElement {
         ev.preventDefault();
         ev.target.click();
       }
-      // Escape closes the confirmation popup.
-      if (ev.key === "Escape" && this._dialog) {
-        ev.stopPropagation();
-        this._closeDialog();
-      }
     });
+    // Escape closes the confirmation popup (as Cancel). Listened on the window while the popup is open: a re-render
+    // or a click on its text can take the focus out of the card. Tab and Shift+Tab stay on the popup's two buttons.
+    this._onKey = (ev) => {
+      if (!this._dialog) return;
+      if (ev.key === "Tab") {
+        const btns = [...this.shadowRoot.querySelectorAll(".modal button.act")];
+        if (!btns.length) return;
+        ev.preventDefault();
+        const i = btns.indexOf(this.shadowRoot.activeElement);
+        btns[(i + (ev.shiftKey ? -1 : 1) + btns.length) % btns.length].focus({ preventScroll: true });
+        return;
+      }
+      if (ev.key !== "Escape") return;
+      ev.stopPropagation();
+      this._closeDialog();
+    };
   }
 
   connectedCallback() {
-    // A click elsewhere on the page closes the confirmation popup. It stops there, so the mini card does not
-    // also leave its zoomed view on the same click (this listener runs before the mini card's).
+    // A click elsewhere on the page closes the confirmation popup; the focus goes where that click put it. The click
+    // goes on to its target; the mini card only keeps its zoomed view on it (this listener runs before the mini's).
     this._onDialogOutside ??= (ev) => {
       if (this._dialog && !ev.composedPath().includes(this)) {
-        ev.stopImmediatePropagation();
-        this._closeDialog();
+        this._dialogClosingClick = ev;
+        this._closeDialog(false);
       }
     };
     document.addEventListener("click", this._onDialogOutside, true);
+    // Reattached with the popup still open (view switch, editor): Escape keeps closing it.
+    if (this._dialog) window.addEventListener("keydown", this._onKey);
   }
 
   disconnectedCallback() {
     document.removeEventListener("click", this._onDialogOutside, true);
+    window.removeEventListener("keydown", this._onKey);
   }
 
   // Presses a Home Assistant button entity. A failed call is logged (Home Assistant already shows a toast).
@@ -2756,35 +2791,43 @@ class InternetBoxBase extends HTMLElement {
     const reboot = box.scalars.reboot;
     if (!reboot || this._s(reboot)?.state === "unavailable") return;
     this._openDialog({
-      body: `<h3>${svgIcon(ICONS.restart)}${esc(this._t("restart"))}</h3>
-        <div class="hint">${esc(this._t("restart_confirm"))}</div>`,
+      body: `<h3 id="dialog-title">${svgIcon(ICONS.restart)}${esc(this._t("restart"))}</h3>
+        <div class="hint" id="dialog-msg">${esc(this._t("restart_confirm"))}</div>`,
       ok: this._t("restart_btn"),
       onOk: () => this._press(reboot),
+      from: "restart",
     });
   }
 
   _openDialog(dialog) {
     this._dialog = dialog;
+    window.addEventListener("keydown", this._onKey);
     this._update();
     // After a re-render: no scroll of the page towards the card.
     this.shadowRoot.querySelector(".modal .danger")?.focus({ preventScroll: true });
   }
 
-  _closeDialog() {
+  // Closes the popup and gives the focus back to the button that opened it (`from`: its data-action), looked up
+  // again after the render, which may have re-created it.
+  _closeDialog(restoreFocus = true) {
     if (!this._dialog) return;
+    const { from } = this._dialog;
     this._dialog = null;
+    this._dialogClosedAt = Date.now();
+    window.removeEventListener("keydown", this._onKey);
     this._update();
+    if (restoreFocus && from) this.shadowRoot.querySelector(`[data-action="${from}"]`)?.focus({ preventScroll: true });
   }
 
   _dialogHtml() {
     const d = this._dialog;
     if (!d) return "";
     return `<style>${DIALOG_STYLE}</style><div class="backdrop" data-action="dialog-backdrop">
-      <div class="modal" role="dialog" aria-modal="true">
+      <div class="modal" role="dialog" aria-modal="true" aria-labelledby="dialog-title" aria-describedby="dialog-msg">
         ${d.body}
         <div class="modal-actions">
-          <button class="act cancel" data-action="dialog-cancel">${esc(this._t("cancel"))}</button>
-          <button class="act danger" data-action="dialog-ok">${esc(d.ok)}</button>
+          <button type="button" class="act cancel" data-action="dialog-cancel">${esc(this._t("cancel"))}</button>
+          <button type="button" class="act danger" data-action="dialog-ok">${esc(d.ok)}</button>
         </div>
       </div>
     </div>`;
@@ -2863,7 +2906,9 @@ class InternetBoxBase extends HTMLElement {
 
   // Download / upload rate tile, shared by the full and the mini card.
   _rateTile(id, cls, icon, k, hist) {
-    return `<div class="tile clickable ${cls}" role="button" tabindex="0" data-entity="${id || ""}">${spark(hist?.[id], hist?.end)}${svgIcon(icon)}<div><div class="k">${k}</div><div class="v">${this._rate(
+    // A tile without its sensor opens no more-info: not focusable.
+    const attrs = id ? `clickable ${cls}" role="button" tabindex="0" data-entity="${id}"` : `${cls}"`;
+    return `<div class="tile ${attrs}>${spark(hist?.[id], hist?.end)}${svgIcon(icon)}<div><div class="k">${k}</div><div class="v">${this._rate(
       id
     )}</div></div></div>`;
   }
@@ -3360,6 +3405,8 @@ class InternetBoxMiniCard extends InternetBoxCard {
     });
     this._onOutside = (ev) => {
       const path = ev.composedPath();
+      // The click that closed the restart popup only closes it.
+      if (ev === this._dialogClosingClick) return;
       if (this._zoomed && !path.includes(this) && !inDialog(path)) this._zoom(false);
     };
   }

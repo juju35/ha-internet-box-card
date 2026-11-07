@@ -231,3 +231,75 @@ test("the focus moved after a re-render does not scroll the page", async (t) => 
   assert.deepEqual(errors, []);
   await page.close();
 });
+
+// The restart popup is a modal dialog: named by its title, the focus kept on its two buttons, Escape (wherever the
+// focus is) closes it and gives the focus back to the restart button, and a double click on its button does not
+// reach what lies under it.
+test("the restart popup traps the focus, closes on Escape and gives the focus back", async (t) => {
+  if (skip) return t.skip(skip);
+  const { page, errors } = await open();
+  await page.evaluate(() => {
+    const root = window.card.shadowRoot;
+    window.click(root.querySelector(".zoom"));
+    root.querySelector(".action").focus();
+  });
+  await page.keyboard.press("Enter");
+  const focused = () => page.evaluate(() => window.card.shadowRoot.activeElement?.className ?? null);
+  const opened = await page.evaluate(() => {
+    const modal = window.card.shadowRoot.querySelector(".modal");
+    return [modal.getAttribute("aria-modal"), window.card.shadowRoot.getElementById(modal.getAttribute("aria-labelledby"))?.textContent];
+  });
+  assert.deepEqual(opened, ["true", "Restart the box"]);
+  assert.equal(await focused(), "act danger");
+  await page.keyboard.press("Tab");
+  assert.equal(await focused(), "act cancel");
+  await page.keyboard.press("Tab");
+  assert.equal(await focused(), "act danger");
+  await page.keyboard.press("Shift+Tab");
+  assert.equal(await focused(), "act cancel");
+  // Focus out of the card (a click on the popup's text, say): Escape still closes it.
+  await page.evaluate(() => document.activeElement.blur());
+  await page.keyboard.press("Escape");
+  assert.deepEqual(await page.evaluate(() => [!!window.card.shadowRoot.querySelector(".modal"), window.view().full]), [false, true]);
+  assert.equal(await focused(), "action");
+  assert.deepEqual(errors, []);
+  await page.close();
+});
+
+test("a double click on the popup's button does not act on what lies under it", async (t) => {
+  if (skip) return t.skip(skip);
+  const { page, errors } = await open();
+  const res = await page.evaluate(() => {
+    const root = window.card.shadowRoot;
+    const calls = [];
+    window.card._press = (id) => calls.push(id);
+    window.click(root.querySelector(".zoom"));
+    window.click(root.querySelector(".action"));
+    window.click(root.querySelector(".modal .danger"));
+    // The second click of the double click lands on the detail button: ignored.
+    window.click(root.querySelector(".zoom"));
+    return { calls: calls.length, full: window.view().full };
+  });
+  assert.deepEqual(res, { calls: 1, full: true });
+  assert.deepEqual(errors, []);
+  await page.close();
+});
+
+test("a click outside closes the restart popup, reaches its target and leaves the card zoomed", async (t) => {
+  if (skip) return t.skip(skip);
+  const { page, errors } = await open();
+  const res = await page.evaluate(() => {
+    const root = window.card.shadowRoot;
+    let reached = 0;
+    document.getElementById("outside").addEventListener("click", () => reached++);
+    window.click(root.querySelector(".zoom"));
+    window.click(root.querySelector(".action"));
+    window.click(document.getElementById("outside"));
+    const first = { popup: !!root.querySelector(".modal"), full: window.view().full, reached };
+    window.click(document.getElementById("outside"));
+    return { first, second: { full: window.view().full, reached } };
+  });
+  assert.deepEqual(res, { first: { popup: false, full: true, reached: 1 }, second: { full: false, reached: 2 } });
+  assert.deepEqual(errors, []);
+  await page.close();
+});

@@ -1,6 +1,6 @@
 {
   "name": "ha-internet-box-card",
-  "version": "2.5.0",
+  "version": "2.6.0",
   "description": "Lovelace cards for Home Assistant to monitor an internet box: Freebox, Livebox (Orange), SFR Box and Bbox (Bouygues).",
   "private": true,
   "type": "module",

@@ -731,3 +731,24 @@ test("sparkline from the recorder: gaps in the statistics break the curve", asyn
   // The last row (5 minutes before the request) ends near the right edge, not stretched to it.
   assert.match(d, /L99\.65,[\d.]+$/);
 });
+
+test("rates use the decimal separator of the card's language", async () => {
+  const fr = await mockCard({}, { language: "fr" });
+  fr._hass.states["sensor.down"] = { entity_id: "sensor.down", state: "1500", attributes: { unit_of_measurement: "kB/s" } };
+  assert.equal(fr._rate("sensor.down"), "1,5 Mo/s");
+  const en = await mockCard({});
+  en._hass.states["sensor.down"] = fr._hass.states["sensor.down"];
+  assert.equal(en._rate("sensor.down"), "1.5 MB/s");
+  // No grouping: 999 kB/s stays "999", units under 1000.
+  en._hass.states["sensor.down"] = { entity_id: "sensor.down", state: "999", attributes: { unit_of_measurement: "kB/s" } };
+  assert.equal(en._rate("sensor.down"), "999 kB/s");
+});
+
+test("a rate tile without its sensor is neither clickable nor focusable", async () => {
+  const el = await mockCard({});
+  const html = el._rateTiles({ rate_down: "sensor.down", rate_up: undefined }, null);
+  assert.match(html, /<div class="tile clickable down" role="button" tabindex="0" data-entity="sensor.down">/);
+  assert.match(html, /<div class="tile up">/);
+  assert.equal(html.match(/tabindex/g).length, 1);
+  assert.doesNotMatch(html, /data-entity=""/);
+});

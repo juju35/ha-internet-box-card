@@ -1,5 +1,16 @@
 # Changelog
 
+## 2.6.0 - 2026-11-08
+
+### Features
+- The restart confirmation popup is a proper modal dialog for keyboard and screen reader users: named by its title, Tab stays on its two buttons, Escape closes it wherever the focus is, and the focus goes back to the restart button.
+- Rates use the decimal separator of the card's language ("1,5 Mo/s" in French).
+
+### Fixes
+- A click elsewhere on the page that closes the restart popup now also reaches what was clicked; the mini card stays on its full view for that click.
+- The second click of a double click on the popup's button no longer acts on what lies under it.
+- A download or upload tile without its sensor is no longer clickable nor focusable.
+
 ## 2.5.0 - 2026-11-07
 
 ### Features
