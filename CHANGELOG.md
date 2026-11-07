@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.3.0 - 2026-11-07
+
+### Features
+- Full card: the download and upload tiles draw their last 24 hours behind the rate (recorder 5-minute statistics, refreshed every 5 minutes). `show_history: false` turns it off (also in the visual editor).
+
 ## 2.2.2 - 2026-11-04
 
 ### Documentation

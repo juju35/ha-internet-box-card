@@ -465,3 +465,40 @@ test("lineOf: the header icon follows the connection type, else the model", () =
   assert.equal(lineOf(undefined, "Bbox Fibre"), "fibre");
   assert.equal(lineOf(undefined, "Livebox 7"), "box");
 });
+
+test("rate tiles: 24 h sparkline from the recorder statistics, refreshed every 5 minutes, off with show_history: false", async () => {
+  const calls = [];
+  const el = new InternetBoxCard();
+  el._config = { box: "router" };
+  el._hass = {
+    states: baseStates(),
+    entities,
+    devices,
+    language: "en",
+    config: { time_zone: "UTC" },
+    callWS: async (msg) => {
+      calls.push(msg);
+      return Object.fromEntries(msg.statistic_ids.map((id) => [id, [{ mean: 10 }, { mean: 40 }, { mean: 20 }]]));
+    },
+  };
+  el._update = () => {
+    el.html = el._render();
+  };
+  el._update();
+  assert.equal(calls.length, 1);
+  assert.equal(calls[0].type, "recorder/statistics_during_period");
+  assert.doesNotMatch(el.html, /class="spark"/);
+  await new Promise((r) => setTimeout(r, 0));
+  assert.match(el.html, /class="spark"/);
+  el._update();
+  assert.equal(calls.length, 1, "no new query within 5 minutes");
+  el._histAt -= 5 * 60000 + 1;
+  el._update();
+  assert.equal(calls.length, 2);
+
+  const off = new InternetBoxCard();
+  off._config = { box: "router", show_history: false };
+  off._hass = el._hass;
+  assert.doesNotMatch(off._render(), /class="spark"/);
+  assert.equal(calls.length, 2);
+});

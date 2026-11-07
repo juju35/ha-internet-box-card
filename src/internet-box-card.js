@@ -505,6 +505,7 @@ const STRINGS = {
     admin_url: "Box admin address (optional, opened when clicking the picture)",
     show_logo: "Show the operator logo",
     show_network: "Show network",
+    show_history: "Show 24 h rate history",
     show_system: "Show system (temperatures, fans)",
     show_storage: "Show storage",
     show_services: "Show services (Wi-Fi, calls, devices)",
@@ -565,6 +566,7 @@ const STRINGS = {
     admin_url: "Adresse d'administration de la box (facultatif, ouverte au clic sur l'illustration)",
     show_logo: "Afficher le logo de l'opérateur",
     show_network: "Afficher le réseau",
+    show_history: "Afficher l’historique 24 h des débits",
     show_system: "Afficher le système (températures, ventilateurs)",
     show_storage: "Afficher le stockage",
     show_services: "Afficher les services (Wi-Fi, appels, appareils)",
@@ -624,6 +626,7 @@ const STRINGS = {
     admin_url: "Verwaltungsadresse der Box (optional, wird beim Klick auf das Bild geöffnet)",
     show_logo: "Logo des Anbieters anzeigen",
     show_network: "Netzwerk anzeigen",
+    show_history: "24-h-Verlauf der Raten anzeigen",
     show_system: "System anzeigen (Temperaturen, Lüfter)",
     show_storage: "Speicher anzeigen",
     show_services: "Dienste anzeigen (WLAN, Anrufe, Geräte)",
@@ -684,6 +687,7 @@ const STRINGS = {
     admin_url: "Dirección de administración del router (opcional, se abre al hacer clic en la imagen)",
     show_logo: "Mostrar el logotipo del operador",
     show_network: "Mostrar la red",
+    show_history: "Mostrar el historial de 24 h de las velocidades",
     show_system: "Mostrar el sistema (temperaturas, ventiladores)",
     show_storage: "Mostrar el almacenamiento",
     show_services: "Mostrar los servicios (Wi-Fi, llamadas, dispositivos)",
@@ -745,6 +749,7 @@ const STRINGS = {
     admin_url: "Администраторска адреса рутера (опционо, отвара се кликом на слику)",
     show_logo: "Прикажи лого оператера",
     show_network: "Прикажи мрежу",
+    show_history: "Прикажи историју протока за 24 ч",
     show_system: "Прикажи систем (температуре, вентилатори)",
     show_storage: "Прикажи складиште",
     show_services: "Прикажи услуге (Wi-Fi, позиви, уређаји)",
@@ -806,6 +811,7 @@ const STRINGS = {
     admin_url: "Administratorska adresa rutera (opciono, otvara se klikom na sliku)",
     show_logo: "Prikaži logo operatera",
     show_network: "Prikaži mrežu",
+    show_history: "Prikaži istoriju protoka za 24 č",
     show_system: "Prikaži sistem (temperature, ventilatori)",
     show_storage: "Prikaži skladište",
     show_services: "Prikaži usluge (Wi-Fi, pozivi, uređaji)",
@@ -866,6 +872,7 @@ const STRINGS = {
     admin_url: "Indirizzo di amministrazione del modem (facoltativo, aperto al clic sull'immagine)",
     show_logo: "Mostra il logo dell'operatore",
     show_network: "Mostra la rete",
+    show_history: "Mostra lo storico 24 h delle velocità",
     show_system: "Mostra il sistema (temperature, ventole)",
     show_storage: "Mostra l'archiviazione",
     show_services: "Mostra i servizi (Wi-Fi, chiamate, dispositivi)",
@@ -925,6 +932,7 @@ const STRINGS = {
     admin_url: "Beheeradres van de modem (optioneel, geopend bij klikken op de afbeelding)",
     show_logo: "Logo van de provider tonen",
     show_network: "Netwerk tonen",
+    show_history: "24-uursgeschiedenis van de snelheden weergeven",
     show_system: "Systeem tonen (temperaturen, ventilatoren)",
     show_storage: "Opslag tonen",
     show_services: "Diensten tonen (Wi-Fi, oproepen, apparaten)",
@@ -985,6 +993,7 @@ const STRINGS = {
     admin_url: "Endereço de administração do router (opcional, aberto ao clicar na imagem)",
     show_logo: "Mostrar o logótipo do operador",
     show_network: "Mostrar a rede",
+    show_history: "Mostrar o histórico de 24 h dos débitos",
     show_system: "Mostrar o sistema (temperaturas, ventoinhas)",
     show_storage: "Mostrar o armazenamento",
     show_services: "Mostrar os serviços (Wi-Fi, chamadas, dispositivos)",
@@ -1047,6 +1056,7 @@ const STRINGS = {
     admin_url: "Adres panelu administracyjnego routera (opcjonalny, otwierany po kliknięciu obrazu)",
     show_logo: "Pokaż logo operatora",
     show_network: "Pokaż sieć",
+    show_history: "Pokaż historię przepustowości z 24 h",
     show_system: "Pokaż system (temperatury, wentylatory)",
     show_storage: "Pokaż pamięć masową",
     show_services: "Pokaż usługi (Wi-Fi, połączenia, urządzenia)",
@@ -1107,6 +1117,7 @@ const STRINGS = {
     admin_url: "Adresa de administrare a routerului (opțional, se deschide la clic pe imagine)",
     show_logo: "Afișează sigla operatorului",
     show_network: "Afișează rețeaua",
+    show_history: "Afișează istoricul vitezelor pe 24 h",
     show_system: "Afișează sistemul (temperaturi, ventilatoare)",
     show_storage: "Afișează stocarea",
     show_services: "Afișează serviciile (Wi-Fi, apeluri, dispozitive)",
@@ -1167,6 +1178,7 @@ const STRINGS = {
     admin_url: "Routerens administrationsadresse (valgfri, åbnes ved klik på billedet)",
     show_logo: "Vis operatørens logo",
     show_network: "Vis netværk",
+    show_history: "Vis 24-timers historik for hastigheder",
     show_system: "Vis system (temperaturer, blæsere)",
     show_storage: "Vis lager",
     show_services: "Vis tjenester (Wi-Fi, opkald, enheder)",
@@ -1227,6 +1239,7 @@ const STRINGS = {
     admin_url: "Routerns administrationsadress (valfri, öppnas vid klick på bilden)",
     show_logo: "Visa operatörens logotyp",
     show_network: "Visa nätverk",
+    show_history: "Visa 24 h-historik för hastigheter",
     show_system: "Visa system (temperaturer, fläktar)",
     show_storage: "Visa lagring",
     show_services: "Visa tjänster (Wi-Fi, samtal, enheter)",
@@ -1287,6 +1300,7 @@ const STRINGS = {
     admin_url: "Администраторски адрес на рутера (по избор, отваря се при щракване върху изображението)",
     show_logo: "Показване на логото на оператора",
     show_network: "Показване на мрежата",
+    show_history: "Показване на 24-часовата история на скоростите",
     show_system: "Показване на системата (температури, вентилатори)",
     show_storage: "Показване на хранилището",
     show_services: "Показване на услугите (Wi-Fi, обаждания, устройства)",
@@ -1347,6 +1361,7 @@ const STRINGS = {
     admin_url: "Адрес веб-интерфейса роутера (необязательно, открывается по нажатию на изображение)",
     show_logo: "Показывать логотип оператора",
     show_network: "Показывать сеть",
+    show_history: "Показать историю скоростей за 24 ч",
     show_system: "Показывать систему (температуры, вентиляторы)",
     show_storage: "Показывать хранилище",
     show_services: "Показывать сервисы (Wi-Fi, звонки, устройства)",
@@ -1408,6 +1423,7 @@ const STRINGS = {
     admin_url: "Адреса вебінтерфейсу роутера (необов’язково, відкривається натисканням на зображення)",
     show_logo: "Показувати логотип оператора",
     show_network: "Показувати мережу",
+    show_history: "Показати історію швидкостей за 24 год",
     show_system: "Показувати систему (температури, вентилятори)",
     show_storage: "Показувати сховище",
     show_services: "Показувати сервіси (Wi-Fi, дзвінки, пристрої)",
@@ -1467,6 +1483,7 @@ const STRINGS = {
     admin_url: "A router felügyeleti címe (nem kötelező, a képre kattintva nyílik meg)",
     show_logo: "A szolgáltató logójának megjelenítése",
     show_network: "Hálózat megjelenítése",
+    show_history: "Sebességek 24 órás előzményeinek megjelenítése",
     show_system: "Rendszer megjelenítése (hőmérsékletek, ventilátorok)",
     show_storage: "Tárhely megjelenítése",
     show_services: "Szolgáltatások megjelenítése (Wi-Fi, hívások, eszközök)",
@@ -1528,6 +1545,7 @@ const STRINGS = {
     admin_url: "Administračná adresa routera (voliteľná, otvorí sa po kliknutí na obrázok)",
     show_logo: "Zobraziť logo operátora",
     show_network: "Zobraziť sieť",
+    show_history: "Zobraziť 24 h históriu rýchlostí",
     show_system: "Zobraziť systém (teploty, ventilátory)",
     show_storage: "Zobraziť úložisko",
     show_services: "Zobraziť služby (Wi-Fi, hovory, zariadenia)",
@@ -1589,6 +1607,7 @@ const STRINGS = {
     admin_url: "Administrační adresa routeru (volitelná, otevře se kliknutím na obrázek)",
     show_logo: "Zobrazit logo operátora",
     show_network: "Zobrazit síť",
+    show_history: "Zobrazit 24h historii rychlostí",
     show_system: "Zobrazit systém (teploty, ventilátory)",
     show_storage: "Zobrazit úložiště",
     show_services: "Zobrazit služby (Wi-Fi, hovory, zařízení)",
@@ -1651,6 +1670,7 @@ const STRINGS = {
     admin_url: "Skrbniški naslov usmerjevalnika (neobvezno, odpre se ob kliku na sliko)",
     show_logo: "Prikaži logotip operaterja",
     show_network: "Prikaži omrežje",
+    show_history: "Prikaži 24-urno zgodovino hitrosti",
     show_system: "Prikaži sistem (temperature, ventilatorji)",
     show_storage: "Prikaži shrambo",
     show_services: "Prikaži storitve (Wi-Fi, klici, naprave)",
@@ -1711,6 +1731,7 @@ const STRINGS = {
     admin_url: "Maršrutētāja administrēšanas adrese (neobligāta, tiek atvērta, noklikšķinot uz attēla)",
     show_logo: "Rādīt operatora logotipu",
     show_network: "Rādīt tīklu",
+    show_history: "Rādīt ātrumu 24 h vēsturi",
     show_system: "Rādīt sistēmu (temperatūras, ventilatori)",
     show_storage: "Rādīt krātuvi",
     show_services: "Rādīt pakalpojumus (Wi-Fi, zvani, ierīces)",
@@ -1771,6 +1792,7 @@ const STRINGS = {
     admin_url: "Διεύθυνση διαχείρισης του δρομολογητή (προαιρετική, ανοίγει με κλικ στην εικόνα)",
     show_logo: "Εμφάνιση λογότυπου παρόχου",
     show_network: "Εμφάνιση δικτύου",
+    show_history: "Εμφάνιση ιστορικού ταχυτήτων 24 ωρών",
     show_system: "Εμφάνιση συστήματος (θερμοκρασίες, ανεμιστήρες)",
     show_storage: "Εμφάνιση αποθήκευσης",
     show_services: "Εμφάνιση υπηρεσιών (Wi-Fi, κλήσεις, συσκευές)",
@@ -2393,7 +2415,11 @@ const BASE_STYLE = `
   @container (max-width: 200px) { .box-link { display: none; } }
   .box { height: 48px; width: auto; max-width: 100%; object-fit: contain; filter: drop-shadow(0 4px 6px rgba(0,0,0,.25)); }
   .tile { display: flex; align-items: center; gap: 8px; padding: 6px 10px; border-radius: 10px; min-width: 0;
-          background: var(--secondary-background-color, rgba(127,127,127,.08)); }
+          background: var(--secondary-background-color, rgba(127,127,127,.08)); position: relative; overflow: hidden; }
+  .tile > :not(.spark) { position: relative; }
+  .tile .spark { position: absolute; left: 0; bottom: 0; width: 100%; height: 55%; pointer-events: none; }
+  .spark-a { fill: color-mix(in srgb, var(--c) 12%, transparent); }
+  .spark-l { fill: none; stroke: color-mix(in srgb, var(--c) 50%, transparent); stroke-width: 1.2; vector-effect: non-scaling-stroke; }
   .tile .icon { color: color-mix(in srgb, var(--c, var(--ibc-red)) 60%, var(--primary-text-color)); }
   .tile > div { min-width: 0; }
   .tile .k { font-size: 11px; color: var(--secondary-text-color); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -2432,6 +2458,15 @@ const DIALOG_STYLE = `
   .modal button.cancel:hover { background: color-mix(in srgb, var(--secondary-text-color) 16%, var(--secondary-background-color, transparent)); }
   .modal button.danger:hover { background: color-mix(in srgb, var(--ibc-red) 26%, transparent); }
 `;
+
+// Sparkline of a series (24 h of rates), scaled from 0 to its peak; nothing under two points.
+const HIST_REFRESH = 5 * 60000;
+function spark(values) {
+  if (!values || values.length < 2) return "";
+  const peak = Math.max(...values) || 1;
+  const pts = values.map((v, i) => `${((i / (values.length - 1)) * 100).toFixed(2)},${(30 - (Math.max(0, v) / peak) * 28).toFixed(2)}`).join("L");
+  return `<svg class="spark" viewBox="0 0 100 30" preserveAspectRatio="none" aria-hidden="true"><path class="spark-a" d="M0,30L${pts}L100,30Z"/><path class="spark-l" d="M${pts}"/></svg>`;
+}
 
 class InternetBoxBase extends HTMLElement {
   constructor() {
@@ -2606,8 +2641,8 @@ class InternetBoxBase extends HTMLElement {
   }
 
   // Download / upload rate tile, shared by the full and the mini card.
-  _rateTile(id, cls, icon, k) {
-    return `<div class="tile clickable ${cls}" role="button" tabindex="0" data-entity="${id || ""}">${svgIcon(icon)}<div><div class="k">${k}</div><div class="v">${this._rate(
+  _rateTile(id, cls, icon, k, hist) {
+    return `<div class="tile clickable ${cls}" role="button" tabindex="0" data-entity="${id || ""}">${spark(hist?.[id])}${svgIcon(icon)}<div><div class="k">${k}</div><div class="v">${this._rate(
       id
     )}</div></div></div>`;
   }
@@ -2630,6 +2665,34 @@ class InternetBoxBase extends HTMLElement {
     for (const id of ids) sig.push(h.states[id]);
     if (this._s(box.scalars.router)?.attributes?.uptime) sig.push(Math.floor(Date.now() / 60e3));
     return sig;
+  }
+
+  // 24 h of 5-minute means from the recorder's statistics, fetched again every 5 minutes. Returns what is
+  // already there (nothing at first): the card renders again when the answer comes.
+  _history(ids) {
+    const key = ids.join(",");
+    if (key && this._hass.callWS && (this._histKey !== key || Date.now() - this._histAt > HIST_REFRESH)) {
+      this._histKey = key;
+      this._histAt = Date.now();
+      this._hass
+        .callWS({
+          type: "recorder/statistics_during_period",
+          start_time: new Date(Date.now() - 864e5).toISOString(),
+          statistic_ids: ids,
+          period: "5minute",
+          types: ["mean"],
+        })
+        .then((r) => {
+          if (this._histKey !== key) return;
+          this._hist = Object.fromEntries(ids.map((id) => [id, (r?.[id] || []).map((p) => p.mean).filter(Number.isFinite)]));
+          this._update();
+        })
+        // No statistics (sensor without state_class, recorder off): try again in a minute, no curve meanwhile.
+        .catch(() => {
+          this._histAt = Date.now() - HIST_REFRESH + 60000;
+        });
+    }
+    return this._histKey === key ? this._hist : null;
   }
 
   _update(sig) {
@@ -2876,11 +2939,12 @@ class InternetBoxCard extends InternetBoxBase {
           this._config
         )}</span>`
       );
+    const hist = this._config.show_history === false ? null : this._history([sc.rate_down, sc.rate_up].filter(Boolean));
     return `<div>
       <div class="section-title">${svgIcon(ICONS.network)}${this._t("network")}</div>
       <div class="grid2">
-        ${this._rateTile(sc.rate_down, "down", ICONS.down, this._t("download"))}
-        ${this._rateTile(sc.rate_up, "up", ICONS.up, this._t("upload"))}
+        ${this._rateTile(sc.rate_down, "down", ICONS.down, this._t("download"), hist)}
+        ${this._rateTile(sc.rate_up, "up", ICONS.up, this._t("upload"), hist)}
       </div>
       ${facts.length ? `<div class="facts">${facts.join("")}</div>` : ""}
     </div>`;
@@ -3290,7 +3354,7 @@ class InternetBoxEditorBase extends HTMLElement {
 
 class InternetBoxCardEditor extends InternetBoxEditorBase {
   static get toggles() {
-    return ["show_network", "show_system", "show_storage", "show_services"];
+    return ["show_network", "show_history", "show_system", "show_storage", "show_services"];
   }
 }
 

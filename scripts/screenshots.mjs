@@ -87,7 +87,17 @@ async function openCard(browser, s) {
     ({ type, config, zoom, states, entities, devices }) => {
       const el = document.createElement(type);
       el.setConfig({ type: `custom:${type}`, ...config });
-      el.hass = { states, entities, devices, language: "en", locale: { language: "en" }, config: { time_zone: "UTC" } };
+      // Recorder statistics: a plausible 24 h rate curve for each rate sensor (busy evening, quiet night).
+      const callWS = async (msg) =>
+        Object.fromEntries(
+          (msg.statistic_ids || []).map((id, k) => [
+            id,
+            Array.from({ length: 288 }, (_, i) => ({
+              mean: 20 + 80 * Math.exp(-((i - 230 + k * 20) ** 2) / 900) + 35 * Math.exp(-((i - 110) ** 2) / 400) + 8 * Math.sin(i * 0.12 + k) ** 2,
+            })),
+          ])
+        );
+      el.hass = { states, entities, devices, language: "en", locale: { language: "en" }, config: { time_zone: "UTC" }, callWS };
       document.getElementById("root").appendChild(el);
       // A mouse click (click count 1), not .click(): no focus ring on the button.
       if (zoom)
