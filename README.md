@@ -1,6 +1,6 @@
 # ha-internet-box-card
 
-[![HACS](https://img.shields.io/badge/HACS-Custom-41BDF5.svg)](https://github.com/hacs/integration)
+[![Marketplace](https://img.shields.io/badge/Marketplace-Custom-41BDF5.svg)](https://www.home-assistant.io/integrations/marketplace/)
 [![HACS Validation](https://github.com/juju35/ha-internet-box-card/actions/workflows/hacs.yml/badge.svg)](https://github.com/juju35/ha-internet-box-card/actions/workflows/hacs.yml)
 [![Validate](https://github.com/juju35/ha-internet-box-card/actions/workflows/validate.yml/badge.svg)](https://github.com/juju35/ha-internet-box-card/actions/workflows/validate.yml)
 [![Lint](https://github.com/juju35/ha-internet-box-card/actions/workflows/lint.yml/badge.svg)](https://github.com/juju35/ha-internet-box-card/actions/workflows/lint.yml)
@@ -19,7 +19,7 @@ Lovelace cards for Home Assistant to monitor an internet box at a glance: downlo
 
 Entities are **discovered automatically**, you don't have to pick them one by one.
 
-[![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=juju35&repository=ha-internet-box-card&category=plugin)
+[![Open your Home Assistant instance and open a repository inside the Marketplace.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/marketplace_repository/?owner=juju35&repository=ha-internet-box-card&category=plugin)
 
 | Internet Box Card | Internet Box Mini Card |
 |---|---|
@@ -67,19 +67,19 @@ On a Freebox, the restart button needs the **Freebox settings modification** per
 
 ## Installation
 
-### Via HACS (recommended)
+### Via the Marketplace (recommended)
 
 Click the button below to add the repository directly:
 
-[![Add to HACS](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=juju35&repository=ha-internet-box-card&category=plugin)
+[![Add to the Marketplace](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/marketplace_repository/?owner=juju35&repository=ha-internet-box-card&category=plugin)
 
-Then click **Download**, and reload your browser when HACS asks you to.
+Then click **Install**, and reload your browser when the Marketplace asks you to.
 
 Or manually:
 
-1. Open HACS → **⋮** (top right) → **Custom repositories**
+1. Open **Settings → Marketplace → Add from link** (top right; this needs a GitHub account connected)
 2. Add `https://github.com/juju35/ha-internet-box-card` — Type: **Dashboard**
-3. Search for **Internet Box Card** and click **Download**
+3. Open **Internet Box Card** and click **Install**
 4. Clear your browser cache and refresh
 
 ### Manual
@@ -251,7 +251,7 @@ npm run check        # builds and checks the card (run in CI)
 npm run screenshots  # renders the cards with mock data (scripts/mock-states.mjs, scripts/mock-operators.mjs) into screenshots/ (and fan.gif / fan-dark.gif, needs ffmpeg)
 ```
 
-`dist/` is not committed: `npm run build` creates it locally, CI builds it on every push, and the release workflow attaches the built file to the release, which is where HACS downloads it from.
+`dist/` is not committed: `npm run build` creates it locally, CI builds it on every push, and the release workflow attaches the built file to the release, which is where the Marketplace installs it from.
 
 ### Releasing
 
