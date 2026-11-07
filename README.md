@@ -32,14 +32,14 @@ Entities are **discovered automatically**, you don't have to pick them one by on
 - Automatic discovery of the box entities, whatever the language of the entity ids (several boxes supported)
 - Header icon of the kind of connection (fibre, xDSL, 4G / 5G, else a box) in the operator colour, with the operator logo as a badge; accent colour, website and admin links follow the detected operator
 - Picture and commercial name of the box model, detected automatically or set with the `model` option, and firmware version
-- Connection status and type (FTTH, xDSL…), public IPv4 (IPv6 on hover) and uptime
+- Connection status and type (FTTH, xDSL…), public IPv4 (IPv6 on hover) and uptime. The status is the real link state when the integration exposes it (Livebox WAN status, SFR Box WAN / DSL / FTTH status, with "Syncing" while the DSL line trains and "Line fault" on a line defect), else the box's own tracker
 - Download / upload rates, in bytes (kB/s, MB/s) or bits (kb/s, Mb/s), with their last 24 hours drawn behind each tile, on the full card and the mini card (recorder statistics)
 - Temperature gauges and fans speed
 - Storage: free space of the disk partitions and RAID status
 - Services: Wi-Fi state, missed calls and connected devices (the mini card footer always shows the missed calls, orange when there are some)
 - A check button next to the missed calls marks them as read, shown only when there are missed calls and the integration has that button
 - A restart button at the top right of the full card reboots the box, after a confirmation popup; shown only when the integration exposes it
-- Colors turn orange / red when a threshold is crossed (temperatures, disk usage, missed calls)
+- Colors turn orange / red when a threshold is crossed (temperatures, disk usage, missed calls); the temperature and disk usage thresholds can be set
 - Click any value (except the connected devices count, a total over several trackers) to open its Home Assistant history (more-info dialog)
 - Click the operator logo to open its website, and the box picture to open the box admin interface
 - Visual editor in the dashboard UI for both cards (no YAML needed)
@@ -53,8 +53,8 @@ Entities are **discovered automatically**, you don't have to pick them one by on
 | Integration | Discovered |
 |---|---|
 | [Freebox](https://www.home-assistant.io/integrations/freebox/) (built in) | Rates, connection, IP, uptime, temperatures, fans, storage, RAID, Wi-Fi, missed calls (mark as read), connected devices, reboot |
-| [Livebox](https://github.com/cyr-ius/hass-livebox-component) (Orange, custom) | Line rates, Wi-Fi, missed calls (clear), connected devices, reboot |
-| [SFR Box](https://www.home-assistant.io/integrations/sfr_box/) (built in) | DSL line sync rates, shown as "Line rate" (the integration has no throughput sensor, so no download / upload traffic nor 24 h curve), temperature, reboot |
+| [Livebox](https://github.com/cyr-ius/hass-livebox-component) (Orange, custom) | Line rates, WAN status and link type, Wi-Fi, missed calls (clear), connected devices, reboot |
+| [SFR Box](https://www.home-assistant.io/integrations/sfr_box/) (built in) | DSL line sync rates, shown as "Line rate" (the integration has no throughput sensor, so no download / upload traffic nor 24 h curve), WAN / DSL / FTTH status (plus the DSL training, line status and access network sensors when enabled, they are disabled by default), temperature, reboot |
 | [Bbox](https://www.home-assistant.io/integrations/bbox/) (Bouygues, built in, YAML) | Download / upload bandwidth |
 
 ## Prerequisites
@@ -125,6 +125,10 @@ show_network: true
 show_system: true
 show_storage: true
 show_services: true
+temp_warning: 70
+temp_critical: 85
+storage_warning: 80
+storage_critical: 95
 rate_unit: bits
 language: fr
 ```
@@ -155,10 +159,14 @@ language: fr
 | `show_image` | both | `true` | Show the box picture |
 | `show_logo` | both | `true` | Show the header icon of the connection with the operator logo (opens the operator website when clicked) |
 | `show_network` | both | `true` | Download / upload rates (and IPv4, uptime on the full card) |
-| `show_history` | both | `true` | 24 h curve behind the download / upload tiles, from the recorder's 5-minute statistics (rate sensors with a `state_class`) |
+| `show_history` | both | `true` | 24 h curve behind the download / upload tiles, from the recorder's 5-minute statistics (rate sensors with a `state_class`), on a time axis: the curve breaks where the recorder has no data |
 | `show_system` | both | `true` | Temperatures and fans (hottest temperature on the mini card) |
 | `show_storage` | full | `true` | Disk partitions and RAID status |
 | `show_services` | full | `true` | Wi-Fi, missed calls and connected devices |
+| `temp_warning` | both | `75` | Temperature (in °C, whatever the sensor's unit) from which a temperature turns orange |
+| `temp_critical` | both | `90` | Temperature (in °C) from which a temperature turns red |
+| `storage_warning` | both | `80` | Disk usage (in % used) from which a partition turns orange (full card) |
+| `storage_critical` | both | `90` | Disk usage (in % used) from which a partition turns red (full card) |
 | `zoom` | mini | `true` | Detail button at the top right: shows the full card (every section) in place of the mini card, and back |
 | `rate_unit` | both | `bytes` | Rates unit: `bytes` (kB/s, MB/s) or `bits` (kb/s, Mb/s) |
 | `language` | both | Auto | Force language: `en`, `fr`, `de`, `es`, `sr`, `sr-Latn`, `it`, `nl`, `pt`, `pl`, `ro`, `da`, `sv`, `bg`, `ru`, `uk`, `hu`, `sk`, `cs`, `sl`, `lv` or `el` (auto-detects from HA settings) |
@@ -231,7 +239,7 @@ The second row is the mini card after a click on its detail button (top right): 
 
 The cards read the entity and device registries of Home Assistant and keep the entities of the supported box integrations (`freebox`, `livebox`, `sfr_box`, `bbox`). Each box's sensors are recognized by their integration's own translation keys (for the Freebox: `rate_down`, `rate_up`, `missed`, `wifi`, `partition_free_space`, `raid_degraded`), so entity ids translated in another language (for example `sensor.freebox_vitesse_de_telechargement`) and renamed entities are supported. The Bbox integration is a legacy YAML platform without devices nor unique ids, so its sensors are not in the entity registry: they are found in the states by their entity-id suffix (`_currently_used_download_bandwidth`…). The box picture and the header logo, colour and links follow the detected operator.
 
-The box itself is the device of the download rate sensor. Temperature and fan sensors are recognized by their `temperature` device class and `rpm` unit, disk partitions by their parent device, and connected devices by the config entry they share with the box (with a single box, the connected devices trackers that have no device are counted too). The **mark calls as read** and **reboot** buttons are found by their translation key (the reboot button also by its `restart` device class). On a Freebox, the connection type, IP addresses and uptime come from the attributes of its `device_tracker`. The Freebox integration gives the boot date without a time zone, in the system time zone of the Home Assistant process, and the card reads it in the time zone of Home Assistant (**Settings → System → General**). Both match on Home Assistant OS and Supervised; in a Docker container, start Home Assistant with `TZ` set to the same time zone (for example `-e TZ=Europe/Paris`), otherwise the uptime is off by the UTC offset. When the registry is not available, English Freebox entity ids (`sensor.freebox_download_speed`…) are used as a fallback.
+The box itself is the device of the download rate sensor. Temperature and fan sensors are recognized by their `temperature` device class and `rpm` unit, disk partitions by their parent device, and connected devices by the config entry they share with the box (with a single box, the connected devices trackers that have no device are counted too). The **mark calls as read** and **reboot** buttons are found by their translation key (the reboot button also by its `restart` device class). On a Freebox, the connection type, IP addresses and uptime come from the attributes of its `device_tracker`. The connection status comes from the integration's connectivity binary sensors when it has some (Livebox `connectivity` with its `link_type` attribute; SFR Box `wan_status`, else `dsl_status` / `ftth_status`, with the `dsl_training`, `dsl_line_status` and `net_infra` sensors), else from the box's `device_tracker` (Freebox). The Freebox integration gives the boot date without a time zone, in the system time zone of the Home Assistant process, and the card reads it in the time zone of Home Assistant (**Settings → System → General**). Both match on Home Assistant OS and Supervised; in a Docker container, start Home Assistant with `TZ` set to the same time zone (for example `-e TZ=Europe/Paris`), otherwise the uptime is off by the UTC offset. When the registry is not available, English Freebox entity ids (`sensor.freebox_download_speed`…) are used as a fallback.
 
 Thresholds:
 

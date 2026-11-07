@@ -23,7 +23,7 @@ const build = (platform, entry, devices, raw, clients = []) => {
 };
 
 // Livebox (Orange), hass-livebox-component: line rates, Wi-Fi switch, missed calls with their clear button,
-// restart button, and a device tracker per connected device.
+// restart button, WAN status, and a device tracker per connected device.
 const LB = "dev_livebox";
 const livebox = build(
   "livebox",
@@ -36,6 +36,7 @@ const livebox = build(
     ["switch.livebox_7_wifi", LB, "wifi_switch", "on", {}, "Wi-Fi"],
     ["button.livebox_7_clear_missed_calls", LB, "cmissed_clear_btn", "unknown", {}, "Clear missed calls"],
     ["button.livebox_7_restart", LB, "restart_btn", "unknown", { device_class: "restart" }, "Restart"],
+    ["binary_sensor.livebox_7_wan_status", LB, "connectivity", "on", { device_class: "connectivity", link_type: "gpon" }, "WAN Status"],
   ],
   [
     ["tv", "home"],
@@ -46,7 +47,8 @@ const livebox = build(
   ]
 );
 
-// SFR Box, sfr_box integration: DSL line sync rates, system temperature and the reboot button.
+// SFR Box, sfr_box integration: DSL line sync rates, system temperature, the reboot button and the WAN and DSL
+// line status.
 const SFR = "dev_sfr";
 const sfr = build(
   "sfr_box",
@@ -57,6 +59,8 @@ const sfr = build(
     ["sensor.sfr_box_dsl_rate_up", SFR, "dsl_rate_up", "11880", { unit_of_measurement: "kbit/s", device_class: "data_rate" }, "DSL rate up"],
     ["sensor.sfr_box_temperature", SFR, null, "52", { unit_of_measurement: "°C", device_class: "temperature" }, "Temperature"],
     ["button.sfr_box_restart", SFR, null, "unknown", { device_class: "restart" }, "Restart"],
+    ["binary_sensor.sfr_box_wan_status", SFR, "wan_status", "on", { device_class: "connectivity" }, "WAN status"],
+    ["binary_sensor.sfr_box_dsl_status", SFR, "dsl_status", "on", { device_class: "connectivity" }, "DSL status"],
   ]
 );
 

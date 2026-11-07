@@ -486,6 +486,8 @@ const STRINGS = {
     raid_degraded: "Degraded",
     online: "Online",
     offline: "Offline",
+    syncing: "Syncing",
+    line_fault: "Line fault",
     unavailable: "Unavailable",
     hours: "h",
     days: "d",
@@ -517,6 +519,10 @@ const STRINGS = {
     unit_bits: "Bits (kb/s, Mb/s)",
     language: "Language",
     lang_auto: "Automatic",
+    temp_warning: "Temperature warning (°C)",
+    temp_critical: "Temperature critical (°C)",
+    storage_warning: "Storage warning (% used)",
+    storage_critical: "Storage critical (% used)",
   },
   fr: {
     network: "Réseau",
@@ -549,6 +555,8 @@ const STRINGS = {
     raid_degraded: "Dégradé",
     online: "En ligne",
     offline: "Hors ligne",
+    syncing: "Synchronisation",
+    line_fault: "Défaut de ligne",
     unavailable: "Indisponible",
     hours: "h",
     days: "j",
@@ -579,6 +587,10 @@ const STRINGS = {
     unit_bits: "Bits (kb/s, Mb/s)",
     language: "Langue",
     lang_auto: "Automatique",
+    temp_warning: "Seuil d'alerte température (°C)",
+    temp_critical: "Seuil critique température (°C)",
+    storage_warning: "Seuil d'alerte stockage (% utilisé)",
+    storage_critical: "Seuil critique stockage (% utilisé)",
   },
   de: {
     network: "Netzwerk",
@@ -610,6 +622,8 @@ const STRINGS = {
     raid_degraded: "Beeinträchtigt",
     online: "Verbunden",
     offline: "Getrennt",
+    syncing: "Synchronisiert",
+    line_fault: "Leitungsstörung",
     unavailable: "Nicht verfügbar",
     hours: "h",
     days: "Tg.",
@@ -640,6 +654,10 @@ const STRINGS = {
     unit_bits: "Bits (kb/s, Mb/s)",
     language: "Sprache",
     lang_auto: "Automatisch",
+    temp_warning: "Temperatur-Warnschwelle (°C)",
+    temp_critical: "Kritische Temperaturschwelle (°C)",
+    storage_warning: "Speicher-Warnschwelle (% belegt)",
+    storage_critical: "Kritische Speicherschwelle (% belegt)",
   },
   es: {
     network: "Red",
@@ -672,6 +690,8 @@ const STRINGS = {
     raid_degraded: "Degradado",
     online: "En línea",
     offline: "Fuera de línea",
+    syncing: "Sincronizando",
+    line_fault: "Fallo de línea",
     unavailable: "No disponible",
     hours: "h",
     days: "d",
@@ -702,6 +722,10 @@ const STRINGS = {
     unit_bits: "Bits (kb/s, Mb/s)",
     language: "Idioma",
     lang_auto: "Automático",
+    temp_warning: "Umbral de aviso de temperatura (°C)",
+    temp_critical: "Umbral crítico de temperatura (°C)",
+    storage_warning: "Umbral de aviso de almacenamiento (% usado)",
+    storage_critical: "Umbral crítico de almacenamiento (% usado)",
   },
   sr: {
     network: "Мрежа",
@@ -735,6 +759,8 @@ const STRINGS = {
     raid_degraded: "Деградирано",
     online: "На мрежи",
     offline: "Ван мреже",
+    syncing: "Синхронизација",
+    line_fault: "Квар линије",
     unavailable: "Недоступно",
     hours: "h",
     days: "d",
@@ -765,6 +791,10 @@ const STRINGS = {
     unit_bits: "Битови (kb/s, Mb/s)",
     language: "Језик",
     lang_auto: "Аутоматски",
+    temp_warning: "Праг упозорења температуре (°)",
+    temp_critical: "Критични праг температуре (°)",
+    storage_warning: "Праг упозорења складишта (% заузето)",
+    storage_critical: "Критични праг складишта (% заузето)",
   },
   "sr-Latn": {
     network: "Mreža",
@@ -798,6 +828,8 @@ const STRINGS = {
     raid_degraded: "Degradirano",
     online: "Na mreži",
     offline: "Van mreže",
+    syncing: "Sinhronizacija",
+    line_fault: "Kvar linije",
     unavailable: "Nedostupno",
     hours: "h",
     days: "d",
@@ -828,6 +860,10 @@ const STRINGS = {
     unit_bits: "Bitovi (kb/s, Mb/s)",
     language: "Jezik",
     lang_auto: "Automatski",
+    temp_warning: "Prag upozorenja temperature (°C)",
+    temp_critical: "Kritični prag temperature (°C)",
+    storage_warning: "Prag upozorenja skladišta (% zauzeto)",
+    storage_critical: "Kritični prag skladišta (% zauzeto)",
   },
   it: {
     network: "Rete",
@@ -860,6 +896,8 @@ const STRINGS = {
     raid_degraded: "Degradato",
     online: "Online",
     offline: "Offline",
+    syncing: "Sincronizzazione",
+    line_fault: "Guasto di linea",
     unavailable: "Non disponibile",
     hours: "h",
     days: "g",
@@ -890,6 +928,10 @@ const STRINGS = {
     unit_bits: "Bit (kb/s, Mb/s)",
     language: "Lingua",
     lang_auto: "Automatica",
+    temp_warning: "Soglia di avviso temperatura (°C)",
+    temp_critical: "Soglia critica temperatura (°C)",
+    storage_warning: "Soglia di avviso archiviazione (% usato)",
+    storage_critical: "Soglia critica archiviazione (% usato)",
   },
   nl: {
     network: "Netwerk",
@@ -921,6 +963,8 @@ const STRINGS = {
     raid_degraded: "Gedegradeerd",
     online: "Online",
     offline: "Offline",
+    syncing: "Synchroniseren",
+    line_fault: "Lijnstoring",
     unavailable: "Niet beschikbaar",
     hours: "u",
     days: "d",
@@ -951,6 +995,10 @@ const STRINGS = {
     unit_bits: "Bits (kb/s, Mb/s)",
     language: "Taal",
     lang_auto: "Automatisch",
+    temp_warning: "Waarschuwingsdrempel temperatuur (°C)",
+    temp_critical: "Kritieke drempel temperatuur (°C)",
+    storage_warning: "Waarschuwingsdrempel opslag (% gebruikt)",
+    storage_critical: "Kritieke drempel opslag (% gebruikt)",
   },
   pt: {
     network: "Rede",
@@ -983,6 +1031,8 @@ const STRINGS = {
     raid_degraded: "Degradado",
     online: "Online",
     offline: "Offline",
+    syncing: "A sincronizar",
+    line_fault: "Falha de linha",
     unavailable: "Indisponível",
     hours: "h",
     days: "d",
@@ -1013,6 +1063,10 @@ const STRINGS = {
     unit_bits: "Bits (kb/s, Mb/s)",
     language: "Idioma",
     lang_auto: "Automático",
+    temp_warning: "Limiar de aviso de temperatura (°C)",
+    temp_critical: "Limiar crítico de temperatura (°C)",
+    storage_warning: "Limiar de aviso de armazenamento (% usado)",
+    storage_critical: "Limiar crítico de armazenamento (% usado)",
   },
   pl: {
     network: "Sieć",
@@ -1047,6 +1101,8 @@ const STRINGS = {
     raid_degraded: "Zdegradowany",
     online: "Online",
     offline: "Offline",
+    syncing: "Synchronizacja",
+    line_fault: "Awaria linii",
     unavailable: "Niedostępne",
     hours: "h",
     days: "d",
@@ -1077,6 +1133,10 @@ const STRINGS = {
     unit_bits: "Bity (kb/s, Mb/s)",
     language: "Język",
     lang_auto: "Automatycznie",
+    temp_warning: "Próg ostrzeżenia temperatury (°C)",
+    temp_critical: "Próg krytyczny temperatury (°C)",
+    storage_warning: "Próg ostrzeżenia pamięci (% zajęte)",
+    storage_critical: "Próg krytyczny pamięci (% zajęte)",
   },
   ro: {
     network: "Rețea",
@@ -1109,6 +1169,8 @@ const STRINGS = {
     raid_degraded: "Degradat",
     online: "Online",
     offline: "Offline",
+    syncing: "Sincronizare",
+    line_fault: "Defect de linie",
     unavailable: "Indisponibil",
     hours: "h",
     days: "z",
@@ -1139,6 +1201,10 @@ const STRINGS = {
     unit_bits: "Biți (kb/s, Mb/s)",
     language: "Limbă",
     lang_auto: "Automată",
+    temp_warning: "Prag de avertizare temperatură (°C)",
+    temp_critical: "Prag critic temperatură (°C)",
+    storage_warning: "Prag de avertizare stocare (% utilizat)",
+    storage_critical: "Prag critic stocare (% utilizat)",
   },
   da: {
     network: "Netværk",
@@ -1171,6 +1237,8 @@ const STRINGS = {
     raid_degraded: "Forringet",
     online: "Online",
     offline: "Offline",
+    syncing: "Synkroniserer",
+    line_fault: "Linjefejl",
     unavailable: "Utilgængelig",
     hours: "t",
     days: "d",
@@ -1201,6 +1269,10 @@ const STRINGS = {
     unit_bits: "Bits (kb/s, Mb/s)",
     language: "Sprog",
     lang_auto: "Automatisk",
+    temp_warning: "Advarselsgrænse for temperatur (°C)",
+    temp_critical: "Kritisk grænse for temperatur (°C)",
+    storage_warning: "Advarselsgrænse for lager (% brugt)",
+    storage_critical: "Kritisk grænse for lager (% brugt)",
   },
   sv: {
     network: "Nätverk",
@@ -1233,6 +1305,8 @@ const STRINGS = {
     raid_degraded: "Försämrad",
     online: "Online",
     offline: "Offline",
+    syncing: "Synkroniserar",
+    line_fault: "Linjefel",
     unavailable: "Ej tillgänglig",
     hours: "h",
     days: "d",
@@ -1263,6 +1337,10 @@ const STRINGS = {
     unit_bits: "Bitar (kb/s, Mb/s)",
     language: "Språk",
     lang_auto: "Automatiskt",
+    temp_warning: "Varningsgräns för temperatur (°C)",
+    temp_critical: "Kritisk gräns för temperatur (°C)",
+    storage_warning: "Varningsgräns för lagring (% använt)",
+    storage_critical: "Kritisk gräns för lagring (% använt)",
   },
   bg: {
     network: "Мрежа",
@@ -1295,6 +1373,8 @@ const STRINGS = {
     raid_degraded: "Влошен",
     online: "На линия",
     offline: "Извън линия",
+    syncing: "Синхронизиране",
+    line_fault: "Повреда на линията",
     unavailable: "Недостъпно",
     hours: "ч",
     days: "д",
@@ -1325,6 +1405,10 @@ const STRINGS = {
     unit_bits: "Битове (kb/s, Mb/s)",
     language: "Език",
     lang_auto: "Автоматично",
+    temp_warning: "Праг за предупреждение за температура (°C)",
+    temp_critical: "Критичен праг за температура (°C)",
+    storage_warning: "Праг за предупреждение за хранилище (% заето)",
+    storage_critical: "Критичен праг за хранилище (% заето)",
   },
   ru: {
     network: "Сеть",
@@ -1357,6 +1441,8 @@ const STRINGS = {
     raid_degraded: "Деградирован",
     online: "В сети",
     offline: "Не в сети",
+    syncing: "Синхронизация",
+    line_fault: "Неисправность линии",
     unavailable: "Недоступно",
     hours: "ч",
     days: "д",
@@ -1387,6 +1473,10 @@ const STRINGS = {
     unit_bits: "Биты (kb/s, Mb/s)",
     language: "Язык",
     lang_auto: "Автоматически",
+    temp_warning: "Порог предупреждения температуры (°C)",
+    temp_critical: "Критический порог температуры (°C)",
+    storage_warning: "Порог предупреждения хранилища (% занято)",
+    storage_critical: "Критический порог хранилища (% занято)",
   },
   uk: {
     network: "Мережа",
@@ -1420,6 +1510,8 @@ const STRINGS = {
     raid_degraded: "Деградований",
     online: "У мережі",
     offline: "Не в мережі",
+    syncing: "Синхронізація",
+    line_fault: "Несправність лінії",
     unavailable: "Недоступно",
     hours: "год",
     days: "дн",
@@ -1450,6 +1542,10 @@ const STRINGS = {
     unit_bits: "Біти (kb/s, Mb/s)",
     language: "Мова",
     lang_auto: "Автоматично",
+    temp_warning: "Поріг попередження температури (°C)",
+    temp_critical: "Критичний поріг температури (°C)",
+    storage_warning: "Поріг попередження сховища (% зайнято)",
+    storage_critical: "Критичний поріг сховища (% зайнято)",
   },
   hu: {
     network: "Hálózat",
@@ -1481,6 +1577,8 @@ const STRINGS = {
     raid_degraded: "Leromlott",
     online: "Online",
     offline: "Offline",
+    syncing: "Szinkronizálás",
+    line_fault: "Vonalhiba",
     unavailable: "Nem elérhető",
     hours: "ó",
     days: "n",
@@ -1511,6 +1609,10 @@ const STRINGS = {
     unit_bits: "Bit (kb/s, Mb/s)",
     language: "Nyelv",
     lang_auto: "Automatikus",
+    temp_warning: "Hőmérséklet figyelmeztetési küszöb (°C)",
+    temp_critical: "Hőmérséklet kritikus küszöb (°C)",
+    storage_warning: "Tárhely figyelmeztetési küszöb (% foglalt)",
+    storage_critical: "Tárhely kritikus küszöb (% foglalt)",
   },
   sk: {
     network: "Sieť",
@@ -1544,6 +1646,8 @@ const STRINGS = {
     raid_degraded: "Degradované",
     online: "Online",
     offline: "Offline",
+    syncing: "Synchronizácia",
+    line_fault: "Porucha linky",
     unavailable: "Nedostupné",
     hours: "h",
     days: "d",
@@ -1574,6 +1678,10 @@ const STRINGS = {
     unit_bits: "Bity (kb/s, Mb/s)",
     language: "Jazyk",
     lang_auto: "Automaticky",
+    temp_warning: "Prah varovania teploty (°C)",
+    temp_critical: "Kritický prah teploty (°C)",
+    storage_warning: "Prah varovania úložiska (% použité)",
+    storage_critical: "Kritický prah úložiska (% použité)",
   },
   cs: {
     network: "Síť",
@@ -1607,6 +1715,8 @@ const STRINGS = {
     raid_degraded: "Degradováno",
     online: "Online",
     offline: "Offline",
+    syncing: "Synchronizace",
+    line_fault: "Porucha linky",
     unavailable: "Nedostupné",
     hours: "h",
     days: "d",
@@ -1637,6 +1747,10 @@ const STRINGS = {
     unit_bits: "Bity (kb/s, Mb/s)",
     language: "Jazyk",
     lang_auto: "Automaticky",
+    temp_warning: "Práh varování teploty (°C)",
+    temp_critical: "Kritický práh teploty (°C)",
+    storage_warning: "Práh varování úložiště (% využito)",
+    storage_critical: "Kritický práh úložiště (% využito)",
   },
   sl: {
     network: "Omrežje",
@@ -1671,6 +1785,8 @@ const STRINGS = {
     raid_degraded: "Okrnjeno",
     online: "Povezan",
     offline: "Brez povezave",
+    syncing: "Sinhronizacija",
+    line_fault: "Napaka linije",
     unavailable: "Ni na voljo",
     hours: "h",
     days: "d",
@@ -1701,6 +1817,10 @@ const STRINGS = {
     unit_bits: "Biti (kb/s, Mb/s)",
     language: "Jezik",
     lang_auto: "Samodejno",
+    temp_warning: "Prag opozorila za temperaturo (°C)",
+    temp_critical: "Kritični prag za temperaturo (°C)",
+    storage_warning: "Prag opozorila za shrambo (% zasedeno)",
+    storage_critical: "Kritični prag za shrambo (% zasedeno)",
   },
   lv: {
     network: "Tīkls",
@@ -1733,6 +1853,8 @@ const STRINGS = {
     raid_degraded: "Degradēts",
     online: "Tiešsaistē",
     offline: "Bezsaistē",
+    syncing: "Sinhronizē",
+    line_fault: "Līnijas kļūme",
     unavailable: "Nav pieejams",
     hours: "h",
     days: "d",
@@ -1763,6 +1885,10 @@ const STRINGS = {
     unit_bits: "Biti (kb/s, Mb/s)",
     language: "Valoda",
     lang_auto: "Automātiski",
+    temp_warning: "Temperatūras brīdinājuma slieksnis (°C)",
+    temp_critical: "Temperatūras kritiskais slieksnis (°C)",
+    storage_warning: "Krātuves brīdinājuma slieksnis (% aizņemts)",
+    storage_critical: "Krātuves kritiskais slieksnis (% aizņemts)",
   },
   el: {
     network: "Δίκτυο",
@@ -1795,6 +1921,8 @@ const STRINGS = {
     raid_degraded: "Υποβαθμισμένο",
     online: "Συνδεμένο",
     offline: "Εκτός σύνδεσης",
+    syncing: "Συγχρονισμός",
+    line_fault: "Βλάβη γραμμής",
     unavailable: "Μη διαθέσιμο",
     hours: "ώρ.",
     days: "ημ.",
@@ -1825,6 +1953,10 @@ const STRINGS = {
     unit_bits: "Bit (kb/s, Mb/s)",
     language: "Γλώσσα",
     lang_auto: "Αυτόματα",
+    temp_warning: "Όριο προειδοποίησης θερμοκρασίας (°C)",
+    temp_critical: "Κρίσιμο όριο θερμοκρασίας (°C)",
+    storage_warning: "Όριο προειδοποίησης αποθήκευσης (% σε χρήση)",
+    storage_critical: "Κρίσιμο όριο αποθήκευσης (% σε χρήση)",
   },
 };
 
@@ -1884,7 +2016,11 @@ const OPERATORS = {
       { id: "livebox_4", name: "Livebox 4", re: /livebox\s*4|lb4/i },
       { id: "livebox_s", name: "Livebox S", re: /livebox\s*s\b|lbs\b/i },
     ],
-    keys: { rate_down: "down_rate", rate_up: "up_rate", missed: "callers", wifi: "wifi_switch", mark_read: "cmissed_clear_btn", reboot: "restart_btn" },
+    // `wan`: the WAN connectivity binary sensor ("WAN Status", its link_type attribute gives the kind of line).
+    keys: {
+      rate_down: "down_rate", rate_up: "up_rate", missed: "callers", wifi: "wifi_switch", mark_read: "cmissed_clear_btn", reboot: "restart_btn",
+      wan: "connectivity",
+    },
   },
   sfr_box: {
     platform: "sfr_box", name: "SFR Box", color: "#e2001a", logo: IMG_SFR,
@@ -1896,8 +2032,13 @@ const OPERATORS = {
     ],
     // sfr_box exposes no throughput sensor, only the DSL line sync rates: they go to the `sync_*` slots, shown as
     // "Line rate" (no 24 h traffic curve), never as download / upload. The reboot button has no translation key
-    // but device_class "restart" (matched below too).
-    keys: { sync_down: "dsl_rate_down", sync_up: "dsl_rate_up", reboot: "system_reboot" },
+    // but device_class "restart" (matched below too). The link state comes from its connectivity binary sensors: the
+    // WAN first, else the DSL or FTTH line (`lines`, by kind of line), with the DSL training and line status sensors
+    // telling why a DSL line is down, and the access network (net_infra) its kind.
+    keys: {
+      sync_down: "dsl_rate_down", sync_up: "dsl_rate_up", reboot: "system_reboot",
+      wan: "wan_status", lines: { dsl_status: "DSL", ftth_status: "FTTH" }, training: "dsl_training", line_status: "dsl_line_status", infra: "net_infra",
+    },
   },
   bbox: {
     platform: "bbox", name: "Bbox", color: "#1246a0", logo: IMG_BBOX,
@@ -2046,6 +2187,17 @@ const temperature = (s) => {
 
 const level = (v, warn, crit) => (v === null ? "" : v >= crit ? "crit" : v >= warn ? "warn" : "ok");
 
+// Default warning / critical thresholds: temperatures in °C, storage in % used. Each can be set in the card options
+// (`temp_warning`, `temp_critical`, `storage_warning`, `storage_critical`).
+const THRESHOLDS = { temp_warning: 75, temp_critical: 90, storage_warning: 80, storage_critical: 90 };
+
+/** A threshold option as a number, or its default when unset or not a number. */
+const threshold = (config, key) => {
+  const v = config?.[key];
+  const n = v === "" || v === null || v === undefined ? Number.NaN : Number(v);
+  return Number.isFinite(n) ? n : THRESHOLDS[key];
+};
+
 // Header icon of the kind of connection (fibre, xDSL, 4G / 5G, else a generic box): a box body with what feeds it.
 const BOX_BODY = '<rect x="3" y="12" width="18" height="8" rx="2"/><circle class="led" cx="7" cy="16" r="1.1"/><circle class="led" cx="10.5" cy="16" r="1.1"/>';
 const LINE_ICONS = {
@@ -2056,7 +2208,7 @@ const LINE_ICONS = {
 };
 const lineOf = (type, model) => {
   const t = `${type || ""} ${model || ""}`.toLowerCase();
-  return /ftth|fib/.test(t) ? "fibre" : /dsl/.test(t) ? "dsl" : /\b(4g|5g|lte|mobile|cell)/.test(t) ? "mobile" : "box";
+  return /ftth|fib|pon\b/.test(t) ? "fibre" : /dsl/.test(t) ? "dsl" : /\b(4g|5g|lte|mobile|cell)/.test(t) ? "mobile" : "box";
 };
 const lineIcon = (kind) => `<svg class="icon type" viewBox="0 0 24 24" aria-hidden="true">${BOX_BODY}${LINE_ICONS[kind]}</svg>`;
 const svgIcon = (path, cls = "") => `<svg class="icon ${cls}" viewBox="0 0 24 24"><path d="${path}"/></svg>`;
@@ -2258,7 +2410,7 @@ const fillLegacy = (hass, box, prefix) => {
   }
 };
 
-const emptyBox = () => ({ id: null, device: null, operator: null, scalars: {}, temps: [], fans: [], partitions: [], raids: [], trackers: [] });
+const emptyBox = () => ({ id: null, device: null, operator: null, lineType: null, scalars: {}, temps: [], fans: [], partitions: [], raids: [], trackers: [] });
 
 /**
  * Map the entities of one box to a structured object of entity ids. The result is cached on the
@@ -2319,6 +2471,13 @@ const discover = (hass, boxId) => {
         else if (keys.sync_down && k === keys.sync_down) box.scalars.sync_down = id;
         else if (keys.sync_up && k === keys.sync_up) box.scalars.sync_up = id;
         else if (keys.missed && k === keys.missed) box.scalars.missed = id;
+        else if (domain === "binary_sensor" && keys.wan && k === keys.wan) box.scalars.wan = id;
+        else if (domain === "binary_sensor" && keys.lines?.[k]) {
+          box.scalars.line = id;
+          box.lineType = keys.lines[k];
+        } else if (domain === "sensor" && keys.training && k === keys.training) box.scalars.training = id;
+        else if (domain === "sensor" && keys.line_status && k === keys.line_status) box.scalars.line_status = id;
+        else if (domain === "sensor" && keys.infra && k === keys.infra) box.scalars.infra = id;
         else if (keys.wifi && k === keys.wifi) box.scalars.wifi = id;
         else if (own && domain === "button" && keys.mark_read && k === keys.mark_read) box.scalars.mark_read = id;
         else if (own && domain === "button" && ((keys.reboot && k === keys.reboot) || a.device_class === "restart")) box.scalars.reboot = id;
@@ -2488,14 +2647,41 @@ const DIALOG_STYLE = `
   .modal button.danger:hover { background: color-mix(in srgb, var(--ibc-red) 26%, transparent); }
 `;
 
-// Sparkline of a series (24 h of rates), scaled from 0 to its peak; nothing under two points.
+// Sparkline of a series of [time (ms), value] points (24 h of 5-minute rate means), on a real time axis: x is the
+// point's time over the 24 h window ending at `end`, y its value scaled from 0 to the series' peak. Points more than
+// two periods apart are not joined: the curve breaks where the recorder has no data. Runs of a single point are not
+// drawn; nothing at all without a run of two points.
 const HIST_REFRESH = 5 * 60000;
-function spark(values) {
-  if (!values || values.length < 2) return "";
-  const peak = Math.max(...values) || 1;
-  const pts = values.map((v, i) => `${((i / (values.length - 1)) * 100).toFixed(2)},${(30 - (Math.max(0, v) / peak) * 28).toFixed(2)}`).join("L");
-  return `<svg class="spark" viewBox="0 0 100 30" preserveAspectRatio="none" aria-hidden="true"><path class="spark-a" d="M0,30L${pts}L100,30Z"/><path class="spark-l" d="M${pts}"/></svg>`;
+const HIST_WINDOW = 864e5;
+const HIST_PERIOD = 5 * 60000;
+function spark(points, end) {
+  if (!points || points.length < 2) return "";
+  const start = end - HIST_WINDOW;
+  const inWindow = points.filter(([at]) => at >= start && at <= end).sort((a, b) => a[0] - b[0]);
+  const runs = [];
+  let run = [];
+  for (const p of inWindow) {
+    if (run.length && p[0] - run[run.length - 1][0] > 2 * HIST_PERIOD) {
+      runs.push(run);
+      run = [];
+    }
+    run.push(p);
+  }
+  runs.push(run);
+  const drawn = runs.filter((r) => r.length >= 2);
+  if (!drawn.length) return "";
+  const peak = Math.max(...drawn.flat().map(([, v]) => v)) || 1;
+  const x = (at) => (((at - start) / HIST_WINDOW) * 100).toFixed(2);
+  const y = (v) => (30 - (Math.max(0, v) / peak) * 28).toFixed(2);
+  const lines = drawn.map((r) => `M${r.map(([at, v]) => `${x(at)},${y(v)}`).join("L")}`);
+  const areas = drawn.map((r, i) => `M${x(r[0][0])},30L${lines[i].slice(1)}L${x(r[r.length - 1][0])},30Z`);
+  return `<svg class="spark" viewBox="0 0 100 30" preserveAspectRatio="none" aria-hidden="true"><path class="spark-a" d="${areas.join("")}"/><path class="spark-l" d="${lines.join(
+    ""
+  )}"/></svg>`;
 }
+
+/** Time of a recorder statistics row in ms: a number (Home Assistant 2023.3 and later) or an ISO date string. */
+const statTime = (p) => (typeof p.start === "number" ? p.start : Date.parse(p.start));
 
 class InternetBoxBase extends HTMLElement {
   constructor() {
@@ -2665,13 +2851,19 @@ class InternetBoxBase extends HTMLElement {
     return { missed, n, reset };
   }
 
+  // Level ("ok", "warn", "crit", or "" without value) of a temperature in °C or a storage use in %, against the
+  // configured thresholds.
+  _level(v, metric) {
+    return level(v, threshold(this._config, `${metric}_warning`), threshold(this._config, `${metric}_critical`));
+  }
+
   _uptime(router) {
     return uptimeSec(router, this._hass.config?.time_zone);
   }
 
   // Download / upload rate tile, shared by the full and the mini card.
   _rateTile(id, cls, icon, k, hist) {
-    return `<div class="tile clickable ${cls}" role="button" tabindex="0" data-entity="${id || ""}">${spark(hist?.[id])}${svgIcon(icon)}<div><div class="k">${k}</div><div class="v">${this._rate(
+    return `<div class="tile clickable ${cls}" role="button" tabindex="0" data-entity="${id || ""}">${spark(hist?.[id], hist?.end)}${svgIcon(icon)}<div><div class="k">${k}</div><div class="v">${this._rate(
       id
     )}</div></div></div>`;
   }
@@ -2705,24 +2897,27 @@ class InternetBoxBase extends HTMLElement {
     return sig;
   }
 
-  // 24 h of 5-minute means from the recorder's statistics, fetched again every 5 minutes. Returns what is
-  // already there (nothing at first): the card renders again when the answer comes.
+  // 24 h of 5-minute means from the recorder's statistics, fetched again every 5 minutes, as { [id]: [[time, mean]…],
+  // end }. Returns what is already there (nothing at first): the card renders again when the answer comes.
   _history(ids) {
     const key = ids.join(",");
     if (key && this._hass.callWS && (this._histKey !== key || Date.now() - this._histAt > HIST_REFRESH)) {
       this._histKey = key;
-      this._histAt = Date.now();
+      const end = Date.now();
+      this._histAt = end;
       this._hass
         .callWS({
           type: "recorder/statistics_during_period",
-          start_time: new Date(Date.now() - 864e5).toISOString(),
+          start_time: new Date(end - HIST_WINDOW).toISOString(),
           statistic_ids: ids,
           period: "5minute",
           types: ["mean"],
         })
         .then((r) => {
           if (this._histKey !== key) return;
-          this._hist = Object.fromEntries(ids.map((id) => [id, (r?.[id] || []).map((p) => p.mean).filter(Number.isFinite)]));
+          // [time, mean] pairs; the window ends at the request time, so the curves stay put until the next fetch.
+          const series = ids.map((id) => [id, (r?.[id] || []).map((p) => [statTime(p), p.mean]).filter(([at, v]) => Number.isFinite(at) && Number.isFinite(v))]);
+          this._hist = { ...Object.fromEntries(series), end };
           this._update();
         })
         // No statistics (sensor without state_class, recorder off): try again in a minute, no curve meanwhile.
@@ -2745,17 +2940,51 @@ class InternetBoxBase extends HTMLElement {
     }
   }
 
-  // Status pill right of the title (connection state and type), or "" without the router entity.
-  _statusPill(box) {
-    const router = this._s(box.scalars.router);
-    if (!router) return "";
+  // Kind of line ("FTTH", "XDSL"…): the router's connection type (Freebox), the WAN sensor's link type (Livebox), the
+  // access network sensor (SFR Box), else the kind of the line sensor found (SFR Box DSL / FTTH); "" when unknown.
+  _linkType(box) {
+    const sc = box.scalars;
+    const infra = this._s(sc.infra);
+    const type =
+      this._s(sc.router)?.attributes?.connection_type ||
+      this._s(sc.wan)?.attributes?.link_type ||
+      (infra && !noValue(infra) ? infra.state : "") ||
+      box.lineType;
+    return type ? String(type).toUpperCase() : "";
+  }
+
+  // State of the internet link: { entity, cls, key, type }, or null when the box exposes nothing about it. Read from
+  // the integration's own link entities when it has some (WAN status, else the DSL / FTTH line status); a link that
+  // is down says why when the DSL line tells it (still training: "Syncing"; a line defect: "Line fault"). Without
+  // them (or while they are unavailable), the router tracker's presence, as before.
+  _link(box) {
+    const sc = box.scalars;
+    const type = this._linkType(box);
+    const real = [this._s(sc.wan), this._s(sc.line)].find((s) => s && !noValue(s));
+    if (real) {
+      if (real.state === "on") return { entity: real.entity_id, cls: "ok", key: "online", type };
+      const training = this._s(sc.training);
+      if (training && !noValue(training) && !["showtime", "idle"].includes(training.state))
+        return { entity: training.entity_id, cls: "warn", key: "syncing", type };
+      const line = this._s(sc.line_status);
+      if (line && !noValue(line) && line.state !== "no_defect") return { entity: line.entity_id, cls: "crit", key: "line_fault", type };
+      return { entity: real.entity_id, cls: "crit", key: "offline", type };
+    }
+    const router = this._s(sc.router);
+    const fallback = router || this._s(sc.wan) || this._s(sc.line);
+    if (!fallback || noValue(fallback)) return fallback ? { entity: fallback.entity_id, cls: "off", key: "unavailable", type } : null;
     const online = router.state === "home";
-    const type = router.attributes.connection_type;
-    const unknown = noValue(router);
-    const text = unknown ? this._t("unavailable") : `${online ? this._t("online") : this._t("offline")}${type ? ` · ${String(type).toUpperCase()}` : ""}`;
+    return { entity: router.entity_id, cls: online ? "ok" : "crit", key: online ? "online" : "offline", type };
+  }
+
+  // Status pill right of the title (connection state and type), or "" when the box exposes no link state.
+  _statusPill(box) {
+    const link = this._link(box);
+    if (!link) return "";
+    const text = link.cls === "off" ? this._t("unavailable") : `${this._t(link.key)}${link.type ? ` · ${link.type}` : ""}`;
     // The text is also the tooltip and accessible name: on a narrow card only the coloured dot is shown.
-    return `<span class="chip status clickable ${unknown ? "off" : online ? "ok" : "crit"}" role="button" tabindex="0" data-entity="${
-      router.entity_id
+    return `<span class="chip status clickable ${link.cls}" role="button" tabindex="0" data-entity="${
+      link.entity
     }" title="${esc(text)}" aria-label="${esc(text)}"><span class="dot"></span><span class="txt">${esc(text)}</span></span>`;
   }
 
@@ -2789,7 +3018,7 @@ class InternetBoxBase extends HTMLElement {
     const sub = [devName && devName !== name ? devName : null, firmware ? `${this._t("firmware")} ${firmware}` : null].filter(Boolean);
     // Icon of the kind of connection, tinted with the operator colour, with the operator logo (every supported
     // operator has one) as a badge, opening its website.
-    const line = lineIcon(lineOf(router?.attributes?.connection_type, model?.name));
+    const line = lineIcon(lineOf(this._linkType(box), model?.name));
     const brand = `<a class="logo-link" href="${esc(op.website)}" target="_blank" rel="noopener noreferrer" title="${esc(op.name)}">${
       op.logo ? `<img class="logo" src="${op.logo}" alt="${esc(op.name)}">` : ""
     }${line}</a>`;
@@ -2997,7 +3226,7 @@ class InternetBoxCard extends InternetBoxBase {
     const gauges = temps.map(({ id, name, label }) => {
       // Thresholds and gauge (0-100) in °C, whatever unit the sensor reports; the value in its own unit.
       const { raw, c } = temperature(this._s(id));
-      return `<div class="gauge clickable ${level(c, 75, 90)}" role="button" tabindex="0" data-key="${id}" data-entity="${id}" title="${esc(name)}">
+      return `<div class="gauge clickable ${this._level(c, "temp")}" role="button" tabindex="0" data-key="${id}" data-entity="${id}" title="${esc(name)}">
         ${ring(c)}
         <div class="val"><b>${raw === null ? "—" : `${Math.round(raw)}°`}</b></div>
         <div class="lbl">${esc(label)}</div>
@@ -3020,7 +3249,7 @@ class InternetBoxCard extends InternetBoxBase {
     const rows = box.partitions.map((p) => {
       const free = num(this._s(p.id));
       const used = free === null ? null : Math.max(0, Math.min(100, 100 - free));
-      const cls = level(used, 80, 90);
+      const cls = this._level(used, "storage");
       return `<div class="part clickable ${cls}" role="button" tabindex="0" data-key="${p.id}" data-entity="${p.id}">
         <div class="row"><span class="dot ${used === null ? "off" : cls || "ok"}"></span><span class="grow">${esc(partitionLabel(this._hass, p, this._t("disk")))}</span>
           <span class="muted">${esc(p.device?.model || "")}</span></div>
@@ -3182,13 +3411,14 @@ class InternetBoxMiniCard extends InternetBoxCard {
     }
     const foot = [];
     const router = this._s(sc.router);
-    if (router) {
-      const online = router.state === "home";
-      const unknown = noValue(router);
-      const text = unknown ? this._t("unavailable") : String(router.attributes.connection_type || this._t(online ? "online" : "offline")).toUpperCase();
-      foot.push(`<span class="clickable ${unknown ? "off" : online ? "ok" : "crit"}" role="button" tabindex="0" data-key="router" data-entity="${
-        router.entity_id
-      }"><span class="dot"></span>&nbsp;${esc(text)}</span>`);
+    const link = this._link(box);
+    if (link) {
+      // The kind of line when the link is up or plainly down (coloured), the reason when the DSL line gives one.
+      const text =
+        link.cls === "off" ? this._t("unavailable") : (["online", "offline"].includes(link.key) && link.type) || this._t(link.key).toUpperCase();
+      foot.push(`<span class="clickable ${link.cls}" role="button" tabindex="0" data-key="router" data-entity="${link.entity}"><span class="dot"></span>&nbsp;${esc(
+        text
+      )}</span>`);
     }
     if (c.show_system !== false && box.temps.length) {
       let hottest = null;
@@ -3197,7 +3427,7 @@ class InternetBoxMiniCard extends InternetBoxCard {
         if (v.c !== null && (!hottest || v.c > hottest.c)) hottest = { ...v, id: tmp.id };
       }
       if (hottest)
-        foot.push(`<span class="clickable ${level(hottest.c, 75, 90)}" role="button" tabindex="0" data-key="hottest" data-entity="${hottest.id}">${svgIcon(ICONS.temp)}${Math.round(
+        foot.push(`<span class="clickable ${this._level(hottest.c, "temp")}" role="button" tabindex="0" data-key="hottest" data-entity="${hottest.id}">${svgIcon(ICONS.temp)}${Math.round(
           hottest.raw
         )}${esc(hottest.unit)}</span>`);
     }
@@ -3288,6 +3518,15 @@ class InternetBoxEditorBase extends HTMLElement {
           ...this.constructor.toggles.map((name) => ({ name, selector: { boolean: {} } })),
         ],
       },
+      // Warning / critical thresholds, shown at their default values.
+      {
+        type: "grid",
+        name: "",
+        schema: Object.keys(THRESHOLDS).map((name) => ({
+          name,
+          selector: { number: { min: 0, max: name.startsWith("temp") ? 150 : 100, step: 1, mode: "box", unit_of_measurement: name.startsWith("temp") ? "°C" : "%" } },
+        })),
+      },
       {
         name: "rate_unit",
         selector: {
@@ -3353,7 +3592,14 @@ class InternetBoxEditorBase extends HTMLElement {
         }
         for (const [k, v] of Object.entries(config)) {
           // Keep the YAML minimal: drop empty values and options left at their default.
-          if (v === "" || v === undefined || v === null || ((k.startsWith("show_") || k === "zoom") && v === true) || (k === "rate_unit" && v === "bytes"))
+          if (
+            v === "" ||
+            v === undefined ||
+            v === null ||
+            ((k.startsWith("show_") || k === "zoom") && v === true) ||
+            (k === "rate_unit" && v === "bytes") ||
+            THRESHOLDS[k] === v
+          )
             delete config[k];
         }
         this._config = config;
@@ -3369,7 +3615,7 @@ class InternetBoxEditorBase extends HTMLElement {
         this.dispatchEvent(new CustomEvent("config-changed", { detail: { config: this._config }, bubbles: true, composed: true }));
       }
     }
-    const data = { rate_unit: "bytes", model: "", ...this._config };
+    const data = { rate_unit: "bytes", model: "", ...THRESHOLDS, ...this._config };
     for (const name of ["show_image", "show_logo", ...this.constructor.toggles]) if (data[name] === undefined) data[name] = true;
     this._form.hass = this._hass;
     this._form.data = data;

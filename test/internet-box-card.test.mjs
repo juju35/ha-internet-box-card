@@ -27,6 +27,9 @@ const entities = {
   "device_tracker.tablet": { entity_id: "device_tracker.tablet", platform: "freebox", device_id: null },
 };
 const st = (state, attributes = {}) => ({ state, attributes });
+// Recorder 5-minute statistics rows ending now, one per value (null: no row for that period).
+const stats = (values, end = Date.now()) =>
+  values.map((mean, i) => (mean === null ? null : { start: end - (values.length - i) * 300000, mean })).filter(Boolean);
 const baseStates = () => {
   const s = {
     "sensor.down": st("100", { unit_of_measurement: "kB/s" }),
@@ -468,6 +471,8 @@ test("lineOf: the header icon follows the connection type, else the model", () =
   assert.equal(lineOf("4G"), "mobile");
   assert.equal(lineOf(undefined, "Bbox Fibre"), "fibre");
   assert.equal(lineOf(undefined, "Livebox 7"), "box");
+  assert.equal(lineOf("GPON"), "fibre");
+  assert.equal(lineOf("XGS-PON"), "fibre");
 });
 
 test("rate tiles: 24 h sparkline from the recorder statistics, refreshed every 5 minutes, off with show_history: false", async () => {
@@ -482,7 +487,7 @@ test("rate tiles: 24 h sparkline from the recorder statistics, refreshed every 5
     config: { time_zone: "UTC" },
     callWS: async (msg) => {
       calls.push(msg);
-      return Object.fromEntries(msg.statistic_ids.map((id) => [id, [{ mean: 10 }, { mean: 40 }, { mean: 20 }]]));
+      return Object.fromEntries(msg.statistic_ids.map((id) => [id, stats([10, 40, 20])]));
     },
   };
   el._update = () => {
@@ -517,7 +522,7 @@ test("mini card: the compact rate tiles draw the same 24 h curves", async () => 
     devices,
     language: "en",
     config: { time_zone: "UTC" },
-    callWS: async (msg) => Object.fromEntries(msg.statistic_ids.map((id) => [id, [{ mean: 1 }, { mean: 3 }]])),
+    callWS: async (msg) => Object.fromEntries(msg.statistic_ids.map((id) => [id, stats([1, 3])])),
   };
   el._update = () => {
     el.html = el._renderMini();
@@ -566,4 +571,163 @@ test("SFR Box: the DSL sync rates show as the line rate, without 24 h traffic cu
   }
   await new Promise((r) => setTimeout(r, 0));
   assert.equal(calls.length, 0);
+});
+
+// SFR Box (or Livebox) with its link entities: [entity id, translation key, state, attributes].
+const linkCard = (Kind, platform, rows) => {
+  const { [Kind]: Card } = load("internet-box-card.js", [Kind]);
+  const devs = { b: { id: "b", name: "Box", config_entries: ["e"] } };
+  const ents = {};
+  const states = {};
+  const down = platform === "sfr_box" ? "dsl_rate_down" : "down_rate";
+  for (const [id, key, state, attributes = {}] of [[`sensor.${platform}_down`, down, "1000", { unit_of_measurement: "kbit/s" }], ...rows]) {
+    ents[id] = { entity_id: id, platform, device_id: "b", translation_key: key };
+    states[id] = { entity_id: id, ...st(state, attributes) };
+  }
+  const el = new Card();
+  el._config = { box: "b", zoom: false };
+  el._hass = { states, entities: ents, devices: devs, language: "en", config: { time_zone: "UTC" } };
+  return el;
+};
+const pill = (html) => html.match(/<span class="chip status[^>]*>.*?<\/span><\/span>/s)?.[0] ?? "";
+
+test("SFR Box: the status pill shows the real WAN / line state from the integration's entities", () => {
+  const sfr = (rows) => linkCard("InternetBoxCard", "sfr_box", rows);
+  const WAN = ["binary_sensor.sfr_wan", "wan_status"];
+  const DSL = ["binary_sensor.sfr_dsl", "dsl_status"];
+  const TRAINING = ["sensor.sfr_training", "dsl_training"];
+  const LINE = ["sensor.sfr_line", "dsl_line_status"];
+  // WAN up, the kind of line from the DSL line sensor.
+  let p = pill(sfr([[...WAN, "on"], [...DSL, "on"]])._render());
+  assert.match(p, /class="chip status clickable ok"[^>]*data-entity="binary_sensor.sfr_wan"/);
+  assert.match(p, />Online · DSL</);
+  // The access network sensor, when enabled, names the line.
+  p = pill(sfr([[...WAN, "on"], [...DSL, "on"], ["sensor.sfr_infra", "net_infra", "ftth"]])._render());
+  assert.match(p, />Online · FTTH</);
+  // WAN down while the DSL line is training: syncing, linked to the training sensor.
+  p = pill(sfr([[...WAN, "off"], [...DSL, "off"], [...TRAINING, "g_994_training"], [...LINE, "no_defect"]])._render());
+  assert.match(p, /class="chip status clickable warn"[^>]*data-entity="sensor.sfr_training"/);
+  assert.match(p, />Syncing · DSL</);
+  // WAN down with a line defect: line fault, linked to the line status sensor.
+  p = pill(sfr([[...WAN, "off"], [...TRAINING, "idle"], [...LINE, "loss_of_signal"]])._render());
+  assert.match(p, /class="chip status clickable crit"[^>]*data-entity="sensor.sfr_line"/);
+  assert.match(p, />Line fault</);
+  // WAN down, nothing more: offline.
+  p = pill(sfr([[...WAN, "off"], [...DSL, "off"], [...TRAINING, "showtime"], [...LINE, "no_defect"]])._render());
+  assert.match(p, /class="chip status clickable crit"[^>]*data-entity="binary_sensor.sfr_wan"/);
+  assert.match(p, />Offline · DSL</);
+  // WAN unavailable: the DSL line sensor answers instead.
+  p = pill(sfr([[...WAN, "unavailable"], [...DSL, "on"]])._render());
+  assert.match(p, /data-entity="binary_sensor.sfr_dsl"[^>]*>.*Online · DSL/s);
+  // Every link entity unavailable: unavailable, not offline.
+  p = pill(sfr([[...WAN, "unavailable"]])._render());
+  assert.match(p, /class="chip status clickable off"[^>]*>.*Unavailable/s);
+  // No link entity (and no router tracker): no pill, as before.
+  assert.equal(pill(sfr([])._render()), "");
+  // The mini card footer: the kind of line when up, the reason when the line gives one.
+  const mini = (rows) => linkCard("InternetBoxMiniCard", "sfr_box", rows)._renderMini();
+  assert.match(mini([[...WAN, "on"], [...DSL, "on"]]), /class="clickable ok"[^>]*data-key="router"[^>]*><span class="dot"><\/span>&nbsp;DSL</);
+  assert.match(mini([[...WAN, "off"], [...TRAINING, "g_993_started"]]), /class="clickable warn"[^>]*data-key="router"[^>]*>.*SYNCING/s);
+});
+
+test("Livebox: the status pill follows the WAN connectivity sensor and its link type", () => {
+  const lb = (state) => linkCard("InternetBoxCard", "livebox", [["binary_sensor.lb_wan", "connectivity", state, { link_type: "gpon" }]]);
+  assert.match(pill(lb("on")._render()), /class="chip status clickable ok"[^>]*>.*Online · GPON/s);
+  assert.match(pill(lb("off")._render()), /class="chip status clickable crit"[^>]*>.*Offline · GPON/s);
+  // The header icon follows the link type: fibre.
+  assert.match(lb("on")._render(), /<path class="ln" d="M12 12V8\.5/);
+});
+
+test("thresholds: temperature and storage levels follow the options, with the former values as defaults", async () => {
+  const mock = await import("../scripts/mock-states.mjs");
+  const tempId = Object.keys(mock.states).find((id) => mock.states[id].attributes.device_class === "temperature");
+  const gaugeOf = (html) => html.match(new RegExp(`class="gauge clickable (\\w*)"[^>]*data-key="${tempId}"`))[1];
+  const partOf = (html) => html.match(new RegExp(`class="part clickable (\\w*)"[^>]*data-key="${PART}"`))[1];
+  // 60 °C and 85 % used: ok and warn by default (75 / 90 °C, 80 / 90 %).
+  const def = (await mockCard({ [tempId]: "60", [PART]: "15" }))._render();
+  assert.equal(gaugeOf(def), "ok");
+  assert.equal(partOf(def), "warn");
+  const custom = await mockCard({ [tempId]: "60", [PART]: "15" }, { temp_warning: 50, temp_critical: 58, storage_warning: 90, storage_critical: "95" });
+  const html = custom._render();
+  assert.equal(gaugeOf(html), "crit");
+  assert.equal(partOf(html), "ok");
+  // A value that is not a number falls back to the default.
+  const bad = (await mockCard({ [tempId]: "80" }, { temp_warning: "hot" }))._render();
+  assert.equal(gaugeOf(bad), "warn");
+  // The mini card's hottest temperature uses the same thresholds.
+  const mini = (await mockCard({ [tempId]: "60" }, { temp_warning: 50 }, "InternetBoxMiniCard"))._renderMini();
+  assert.match(mini, /class="clickable warn" role="button" tabindex="0" data-key="hottest"/);
+});
+
+test("thresholds in the editor: shown at their defaults, kept in the YAML only when changed", () => {
+  const { InternetBoxCardEditor } = load("internet-box-card.js", ["InternetBoxCardEditor"]);
+  const ed = new InternetBoxCardEditor();
+  ed.appendChild = () => {};
+  const emitted = [];
+  ed.dispatchEvent = (ev) => emitted.push(ev.detail.config);
+  ed.setConfig({ box: "router" });
+  ed.hass = { states: baseStates(), entities, devices, language: "en" };
+  assert.equal(ed._form.data.temp_warning, 75);
+  assert.equal(ed._form.data.storage_critical, 90);
+  const names = JSON.stringify(ed._form.schema);
+  for (const k of ["temp_warning", "temp_critical", "storage_warning", "storage_critical"]) assert.match(names, new RegExp(`"${k}"`));
+  ed._form.listeners["value-changed"]({ stopPropagation() {}, detail: { value: { ...ed._form.data, temp_warning: 70 } } });
+  const out = emitted.at(-1);
+  assert.equal(out.temp_warning, 70);
+  for (const k of ["temp_critical", "storage_warning", "storage_critical"]) assert.equal(k in out, false, k);
+});
+
+test("sparkline: real time axis over the 24 h window, broken where the recorder has no data", () => {
+  const { spark, statTime } = load("internet-box-card.js", ["spark", "statTime"]);
+  const end = Date.UTC(2026, 10, 7, 12);
+  const H = 3600000;
+  // Points at -24 h, -12 h and now land at x 0, 50 and 100, whatever their count.
+  const even = spark(
+    [
+      [end - 24 * H, 1],
+      [end - 24 * H + 300000, 1],
+      [end - 12 * H, 2],
+      [end - 12 * H + 300000, 2],
+      [end - 300000, 1],
+      [end, 1],
+    ],
+    end
+  );
+  const line = even.match(/class="spark-l" d="([^"]*)"/)[1];
+  // Three runs (gaps of 12 h): three subpaths, starting at x 0, 50 and 99.65.
+  assert.deepEqual(line.match(/M[\d.]+/g), ["M0.00", "M50.00", "M99.65"]);
+  // Each run's area is closed down to the baseline on its own.
+  assert.equal(even.match(/class="spark-a" d="([^"]*)"/)[1].match(/Z/g).length, 3);
+  // One missing 5-minute row (10 minutes apart) still joins; two (15 minutes) break.
+  const run = (gap) => spark([[end - 3 * H, 1], [end - 3 * H + 300000, 2], [end - 3 * H + 300000 + gap, 3], [end - 3 * H + 600000 + gap, 1]], end);
+  assert.equal(run(600000).match(/class="spark-l" d="([^"]*)"/)[1].match(/M/g).length, 1);
+  assert.equal(run(900000).match(/class="spark-l" d="([^"]*)"/)[1].match(/M/g).length, 2);
+  // A lone point between gaps is not drawn; nothing at all without a run of two points; points outside the window are left out.
+  assert.equal(spark([[end - 5 * H, 1], [end - 2 * H, 2]], end), "");
+  assert.equal(spark([[end - 30 * H, 1], [end - 29 * H, 2], [end - H, 3]], end), "");
+  // Statistics rows carry their start as epoch ms (current Home Assistant) or an ISO date (older ones).
+  assert.equal(statTime({ start: end }), end);
+  assert.equal(statTime({ start: new Date(end).toISOString() }), end);
+});
+
+test("sparkline from the recorder: gaps in the statistics break the curve", async () => {
+  const el = new InternetBoxCard();
+  el._config = { box: "router" };
+  el._hass = {
+    states: baseStates(),
+    entities,
+    devices,
+    language: "en",
+    config: { time_zone: "UTC" },
+    callWS: async (msg) => Object.fromEntries(msg.statistic_ids.map((id) => [id, stats([5, 6, 7, null, null, null, 4, 5])])),
+  };
+  el._update = () => {
+    el.html = el._render();
+  };
+  el._update();
+  await new Promise((r) => setTimeout(r, 0));
+  const d = el.html.match(/class="spark-l" d="([^"]*)"/)[1];
+  assert.equal(d.match(/M/g).length, 2);
+  // The last row (5 minutes before the request) ends near the right edge, not stretched to it.
+  assert.match(d, /L99\.65,[\d.]+$/);
 });

@@ -1,5 +1,12 @@
 # Changelog
 
+## 2.5.0 - 2026-11-07
+
+### Features
+- The connection status shows the real link state from the integration when it has one: the WAN status of the Livebox (with its link type) and the WAN, DSL or FTTH status of the SFR Box, with "Syncing" while the DSL line trains and "Line fault" on a line defect; the box's tracker remains the fallback.
+- The temperature and disk usage thresholds can be set with `temp_warning`, `temp_critical`, `storage_warning` and `storage_critical` (also in the visual editor); the defaults are unchanged (75 / 90 °C, 80 / 90 %).
+- The 24 h rate curves use a real time axis and break where the recorder has no data, instead of joining the remaining points evenly spaced.
+
 ## 2.4.1 - 2026-11-07
 
 ### Fixes

@@ -87,14 +87,16 @@ async function openCard(browser, s) {
     ({ type, config, zoom, states, entities, devices }) => {
       const el = document.createElement(type);
       el.setConfig({ type: `custom:${type}`, ...config });
-      // Recorder statistics: a plausible 24 h rate curve for each rate sensor (busy evening, quiet night).
+      // Recorder statistics: a plausible 24 h rate curve for each rate sensor (busy evening, quiet night), 5-minute
+      // rows from the requested start, with an hour without data in the early morning (the curve breaks there).
       const callWS = async (msg) =>
         Object.fromEntries(
           (msg.statistic_ids || []).map((id, k) => [
             id,
             Array.from({ length: 288 }, (_, i) => ({
+              start: Date.parse(msg.start_time) + i * 300000,
               mean: 20 + 80 * Math.exp(-((i - 230 + k * 20) ** 2) / 900) + 35 * Math.exp(-((i - 110) ** 2) / 400) + 8 * Math.sin(i * 0.12 + k) ** 2,
-            })),
+            })).filter((_, i) => i < 60 || i >= 72),
           ])
         );
       el.hass = { states, entities, devices, language: "en", locale: { language: "en" }, config: { time_zone: "UTC" }, callWS };
