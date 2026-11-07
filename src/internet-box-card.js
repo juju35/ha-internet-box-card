@@ -3141,12 +3141,11 @@ class InternetBoxMiniCard extends InternetBoxCard {
     const sc = box.scalars;
     const parts = [];
     if (c.show_network !== false && (sc.rate_down || sc.rate_up)) {
-      parts.push(`<div class="grid2">${this._rateTile(sc.rate_down, "down", ICONS.down, this._t("download"))}${this._rateTile(
-        sc.rate_up,
-        "up",
-        ICONS.up,
-        this._t("upload")
-      )}</div>`);
+      // The same 24 h curves as the full card, behind the compact rate tiles.
+      const hist = c.show_history === false ? null : this._history([sc.rate_down, sc.rate_up].filter(Boolean));
+      parts.push(
+        `<div class="grid2">${this._rateTile(sc.rate_down, "down", ICONS.down, this._t("download"), hist)}${this._rateTile(sc.rate_up, "up", ICONS.up, this._t("upload"), hist)}</div>`
+      );
     }
     const foot = [];
     const router = this._s(sc.router);
@@ -3360,7 +3359,7 @@ class InternetBoxCardEditor extends InternetBoxEditorBase {
 
 class InternetBoxMiniCardEditor extends InternetBoxEditorBase {
   static get toggles() {
-    return ["show_network", "show_system", "zoom"];
+    return ["show_network", "show_history", "show_system", "zoom"];
   }
 }
 

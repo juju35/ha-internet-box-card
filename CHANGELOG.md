@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.4.0 - 2026-11-07
+
+### Features
+- Mini card: the folded download and upload tiles also draw their last 24 hours, like the full card (`show_history`, now also in the mini card editor).
+
 ## 2.3.0 - 2026-11-07
 
 ### Features

@@ -502,3 +502,25 @@ test("rate tiles: 24 h sparkline from the recorder statistics, refreshed every 5
   assert.doesNotMatch(off._render(), /class="spark"/);
   assert.equal(calls.length, 2);
 });
+
+test("mini card: the compact rate tiles draw the same 24 h curves", async () => {
+  const { InternetBoxMiniCard } = load("internet-box-card.js", ["InternetBoxMiniCard"]);
+  const el = new InternetBoxMiniCard();
+  el._config = { box: "router" };
+  el._hass = {
+    states: baseStates(),
+    entities,
+    devices,
+    language: "en",
+    config: { time_zone: "UTC" },
+    callWS: async (msg) => Object.fromEntries(msg.statistic_ids.map((id) => [id, [{ mean: 1 }, { mean: 3 }]])),
+  };
+  el._update = () => {
+    el.html = el._renderMini();
+  };
+  el._update();
+  await new Promise((r) => setTimeout(r, 0));
+  assert.match(el.html, /class="spark"/);
+  el._config = { box: "router", show_history: false };
+  assert.doesNotMatch(el._renderMini(), /class="spark"/);
+});

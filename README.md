@@ -33,7 +33,7 @@ Entities are **discovered automatically**, you don't have to pick them one by on
 - Header icon of the kind of connection (fibre, xDSL, 4G / 5G, else a box) in the operator colour, with the operator logo as a badge; accent colour, website and admin links follow the detected operator
 - Picture and commercial name of the box model, detected automatically or set with the `model` option, and firmware version
 - Connection status and type (FTTH, xDSL…), public IPv4 (IPv6 on hover) and uptime
-- Download / upload rates, in bytes (kB/s, MB/s) or bits (kb/s, Mb/s), with their last 24 hours drawn behind each tile (recorder statistics)
+- Download / upload rates, in bytes (kB/s, MB/s) or bits (kb/s, Mb/s), with their last 24 hours drawn behind each tile, on the full card and the mini card (recorder statistics)
 - Temperature gauges and fans speed
 - Storage: free space of the disk partitions and RAID status
 - Services: Wi-Fi state, missed calls and connected devices (the mini card footer always shows the missed calls, orange when there are some)
@@ -155,7 +155,7 @@ language: fr
 | `show_image` | both | `true` | Show the box picture |
 | `show_logo` | both | `true` | Show the header icon of the connection with the operator logo (opens the operator website when clicked) |
 | `show_network` | both | `true` | Download / upload rates (and IPv4, uptime on the full card) |
-| `show_history` | full | `true` | 24 h curve behind the download / upload tiles, from the recorder's 5-minute statistics (rate sensors with a `state_class`) |
+| `show_history` | both | `true` | 24 h curve behind the download / upload tiles, from the recorder's 5-minute statistics (rate sensors with a `state_class`) |
 | `show_system` | both | `true` | Temperatures and fans (hottest temperature on the mini card) |
 | `show_storage` | full | `true` | Disk partitions and RAID status |
 | `show_services` | full | `true` | Wi-Fi, missed calls and connected devices |
