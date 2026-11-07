@@ -137,7 +137,11 @@ test("boxes of other operators are discovered from their own entity keys", () =>
   };
   const sfr = discover({ states: sfrStates, entities: sfrEntities, devices: sfrDevices }, "sfr");
   assert.equal(sfr.operator.name, "SFR Box");
-  assert.equal(sfr.scalars.rate_down, "sensor.s_down");
+  // sfr_box has no throughput sensor: its DSL sync rates are the line rate, not the download / upload rates.
+  assert.equal(sfr.scalars.sync_down, "sensor.s_down");
+  assert.equal(sfr.scalars.sync_up, "sensor.s_up");
+  assert.equal(sfr.scalars.rate_down, undefined);
+  assert.equal(sfr.scalars.rate_up, undefined);
   assert.equal(sfr.scalars.reboot, "button.s_reboot");
   assert.deepEqual([...sfr.temps].map((t) => t.id), ["sensor.s_temp"]);
 
@@ -523,4 +527,43 @@ test("mini card: the compact rate tiles draw the same 24 h curves", async () => 
   assert.match(el.html, /class="spark"/);
   el._config = { box: "router", show_history: false };
   assert.doesNotMatch(el._renderMini(), /class="spark"/);
+});
+
+test("SFR Box: the DSL sync rates show as the line rate, without 24 h traffic curve", async () => {
+  const { InternetBoxCard: Full, InternetBoxMiniCard } = load("internet-box-card.js", ["InternetBoxCard", "InternetBoxMiniCard"]);
+  const sfrDevices = { sfr: { id: "sfr", name: "SFR Box 8", model: "NB6VAC", config_entries: ["e"] } };
+  const sfrEntities = {
+    "sensor.s_down": { entity_id: "sensor.s_down", platform: "sfr_box", translation_key: "dsl_rate_down", device_id: "sfr" },
+    "sensor.s_up": { entity_id: "sensor.s_up", platform: "sfr_box", translation_key: "dsl_rate_up", device_id: "sfr" },
+  };
+  const kbps = { unit_of_measurement: "kbit/s", device_class: "data_rate" };
+  const states = {
+    "sensor.s_down": { entity_id: "sensor.s_down", ...st("65480", kbps) },
+    "sensor.s_up": { entity_id: "sensor.s_up", ...st("11880", kbps) },
+  };
+  const calls = [];
+  const hass = {
+    states,
+    entities: sfrEntities,
+    devices: sfrDevices,
+    language: "en",
+    config: { time_zone: "UTC" },
+    callWS: async (msg) => {
+      calls.push(msg);
+      return {};
+    },
+  };
+  for (const El of [Full, InternetBoxMiniCard]) {
+    const el = new El();
+    el._config = { box: "sfr", zoom: false };
+    el._hass = hass;
+    const html = El === Full ? el._render() : el._renderMini();
+    assert.match(html, /Line rate ↓/);
+    assert.match(html, /Line rate ↑/);
+    assert.doesNotMatch(html, />Download</);
+    assert.doesNotMatch(html, />Upload</);
+    assert.doesNotMatch(html, /class="spark"/);
+  }
+  await new Promise((r) => setTimeout(r, 0));
+  assert.equal(calls.length, 0);
 });

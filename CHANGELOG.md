@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.4.1 - 2026-11-07
+
+### Fixes
+- SFR Box: the DSL line sync rates are no longer shown as download / upload traffic (the `sfr_box` integration has no throughput sensor). They show as "Line rate" tiles, without the 24 h traffic curve.
+
 ## 2.4.0 - 2026-11-07
 
 ### Features

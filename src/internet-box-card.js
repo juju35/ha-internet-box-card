@@ -463,6 +463,7 @@ const STRINGS = {
     services: "Services",
     download: "Download",
     upload: "Upload",
+    line_rate: "Line rate",
     uptime: "Uptime",
     firmware: "Firmware",
     devices_short: "Devices",
@@ -524,6 +525,7 @@ const STRINGS = {
     services: "Services",
     download: "Réception",
     upload: "Envoi",
+    line_rate: "Débit synchro",
     uptime: "Allumée depuis",
     firmware: "Firmware",
     devices_short: "Appareils",
@@ -585,6 +587,7 @@ const STRINGS = {
     services: "Dienste",
     download: "Download",
     upload: "Upload",
+    line_rate: "Leitungsrate",
     uptime: "Betriebszeit",
     firmware: "Firmware",
     devices_short: "Geräte",
@@ -645,6 +648,7 @@ const STRINGS = {
     services: "Servicios",
     download: "Descarga",
     upload: "Subida",
+    line_rate: "Velocidad de línea",
     uptime: "Tiempo activo",
     firmware: "Firmware",
     devices_short: "Dispositivos",
@@ -706,6 +710,7 @@ const STRINGS = {
     services: "Услуге",
     download: "Преузимање",
     upload: "Слање",
+    line_rate: "Брзина линије",
     uptime: "Време рада",
     firmware: "Фирмвер",
     devices_short: "Уређаји",
@@ -768,6 +773,7 @@ const STRINGS = {
     services: "Usluge",
     download: "Preuzimanje",
     upload: "Slanje",
+    line_rate: "Brzina linije",
     uptime: "Vreme rada",
     firmware: "Firmver",
     devices_short: "Uređaji",
@@ -830,6 +836,7 @@ const STRINGS = {
     services: "Servizi",
     download: "Download",
     upload: "Upload",
+    line_rate: "Velocità di linea",
     uptime: "Tempo di attività",
     firmware: "Firmware",
     devices_short: "Dispositivi",
@@ -891,6 +898,7 @@ const STRINGS = {
     services: "Diensten",
     download: "Download",
     upload: "Upload",
+    line_rate: "Lijnsnelheid",
     uptime: "Uptime",
     firmware: "Firmware",
     devices_short: "Apparaten",
@@ -951,6 +959,7 @@ const STRINGS = {
     services: "Serviços",
     download: "Transferência",
     upload: "Envio",
+    line_rate: "Velocidade da linha",
     uptime: "Tempo ligado",
     firmware: "Firmware",
     devices_short: "Dispositivos",
@@ -1012,6 +1021,7 @@ const STRINGS = {
     services: "Usługi",
     download: "Pobieranie",
     upload: "Wysyłanie",
+    line_rate: "Prędkość linii",
     uptime: "Czas pracy",
     firmware: "Firmware",
     devices_short: "Urządzenia",
@@ -1075,6 +1085,7 @@ const STRINGS = {
     services: "Servicii",
     download: "Descărcare",
     upload: "Încărcare",
+    line_rate: "Viteză linie",
     uptime: "Funcționează de",
     firmware: "Firmware",
     devices_short: "Dispozitive",
@@ -1136,6 +1147,7 @@ const STRINGS = {
     services: "Tjenester",
     download: "Download",
     upload: "Upload",
+    line_rate: "Linjehastighed",
     uptime: "Oppetid",
     firmware: "Firmware",
     devices_short: "Enheder",
@@ -1197,6 +1209,7 @@ const STRINGS = {
     services: "Tjänster",
     download: "Nedladdning",
     upload: "Uppladdning",
+    line_rate: "Linjehastighet",
     uptime: "Drifttid",
     firmware: "Firmware",
     devices_short: "Enheter",
@@ -1258,6 +1271,7 @@ const STRINGS = {
     services: "Услуги",
     download: "Изтегляне",
     upload: "Качване",
+    line_rate: "Скорост на линията",
     uptime: "Време на работа",
     firmware: "Фърмуер",
     devices_short: "Устройства",
@@ -1319,6 +1333,7 @@ const STRINGS = {
     services: "Сервисы",
     download: "Приём",
     upload: "Передача",
+    line_rate: "Скорость линии",
     uptime: "Время работы",
     firmware: "Прошивка",
     devices_short: "Устройства",
@@ -1380,6 +1395,7 @@ const STRINGS = {
     services: "Сервіси",
     download: "Прийом",
     upload: "Передача",
+    line_rate: "Швидкість лінії",
     uptime: "Час роботи",
     firmware: "Прошивка",
     devices_short: "Пристрої",
@@ -1442,6 +1458,7 @@ const STRINGS = {
     services: "Szolgáltatások",
     download: "Letöltés",
     upload: "Feltöltés",
+    line_rate: "Vonalsebesség",
     uptime: "Üzemidő",
     firmware: "Firmware",
     devices_short: "Eszközök",
@@ -1502,6 +1519,7 @@ const STRINGS = {
     services: "Služby",
     download: "Sťahovanie",
     upload: "Odosielanie",
+    line_rate: "Rýchlosť linky",
     uptime: "Doba prevádzky",
     firmware: "Firmvér",
     devices_short: "Zariadenia",
@@ -1564,6 +1582,7 @@ const STRINGS = {
     services: "Služby",
     download: "Stahování",
     upload: "Odesílání",
+    line_rate: "Rychlost linky",
     uptime: "Doba provozu",
     firmware: "Firmware",
     devices_short: "Zařízení",
@@ -1626,6 +1645,7 @@ const STRINGS = {
     services: "Storitve",
     download: "Prejemanje",
     upload: "Pošiljanje",
+    line_rate: "Hitrost linije",
     uptime: "Čas delovanja",
     firmware: "Firmware",
     devices_short: "Naprave",
@@ -1689,6 +1709,7 @@ const STRINGS = {
     services: "Pakalpojumi",
     download: "Lejupielāde",
     upload: "Augšupielāde",
+    line_rate: "Līnijas ātrums",
     uptime: "Darbības laiks",
     firmware: "Firmware",
     devices_short: "Ierīces",
@@ -1750,6 +1771,7 @@ const STRINGS = {
     services: "Υπηρεσίες",
     download: "Λήψη",
     upload: "Αποστολή",
+    line_rate: "Ταχύτητα γραμμής",
     uptime: "Σε λειτουργία",
     firmware: "Firmware",
     devices_short: "Συσκευές",
@@ -1872,8 +1894,10 @@ const OPERATORS = {
       { id: "sfr_box_7", name: "SFR Box 7", re: /box\s*7|nb7/i },
       { id: "sfr_nb6vac", name: "SFR Box", re: /nb6vac|box\s*(plus|power|fibre|thd)/i },
     ],
-    // The reboot button has no translation key but device_class "restart" (matched below too).
-    keys: { rate_down: "dsl_rate_down", rate_up: "dsl_rate_up", reboot: "system_reboot" },
+    // sfr_box exposes no throughput sensor, only the DSL line sync rates: they go to the `sync_*` slots, shown as
+    // "Line rate" (no 24 h traffic curve), never as download / upload. The reboot button has no translation key
+    // but device_class "restart" (matched below too).
+    keys: { sync_down: "dsl_rate_down", sync_up: "dsl_rate_up", reboot: "system_reboot" },
   },
   bbox: {
     platform: "bbox", name: "Bbox", color: "#1246a0", logo: IMG_BBOX,
@@ -2147,9 +2171,12 @@ const registry = (hass) => {
   return list;
 };
 
-/** True when an entity is the operator's "download rate" sensor (by translation key, or entity id for a legacy one). */
+/** True when an entity is the operator's "download rate" sensor (by translation key, or entity id for a legacy one),
+ *  or its downstream line sync rate for an operator without throughput sensors (SFR Box). */
 const isRateDown = (op, e) =>
-  (op.keys.rate_down && e.translation_key === op.keys.rate_down) || (op.legacy?.rate_down?.test(e.entity_id));
+  (op.keys.rate_down && e.translation_key === op.keys.rate_down) ||
+  (op.keys.sync_down && e.translation_key === op.keys.sync_down) ||
+  (op.legacy?.rate_down?.test(e.entity_id));
 
 /** The operator of a device, from the platform of its registry entities, or undefined. */
 const opOfDevice = (hass, deviceId) => {
@@ -2289,6 +2316,8 @@ const discover = (hass, boxId) => {
         // Each data slot is matched by the operator's translation key, or by an entity-id pattern for a legacy one.
         if ((keys.rate_down && k === keys.rate_down) || (legacy?.rate_down?.test(id))) box.scalars.rate_down = id;
         else if ((keys.rate_up && k === keys.rate_up) || (legacy?.rate_up?.test(id))) box.scalars.rate_up = id;
+        else if (keys.sync_down && k === keys.sync_down) box.scalars.sync_down = id;
+        else if (keys.sync_up && k === keys.sync_up) box.scalars.sync_up = id;
         else if (keys.missed && k === keys.missed) box.scalars.missed = id;
         else if (keys.wifi && k === keys.wifi) box.scalars.wifi = id;
         else if (own && domain === "button" && keys.mark_read && k === keys.mark_read) box.scalars.mark_read = id;
@@ -2647,6 +2676,15 @@ class InternetBoxBase extends HTMLElement {
     )}</div></div></div>`;
   }
 
+  // The download / upload tiles, with their 24 h curves (`hist`). A box without throughput sensors (SFR Box) gets
+  // its DSL line sync rates instead, labelled "Line rate" and without curve: the sync rate is not traffic.
+  _rateTiles(sc, hist) {
+    if (sc.rate_down || sc.rate_up)
+      return `${this._rateTile(sc.rate_down, "down", ICONS.down, this._t("download"), hist)}${this._rateTile(sc.rate_up, "up", ICONS.up, this._t("upload"), hist)}`;
+    const k = this._t("line_rate");
+    return `${this._rateTile(sc.sync_down, "down sync", ICONS.down, `${k} ↓`, null)}${this._rateTile(sc.sync_up, "up sync", ICONS.up, `${k} ↑`, null)}`;
+  }
+
   // What the render depends on: registries, language, the states of the box entities and the
   // minute, for the uptime shown in days, hours and minutes.
   _signature() {
@@ -2921,7 +2959,7 @@ class InternetBoxCard extends InternetBoxBase {
 
   _network(box) {
     const sc = box.scalars;
-    if (!sc.rate_down && !sc.rate_up) return "";
+    if (!sc.rate_down && !sc.rate_up && !sc.sync_down && !sc.sync_up) return "";
     const router = this._s(sc.router);
     const facts = [];
     if (router?.attributes?.IPv4)
@@ -2942,10 +2980,7 @@ class InternetBoxCard extends InternetBoxBase {
     const hist = this._config.show_history === false ? null : this._history([sc.rate_down, sc.rate_up].filter(Boolean));
     return `<div>
       <div class="section-title">${svgIcon(ICONS.network)}${this._t("network")}</div>
-      <div class="grid2">
-        ${this._rateTile(sc.rate_down, "down", ICONS.down, this._t("download"), hist)}
-        ${this._rateTile(sc.rate_up, "up", ICONS.up, this._t("upload"), hist)}
-      </div>
+      <div class="grid2">${this._rateTiles(sc, hist)}</div>
       ${facts.length ? `<div class="facts">${facts.join("")}</div>` : ""}
     </div>`;
   }
@@ -3140,12 +3175,10 @@ class InternetBoxMiniCard extends InternetBoxCard {
     const c = this._config;
     const sc = box.scalars;
     const parts = [];
-    if (c.show_network !== false && (sc.rate_down || sc.rate_up)) {
+    if (c.show_network !== false && (sc.rate_down || sc.rate_up || sc.sync_down || sc.sync_up)) {
       // The same 24 h curves as the full card, behind the compact rate tiles.
       const hist = c.show_history === false ? null : this._history([sc.rate_down, sc.rate_up].filter(Boolean));
-      parts.push(
-        `<div class="grid2">${this._rateTile(sc.rate_down, "down", ICONS.down, this._t("download"), hist)}${this._rateTile(sc.rate_up, "up", ICONS.up, this._t("upload"), hist)}</div>`
-      );
+      parts.push(`<div class="grid2">${this._rateTiles(sc, hist)}</div>`);
     }
     const foot = [];
     const router = this._s(sc.router);

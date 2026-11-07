@@ -54,7 +54,7 @@ Entities are **discovered automatically**, you don't have to pick them one by on
 |---|---|
 | [Freebox](https://www.home-assistant.io/integrations/freebox/) (built in) | Rates, connection, IP, uptime, temperatures, fans, storage, RAID, Wi-Fi, missed calls (mark as read), connected devices, reboot |
 | [Livebox](https://github.com/cyr-ius/hass-livebox-component) (Orange, custom) | Line rates, Wi-Fi, missed calls (clear), connected devices, reboot |
-| [SFR Box](https://www.home-assistant.io/integrations/sfr_box/) (built in) | DSL line rates, temperature, reboot |
+| [SFR Box](https://www.home-assistant.io/integrations/sfr_box/) (built in) | DSL line sync rates, shown as "Line rate" (the integration has no throughput sensor, so no download / upload traffic nor 24 h curve), temperature, reboot |
 | [Bbox](https://www.home-assistant.io/integrations/bbox/) (Bouygues, built in, YAML) | Download / upload bandwidth |
 
 ## Prerequisites
@@ -209,7 +209,7 @@ While the box is running, the card animates: the cooling fan spins at its live s
 
 ### Operators
 
-The full card with what each integration exposes: the Freebox shows every section (rates, connection, temperatures, fan, storage, Wi-Fi, calls, devices, restart); the Livebox its line rates, Wi-Fi, missed calls (with the clear button), connected devices and restart button; the SFR Box its DSL line rates, temperature and restart button; the Bbox its bandwidth (picture set with `model: bbox_fibre`).
+The full card with what each integration exposes: the Freebox shows every section (rates, connection, temperatures, fan, storage, Wi-Fi, calls, devices, restart); the Livebox its line rates, Wi-Fi, missed calls (with the clear button), connected devices and restart button; the SFR Box its DSL line sync rates ("Line rate"), temperature and restart button; the Bbox its bandwidth (picture set with `model: bbox_fibre`).
 
 | Operator | Light | Dark |
 |---|---|---|
