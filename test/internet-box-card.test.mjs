@@ -648,10 +648,15 @@ test("thresholds: temperature and storage levels follow the options, with the fo
   const def = (await mockCard({ [tempId]: "60", [PART]: "15" }))._render();
   assert.equal(gaugeOf(def), "ok");
   assert.equal(partOf(def), "warn");
-  const custom = await mockCard({ [tempId]: "60", [PART]: "15" }, { temp_warning: 50, temp_critical: 58, storage_warning: 90, storage_critical: "95" });
+  const custom = await mockCard({ [tempId]: "60", [PART]: "15" }, { temp_warning: 50, temp_critical: 58, disk_warning: 90, disk_critical: "95" });
   const html = custom._render();
   assert.equal(gaugeOf(html), "crit");
   assert.equal(partOf(html), "ok");
+  // storage_* (before 2.8) still read, disk_* winning when both are set: 85 % used is critical from 70, not 95.
+  const { normalizeConfig } = load("internet-box-card.js", ["normalizeConfig"]);
+  const legacy = (await mockCard({ [PART]: "15" }, normalizeConfig({ storage_warning: 90, storage_critical: 95, disk_critical: 70 })))._render();
+  assert.equal(partOf(legacy), "crit");
+  assert.equal(JSON.stringify(normalizeConfig({ storage_warning: 90, disk_critical: 70 })), JSON.stringify({ disk_critical: 70, disk_warning: 90 }));
   // A value that is not a number falls back to the default.
   const bad = (await mockCard({ [tempId]: "80" }, { temp_warning: "hot" }))._render();
   assert.equal(gaugeOf(bad), "warn");
@@ -669,13 +674,13 @@ test("thresholds in the editor: shown at their defaults, kept in the YAML only w
   ed.setConfig({ box: "router" });
   ed.hass = { states: baseStates(), entities, devices, language: "en" };
   assert.equal(ed._form.data.temp_warning, 75);
-  assert.equal(ed._form.data.storage_critical, 90);
+  assert.equal(ed._form.data.disk_critical, 90);
   const names = JSON.stringify(ed._form.schema);
-  for (const k of ["temp_warning", "temp_critical", "storage_warning", "storage_critical"]) assert.match(names, new RegExp(`"${k}"`));
+  for (const k of ["temp_warning", "temp_critical", "disk_warning", "disk_critical"]) assert.match(names, new RegExp(`"${k}"`));
   ed._form.listeners["value-changed"]({ stopPropagation() {}, detail: { value: { ...ed._form.data, temp_warning: 70 } } });
   const out = emitted.at(-1);
   assert.equal(out.temp_warning, 70);
-  for (const k of ["temp_critical", "storage_warning", "storage_critical"]) assert.equal(k in out, false, k);
+  for (const k of ["temp_critical", "disk_warning", "disk_critical"]) assert.equal(k in out, false, k);
 });
 
 test("sparkline: real time axis over the 24 h window, broken where the recorder has no data", () => {

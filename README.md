@@ -128,8 +128,8 @@ show_storage: true
 show_services: true
 temp_warning: 70
 temp_critical: 85
-storage_warning: 80
-storage_critical: 95
+disk_warning: 80
+disk_critical: 95
 rate_unit: bits
 language: fr
 ```
@@ -166,8 +166,8 @@ language: fr
 | `show_services` | full | `true` | Wi-Fi, missed calls and connected devices |
 | `temp_warning` | both | `75` | Temperature (in °C, whatever the sensor's unit) from which a temperature turns orange |
 | `temp_critical` | both | `90` | Temperature (in °C) from which a temperature turns red |
-| `storage_warning` | both | `80` | Disk usage (in % used) from which a partition turns orange (full card) |
-| `storage_critical` | both | `90` | Disk usage (in % used) from which a partition turns red (full card) |
+| `disk_warning` | both | `80` | Disk usage (in % used) from which a partition turns orange (full card); `storage_warning` before 2.8.0, still read |
+| `disk_critical` | both | `90` | Disk usage (in % used) from which a partition turns red (full card); `storage_critical` before 2.8.0, still read |
 | `zoom` | mini | `true` | Detail button at the top right: shows the full card (every section) in place of the mini card, and back |
 | `rate_unit` | both | `bytes` | Rates unit: `bytes` (kB/s, MB/s) or `bits` (kb/s, Mb/s) |
 | `language` | both | Auto | Force language: `en`, `fr`, `de`, `es`, `sr`, `sr-Latn`, `it`, `nl`, `pt`, `pl`, `ro`, `da`, `sv`, `bg`, `ru`, `uk`, `hu`, `sk`, `cs`, `sl`, `lv` or `el` (auto-detects from HA settings) |

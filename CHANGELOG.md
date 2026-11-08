@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.8.0 - 2026-11-08
+
+### Changes
+- Display aligned with the other cards (system-monitor, docker, switch): the download tile is green and the upload tile blue, as everywhere else, instead of the operator red; storage percentages are rounded like the other gauges.
+- Options renamed `storage_warning` / `storage_critical` → `disk_warning` / `disk_critical` (the names of system-monitor-card); the old names are still read.
+
 ## 2.7.0 - 2026-11-08
 
 ### Features

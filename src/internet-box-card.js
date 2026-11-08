@@ -525,8 +525,8 @@ const STRINGS = {
     lang_auto: "Automatic",
     temp_warning: "Temperature warning (°C)",
     temp_critical: "Temperature critical (°C)",
-    storage_warning: "Storage warning (% used)",
-    storage_critical: "Storage critical (% used)",
+    disk_warning: "Storage warning (% used)",
+    disk_critical: "Storage critical (% used)",
   },
   fr: {
     network: "Réseau",
@@ -597,8 +597,8 @@ const STRINGS = {
     lang_auto: "Automatique",
     temp_warning: "Seuil d'alerte température (°C)",
     temp_critical: "Seuil critique température (°C)",
-    storage_warning: "Seuil d'alerte stockage (% utilisé)",
-    storage_critical: "Seuil critique stockage (% utilisé)",
+    disk_warning: "Seuil d'alerte stockage (% utilisé)",
+    disk_critical: "Seuil critique stockage (% utilisé)",
   },
   de: {
     network: "Netzwerk",
@@ -668,8 +668,8 @@ const STRINGS = {
     lang_auto: "Automatisch",
     temp_warning: "Temperatur-Warnschwelle (°C)",
     temp_critical: "Kritische Temperaturschwelle (°C)",
-    storage_warning: "Speicher-Warnschwelle (% belegt)",
-    storage_critical: "Kritische Speicherschwelle (% belegt)",
+    disk_warning: "Speicher-Warnschwelle (% belegt)",
+    disk_critical: "Kritische Speicherschwelle (% belegt)",
   },
   es: {
     network: "Red",
@@ -740,8 +740,8 @@ const STRINGS = {
     lang_auto: "Automático",
     temp_warning: "Umbral de aviso de temperatura (°C)",
     temp_critical: "Umbral crítico de temperatura (°C)",
-    storage_warning: "Umbral de aviso de almacenamiento (% usado)",
-    storage_critical: "Umbral crítico de almacenamiento (% usado)",
+    disk_warning: "Umbral de aviso de almacenamiento (% usado)",
+    disk_critical: "Umbral crítico de almacenamiento (% usado)",
   },
   sr: {
     network: "Мрежа",
@@ -813,8 +813,8 @@ const STRINGS = {
     lang_auto: "Аутоматски",
     temp_warning: "Праг упозорења температуре (°)",
     temp_critical: "Критични праг температуре (°)",
-    storage_warning: "Праг упозорења складишта (% заузето)",
-    storage_critical: "Критични праг складишта (% заузето)",
+    disk_warning: "Праг упозорења складишта (% заузето)",
+    disk_critical: "Критични праг складишта (% заузето)",
   },
   "sr-Latn": {
     network: "Mreža",
@@ -886,8 +886,8 @@ const STRINGS = {
     lang_auto: "Automatski",
     temp_warning: "Prag upozorenja temperature (°C)",
     temp_critical: "Kritični prag temperature (°C)",
-    storage_warning: "Prag upozorenja skladišta (% zauzeto)",
-    storage_critical: "Kritični prag skladišta (% zauzeto)",
+    disk_warning: "Prag upozorenja skladišta (% zauzeto)",
+    disk_critical: "Kritični prag skladišta (% zauzeto)",
   },
   it: {
     network: "Rete",
@@ -958,8 +958,8 @@ const STRINGS = {
     lang_auto: "Automatica",
     temp_warning: "Soglia di avviso temperatura (°C)",
     temp_critical: "Soglia critica temperatura (°C)",
-    storage_warning: "Soglia di avviso archiviazione (% usato)",
-    storage_critical: "Soglia critica archiviazione (% usato)",
+    disk_warning: "Soglia di avviso archiviazione (% usato)",
+    disk_critical: "Soglia critica archiviazione (% usato)",
   },
   nl: {
     network: "Netwerk",
@@ -1029,8 +1029,8 @@ const STRINGS = {
     lang_auto: "Automatisch",
     temp_warning: "Waarschuwingsdrempel temperatuur (°C)",
     temp_critical: "Kritieke drempel temperatuur (°C)",
-    storage_warning: "Waarschuwingsdrempel opslag (% gebruikt)",
-    storage_critical: "Kritieke drempel opslag (% gebruikt)",
+    disk_warning: "Waarschuwingsdrempel opslag (% gebruikt)",
+    disk_critical: "Kritieke drempel opslag (% gebruikt)",
   },
   pt: {
     network: "Rede",
@@ -1101,8 +1101,8 @@ const STRINGS = {
     lang_auto: "Automático",
     temp_warning: "Limiar de aviso de temperatura (°C)",
     temp_critical: "Limiar crítico de temperatura (°C)",
-    storage_warning: "Limiar de aviso de armazenamento (% usado)",
-    storage_critical: "Limiar crítico de armazenamento (% usado)",
+    disk_warning: "Limiar de aviso de armazenamento (% usado)",
+    disk_critical: "Limiar crítico de armazenamento (% usado)",
   },
   pl: {
     network: "Sieć",
@@ -1175,8 +1175,8 @@ const STRINGS = {
     lang_auto: "Automatycznie",
     temp_warning: "Próg ostrzeżenia temperatury (°C)",
     temp_critical: "Próg krytyczny temperatury (°C)",
-    storage_warning: "Próg ostrzeżenia pamięci (% zajęte)",
-    storage_critical: "Próg krytyczny pamięci (% zajęte)",
+    disk_warning: "Próg ostrzeżenia pamięci (% zajęte)",
+    disk_critical: "Próg krytyczny pamięci (% zajęte)",
   },
   ro: {
     network: "Rețea",
@@ -1247,8 +1247,8 @@ const STRINGS = {
     lang_auto: "Automată",
     temp_warning: "Prag de avertizare temperatură (°C)",
     temp_critical: "Prag critic temperatură (°C)",
-    storage_warning: "Prag de avertizare stocare (% utilizat)",
-    storage_critical: "Prag critic stocare (% utilizat)",
+    disk_warning: "Prag de avertizare stocare (% utilizat)",
+    disk_critical: "Prag critic stocare (% utilizat)",
   },
   da: {
     network: "Netværk",
@@ -1319,8 +1319,8 @@ const STRINGS = {
     lang_auto: "Automatisk",
     temp_warning: "Advarselsgrænse for temperatur (°C)",
     temp_critical: "Kritisk grænse for temperatur (°C)",
-    storage_warning: "Advarselsgrænse for lager (% brugt)",
-    storage_critical: "Kritisk grænse for lager (% brugt)",
+    disk_warning: "Advarselsgrænse for lager (% brugt)",
+    disk_critical: "Kritisk grænse for lager (% brugt)",
   },
   sv: {
     network: "Nätverk",
@@ -1391,8 +1391,8 @@ const STRINGS = {
     lang_auto: "Automatiskt",
     temp_warning: "Varningsgräns för temperatur (°C)",
     temp_critical: "Kritisk gräns för temperatur (°C)",
-    storage_warning: "Varningsgräns för lagring (% använt)",
-    storage_critical: "Kritisk gräns för lagring (% använt)",
+    disk_warning: "Varningsgräns för lagring (% använt)",
+    disk_critical: "Kritisk gräns för lagring (% använt)",
   },
   bg: {
     network: "Мрежа",
@@ -1463,8 +1463,8 @@ const STRINGS = {
     lang_auto: "Автоматично",
     temp_warning: "Праг за предупреждение за температура (°C)",
     temp_critical: "Критичен праг за температура (°C)",
-    storage_warning: "Праг за предупреждение за хранилище (% заето)",
-    storage_critical: "Критичен праг за хранилище (% заето)",
+    disk_warning: "Праг за предупреждение за хранилище (% заето)",
+    disk_critical: "Критичен праг за хранилище (% заето)",
   },
   ru: {
     network: "Сеть",
@@ -1535,8 +1535,8 @@ const STRINGS = {
     lang_auto: "Автоматически",
     temp_warning: "Порог предупреждения температуры (°C)",
     temp_critical: "Критический порог температуры (°C)",
-    storage_warning: "Порог предупреждения хранилища (% занято)",
-    storage_critical: "Критический порог хранилища (% занято)",
+    disk_warning: "Порог предупреждения хранилища (% занято)",
+    disk_critical: "Критический порог хранилища (% занято)",
   },
   uk: {
     network: "Мережа",
@@ -1608,8 +1608,8 @@ const STRINGS = {
     lang_auto: "Автоматично",
     temp_warning: "Поріг попередження температури (°C)",
     temp_critical: "Критичний поріг температури (°C)",
-    storage_warning: "Поріг попередження сховища (% зайнято)",
-    storage_critical: "Критичний поріг сховища (% зайнято)",
+    disk_warning: "Поріг попередження сховища (% зайнято)",
+    disk_critical: "Критичний поріг сховища (% зайнято)",
   },
   hu: {
     network: "Hálózat",
@@ -1679,8 +1679,8 @@ const STRINGS = {
     lang_auto: "Automatikus",
     temp_warning: "Hőmérséklet figyelmeztetési küszöb (°C)",
     temp_critical: "Hőmérséklet kritikus küszöb (°C)",
-    storage_warning: "Tárhely figyelmeztetési küszöb (% foglalt)",
-    storage_critical: "Tárhely kritikus küszöb (% foglalt)",
+    disk_warning: "Tárhely figyelmeztetési küszöb (% foglalt)",
+    disk_critical: "Tárhely kritikus küszöb (% foglalt)",
   },
   sk: {
     network: "Sieť",
@@ -1752,8 +1752,8 @@ const STRINGS = {
     lang_auto: "Automaticky",
     temp_warning: "Prah varovania teploty (°C)",
     temp_critical: "Kritický prah teploty (°C)",
-    storage_warning: "Prah varovania úložiska (% použité)",
-    storage_critical: "Kritický prah úložiska (% použité)",
+    disk_warning: "Prah varovania úložiska (% použité)",
+    disk_critical: "Kritický prah úložiska (% použité)",
   },
   cs: {
     network: "Síť",
@@ -1825,8 +1825,8 @@ const STRINGS = {
     lang_auto: "Automaticky",
     temp_warning: "Práh varování teploty (°C)",
     temp_critical: "Kritický práh teploty (°C)",
-    storage_warning: "Práh varování úložiště (% využito)",
-    storage_critical: "Kritický práh úložiště (% využito)",
+    disk_warning: "Práh varování úložiště (% využito)",
+    disk_critical: "Kritický práh úložiště (% využito)",
   },
   sl: {
     network: "Omrežje",
@@ -1899,8 +1899,8 @@ const STRINGS = {
     lang_auto: "Samodejno",
     temp_warning: "Prag opozorila za temperaturo (°C)",
     temp_critical: "Kritični prag za temperaturo (°C)",
-    storage_warning: "Prag opozorila za shrambo (% zasedeno)",
-    storage_critical: "Kritični prag za shrambo (% zasedeno)",
+    disk_warning: "Prag opozorila za shrambo (% zasedeno)",
+    disk_critical: "Kritični prag za shrambo (% zasedeno)",
   },
   lv: {
     network: "Tīkls",
@@ -1971,8 +1971,8 @@ const STRINGS = {
     lang_auto: "Automātiski",
     temp_warning: "Temperatūras brīdinājuma slieksnis (°C)",
     temp_critical: "Temperatūras kritiskais slieksnis (°C)",
-    storage_warning: "Krātuves brīdinājuma slieksnis (% aizņemts)",
-    storage_critical: "Krātuves kritiskais slieksnis (% aizņemts)",
+    disk_warning: "Krātuves brīdinājuma slieksnis (% aizņemts)",
+    disk_critical: "Krātuves kritiskais slieksnis (% aizņemts)",
   },
   el: {
     network: "Δίκτυο",
@@ -2043,8 +2043,8 @@ const STRINGS = {
     lang_auto: "Αυτόματα",
     temp_warning: "Όριο προειδοποίησης θερμοκρασίας (°C)",
     temp_critical: "Κρίσιμο όριο θερμοκρασίας (°C)",
-    storage_warning: "Όριο προειδοποίησης αποθήκευσης (% σε χρήση)",
-    storage_critical: "Κρίσιμο όριο αποθήκευσης (% σε χρήση)",
+    disk_warning: "Όριο προειδοποίησης αποθήκευσης (% σε χρήση)",
+    disk_critical: "Κρίσιμο όριο αποθήκευσης (% σε χρήση)",
   },
 };
 
@@ -2287,9 +2287,22 @@ const temperature = (s) => {
 
 const level = (v, warn, crit) => (v === null ? "" : v >= crit ? "crit" : v >= warn ? "warn" : "ok");
 
-// Default warning / critical thresholds: temperatures in °C, storage in % used. Each can be set in the card options
-// (`temp_warning`, `temp_critical`, `storage_warning`, `storage_critical`).
-const THRESHOLDS = { temp_warning: 75, temp_critical: 90, storage_warning: 80, storage_critical: 90 };
+// Default warning / critical thresholds: temperatures in °C, disk in % used. Each can be set in the card options
+// (`temp_warning`, `temp_critical`, `disk_warning`, `disk_critical`), named as on the system-monitor card.
+const THRESHOLDS = { temp_warning: 75, temp_critical: 90, disk_warning: 80, disk_critical: 90 };
+
+// Options renamed in 2.8.0 (`storage_*` -> `disk_*`), still read under their old name; the new name wins when both are set.
+const LEGACY_OPTIONS = { storage_warning: "disk_warning", storage_critical: "disk_critical" };
+const normalizeConfig = (config) => {
+  const out = { ...config };
+  for (const [old, name] of Object.entries(LEGACY_OPTIONS)) {
+    if (old in out) {
+      if (out[name] === undefined) out[name] = out[old];
+      delete out[old];
+    }
+  }
+  return out;
+};
 
 /** A threshold option as a number, or its default when unset or not a number. */
 const threshold = (config, key) => {
@@ -2727,7 +2740,7 @@ const BASE_STYLE = `
   .tile > div { min-width: 0; }
   .tile .k { font-size: 11px; color: var(--secondary-text-color); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .tile .v { font-size: 14px; font-weight: 500; white-space: nowrap; }
-  .tile.down { --c: var(--ibc-red); }
+  .tile.down { --c: var(--ibc-ok); }
   .tile.up { --c: var(--info-color, #039be5); }
   .warning { padding: 16px; color: color-mix(in srgb, var(--ibc-warn) 50%, var(--primary-text-color)); }
   .zoom { all: unset; flex: none; cursor: pointer; width: 24px; height: 24px; margin: -4px -4px -4px 0; border-radius: 50%;
@@ -2989,7 +3002,7 @@ class InternetBoxBase extends HTMLElement {
 
   setConfig(config) {
     if (!config) throw new Error("Invalid configuration");
-    this._config = { ...config };
+    this._config = normalizeConfig(config);
     this._html = "";
     this._update();
   }
@@ -3429,13 +3442,13 @@ class InternetBoxCard extends InternetBoxBase {
     const rows = box.partitions.map((p) => {
       const free = num(this._s(p.id));
       const used = free === null ? null : Math.max(0, Math.min(100, 100 - free));
-      const cls = this._level(used, "storage");
+      const cls = this._level(used, "disk");
       return `<div class="part clickable ${cls}" role="button" tabindex="0" data-key="${p.id}" data-entity="${p.id}">
         <div class="row"><span class="dot ${used === null ? "off" : cls || "ok"}"></span><span class="grow">${esc(partitionLabel(this._hass, p, this._t("disk")))}</span>
           <span class="muted">${esc(p.device?.model || "")}</span></div>
         <div class="bar"><div style="width:${used ?? 0}%"></div></div>
-        <div class="detail"><span>${used === null ? "—" : `${used.toFixed(0)}% ${this._t("used")}`}</span>
-          <span>${free === null ? "" : `${free.toFixed(0)}% ${this._t("free")}`}</span></div>
+        <div class="detail"><span>${used === null ? "—" : `${Math.round(used)}% ${this._t("used")}`}</span>
+          <span>${free === null ? "" : `${Math.round(free)}% ${this._t("free")}`}</span></div>
       </div>`;
     });
     for (const id of box.raids) {
@@ -3661,7 +3674,7 @@ class InternetBoxEditorBase extends HTMLElement {
   }
 
   setConfig(config) {
-    this._config = { ...config };
+    this._config = normalizeConfig(config);
     this._render();
   }
 
