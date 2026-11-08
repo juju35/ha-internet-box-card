@@ -390,7 +390,8 @@ test("an unavailable Wi-Fi switch or missed-calls sensor is shown as unavailable
     const chip = (await mockCard({ [WIFI]: state }, { show_services: false }))._chips(
       { scalars: { wifi: WIFI } }
     );
-    assert.match(chip, /class="chip clickable off"/, state);
+    assert.match(chip, /class="chip wifi clickable off"/, state);
+    assert.doesNotMatch(chip, /class="toggle"/, state);
     assert.match(chip, /Wi-Fi · Unavailable/, state);
     assert.doesNotMatch(chip, /Wi-Fi off/, state);
 
@@ -751,4 +752,70 @@ test("a rate tile without its sensor is neither clickable nor focusable", async 
   assert.match(html, /<div class="tile up">/);
   assert.equal(html.match(/tabindex/g).length, 1);
   assert.doesNotMatch(html, /data-entity=""/);
+});
+
+test("the network section keeps the IP address and uptime when the box has no rate or sync sensor", async () => {
+  const el = await mockCard({});
+  const router = el._s(ROUTER_ID);
+  router.attributes = { ...router.attributes, IPv4: "203.0.113.7" };
+  const html = el._network({ scalars: { router: ROUTER_ID } });
+  assert.match(html, /class="section-title"/);
+  assert.match(html, /203\.0\.113\.7/);
+  assert.match(html, /Uptime /);
+  assert.doesNotMatch(html, /class="grid2"|class="tile/);
+  // Neither rates nor facts: no section.
+  el._hass.states[ROUTER_ID] = { ...router, attributes: {} };
+  assert.equal(el._network({ scalars: { router: ROUTER_ID } }), "");
+});
+
+test("Wi-Fi switch: on the tile, the header chip and the mini card footer, none while unavailable", async () => {
+  const toggle = /<button type="button" class="toggle" role="switch" aria-checked="(true|false)" data-action="wifi" title="([^"]*)" aria-label="Wi-Fi"><\/button>/;
+  for (const [state, checked, title] of [
+    ["on", "true", "Turn the Wi-Fi off"],
+    ["off", "false", "Turn the Wi-Fi on"],
+  ]) {
+    const tile = (await mockCard({ [WIFI]: state }))._render();
+    assert.deepEqual(tile.match(toggle).slice(1), [checked, title], state);
+    // The switch is not inside an element with role="button": the tile's label is the keyboard target.
+    assert.match(tile, /data-entity="switch\.freebox_wifi">[\s\S]*?<div role="button" tabindex="0"><div class="k">Wi-Fi<\/div>[\s\S]*?<\/div><\/div><button type="button" class="toggle"/);
+    const chip = (await mockCard({ [WIFI]: state }, { show_services: false }))._chips({ scalars: { wifi: WIFI } });
+    assert.deepEqual(chip.match(toggle).slice(1), [checked, title], state);
+    assert.match(chip, /<span role="button" tabindex="0">/);
+    const mini = (await mockCard({ [WIFI]: state }, {}, "InternetBoxMiniCard"))._renderMini();
+    assert.deepEqual(mini.match(toggle).slice(1), [checked, title], state);
+  }
+  for (const state of ["unavailable", "unknown"]) {
+    assert.doesNotMatch((await mockCard({ [WIFI]: state }))._render(), /class="toggle"/, state);
+    assert.doesNotMatch((await mockCard({ [WIFI]: state }, {}, "InternetBoxMiniCard"))._renderMini(), /class="toggle"/, state);
+  }
+});
+
+test("Wi-Fi switch: turns the Wi-Fi on at once, off only after the confirmation popup", async () => {
+  const run = async (state) => {
+    const el = await mockCard({ [WIFI]: state });
+    const calls = [];
+    el._hass.callService = (...a) => calls.push(a);
+    let dialog = null;
+    el._openDialog = (d) => {
+      dialog = d;
+    };
+    el._toggleWifi();
+    await new Promise((r) => setTimeout(r));
+    return { calls, dialog };
+  };
+  const off = await run("off");
+  assert.equal(off.dialog, null);
+  assert.deepEqual(JSON.parse(JSON.stringify(off.calls)), [["switch", "turn_on", { entity_id: WIFI }]]);
+
+  const on = await run("on");
+  assert.deepEqual(on.calls, []);
+  assert.equal(on.dialog.from, "wifi");
+  assert.equal(on.dialog.ok, "Turn off");
+  assert.match(on.dialog.body, /Turn the Wi-Fi off<\/h3>/);
+  assert.match(on.dialog.body, /Wireless devices will lose their connection/);
+  on.dialog.onOk();
+  await new Promise((r) => setTimeout(r));
+  assert.deepEqual(JSON.parse(JSON.stringify(on.calls)), [["switch", "turn_off", { entity_id: WIFI }]]);
+
+  for (const state of ["unavailable", "unknown"]) assert.deepEqual(await run(state), { calls: [], dialog: null }, state);
 });

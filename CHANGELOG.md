@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.7.0 - 2026-11-08
+
+### Features
+- A switch next to the Wi-Fi state (Services tile, header chip and mini card footer) turns the box's Wi-Fi on, or off after a confirmation popup at the top of the card.
+
+### Fixes
+- The IP address and the uptime are shown in the Network section even when the box has no rate or line sync sensor.
+
 ## 2.6.0 - 2026-11-08
 
 ### Features

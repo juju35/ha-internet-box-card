@@ -477,6 +477,10 @@ const STRINGS = {
     restart_confirm: "Restart the box now? The internet, phone and TV connection will be interrupted for a few minutes.",
     restart_btn: "Restart",
     cancel: "Cancel",
+    wifi_turn_on: "Turn the Wi-Fi on",
+    wifi_turn_off: "Turn the Wi-Fi off",
+    wifi_off_confirm: "Turn the Wi-Fi off now? Wireless devices will lose their connection; wired devices are not affected.",
+    wifi_off_btn: "Turn off",
     calls: "Calls",
     missed: "missed",
     temperature: "Temp.",
@@ -545,6 +549,10 @@ const STRINGS = {
     restart_confirm: "Redémarrer la box maintenant ? La connexion internet, téléphone et TV sera interrompue pendant quelques minutes.",
     restart_btn: "Redémarrer",
     cancel: "Annuler",
+    wifi_turn_on: "Activer le Wi-Fi",
+    wifi_turn_off: "Désactiver le Wi-Fi",
+    wifi_off_confirm: "Désactiver le Wi-Fi maintenant ? Les appareils sans fil perdront leur connexion ; les appareils filaires ne sont pas concernés.",
+    wifi_off_btn: "Désactiver",
     calls: "Appels",
     missed: "manqués",
     missed_one: "manqué",
@@ -613,6 +621,10 @@ const STRINGS = {
     restart_confirm: "Box jetzt neu starten? Internet-, Telefon- und TV-Verbindung werden für einige Minuten unterbrochen.",
     restart_btn: "Neu starten",
     cancel: "Abbrechen",
+    wifi_turn_on: "WLAN einschalten",
+    wifi_turn_off: "WLAN ausschalten",
+    wifi_off_confirm: "WLAN jetzt ausschalten? Drahtlose Geräte verlieren ihre Verbindung; kabelgebundene Geräte sind nicht betroffen.",
+    wifi_off_btn: "Ausschalten",
     calls: "Anrufe",
     missed: "verpasst",
     temperature: "Temp.",
@@ -680,6 +692,10 @@ const STRINGS = {
     restart_confirm: "¿Reiniciar el router ahora? La conexión a internet, el teléfono y la TV se interrumpirán durante unos minutos.",
     restart_btn: "Reiniciar",
     cancel: "Cancelar",
+    wifi_turn_on: "Activar el Wi-Fi",
+    wifi_turn_off: "Desactivar el Wi-Fi",
+    wifi_off_confirm: "¿Desactivar el Wi-Fi ahora? Los dispositivos inalámbricos perderán la conexión; los dispositivos con cable no se verán afectados.",
+    wifi_off_btn: "Desactivar",
     calls: "Llamadas",
     missed: "perdidas",
     missed_one: "perdida",
@@ -748,6 +764,10 @@ const STRINGS = {
     restart_confirm: "Поново покренути рутер сада? Интернет, телефонска и ТВ веза биће прекинуте на неколико минута.",
     restart_btn: "Поново покрени",
     cancel: "Откажи",
+    wifi_turn_on: "Укључи Wi-Fi",
+    wifi_turn_off: "Искључи Wi-Fi",
+    wifi_off_confirm: "Искључити Wi-Fi сада? Бежични уређаји ће изгубити везу; уређаји повезани каблом нису погођени.",
+    wifi_off_btn: "Искључи",
     calls: "Позиви",
     missed: "пропуштених",
     missed_one: "пропуштен",
@@ -817,6 +837,10 @@ const STRINGS = {
     restart_confirm: "Ponovo pokrenuti ruter sada? Internet, telefonska i TV veza biće prekinute na nekoliko minuta.",
     restart_btn: "Ponovo pokreni",
     cancel: "Otkaži",
+    wifi_turn_on: "Uključi Wi-Fi",
+    wifi_turn_off: "Isključi Wi-Fi",
+    wifi_off_confirm: "Isključiti Wi-Fi sada? Bežični uređaji će izgubiti vezu; uređaji povezani kablom nisu pogođeni.",
+    wifi_off_btn: "Isključi",
     calls: "Pozivi",
     missed: "propuštenih",
     missed_one: "propušten",
@@ -886,6 +910,10 @@ const STRINGS = {
     restart_confirm: "Riavviare il modem adesso? La connessione internet, il telefono e la TV saranno interrotti per qualche minuto.",
     restart_btn: "Riavvia",
     cancel: "Annulla",
+    wifi_turn_on: "Attiva il Wi-Fi",
+    wifi_turn_off: "Disattiva il Wi-Fi",
+    wifi_off_confirm: "Disattivare il Wi-Fi adesso? I dispositivi wireless perderanno la connessione; i dispositivi via cavo non sono interessati.",
+    wifi_off_btn: "Disattiva",
     calls: "Chiamate",
     missed: "perse",
     missed_one: "persa",
@@ -954,6 +982,10 @@ const STRINGS = {
     restart_confirm: "Modem nu herstarten? De internet-, telefoon- en tv-verbinding wordt een paar minuten onderbroken.",
     restart_btn: "Herstarten",
     cancel: "Annuleren",
+    wifi_turn_on: "Wi-Fi inschakelen",
+    wifi_turn_off: "Wi-Fi uitschakelen",
+    wifi_off_confirm: "Wi-Fi nu uitschakelen? Draadloze apparaten verliezen hun verbinding; bekabelde apparaten blijven verbonden.",
+    wifi_off_btn: "Uitschakelen",
     calls: "Oproepen",
     missed: "gemist",
     temperature: "Temp.",
@@ -1021,6 +1053,10 @@ const STRINGS = {
     restart_confirm: "Reiniciar o router agora? A ligação à internet, ao telefone e à TV será interrompida durante alguns minutos.",
     restart_btn: "Reiniciar",
     cancel: "Cancelar",
+    wifi_turn_on: "Ligar o Wi-Fi",
+    wifi_turn_off: "Desligar o Wi-Fi",
+    wifi_off_confirm: "Desligar o Wi-Fi agora? Os dispositivos sem fios perderão a ligação; os dispositivos com cabo não são afetados.",
+    wifi_off_btn: "Desligar",
     calls: "Chamadas",
     missed: "perdidas",
     missed_one: "perdida",
@@ -1089,6 +1125,10 @@ const STRINGS = {
     restart_confirm: "Uruchomić teraz ponownie router? Połączenie z internetem, telefon i telewizja zostaną przerwane na kilka minut.",
     restart_btn: "Uruchom ponownie",
     cancel: "Anuluj",
+    wifi_turn_on: "Włącz Wi-Fi",
+    wifi_turn_off: "Wyłącz Wi-Fi",
+    wifi_off_confirm: "Wyłączyć teraz Wi-Fi? Urządzenia bezprzewodowe stracą połączenie; urządzenia przewodowe nie zostaną odłączone.",
+    wifi_off_btn: "Wyłącz",
     calls: "Połączenia",
     missed: "nieodebrane",
     missed_one: "nieodebrane",
@@ -1159,6 +1199,10 @@ const STRINGS = {
     restart_confirm: "Reporniți routerul acum? Conexiunea la internet, telefonul și televiziunea vor fi întrerupte câteva minute.",
     restart_btn: "Repornește",
     cancel: "Anulează",
+    wifi_turn_on: "Pornește Wi-Fi",
+    wifi_turn_off: "Oprește Wi-Fi",
+    wifi_off_confirm: "Opriți Wi-Fi acum? Dispozitivele wireless își vor pierde conexiunea; dispozitivele conectate prin cablu nu sunt afectate.",
+    wifi_off_btn: "Oprește",
     calls: "Apeluri",
     missed: "pierdute",
     missed_one: "pierdut",
@@ -1227,6 +1271,10 @@ const STRINGS = {
     restart_confirm: "Vil du genstarte routeren nu? Internet-, telefon- og tv-forbindelsen afbrydes i et par minutter.",
     restart_btn: "Genstart",
     cancel: "Annuller",
+    wifi_turn_on: "Slå Wi-Fi til",
+    wifi_turn_off: "Slå Wi-Fi fra",
+    wifi_off_confirm: "Vil du slå Wi-Fi fra nu? Trådløse enheder mister forbindelsen; enheder med kabel påvirkes ikke.",
+    wifi_off_btn: "Slå fra",
     calls: "Opkald",
     missed: "ubesvarede",
     missed_one: "ubesvaret",
@@ -1295,6 +1343,10 @@ const STRINGS = {
     restart_confirm: "Vill du starta om routern nu? Internet-, telefon- och tv-anslutningen bryts i några minuter.",
     restart_btn: "Starta om",
     cancel: "Avbryt",
+    wifi_turn_on: "Slå på Wi-Fi",
+    wifi_turn_off: "Stäng av Wi-Fi",
+    wifi_off_confirm: "Vill du stänga av Wi-Fi nu? Trådlösa enheter tappar anslutningen; enheter med kabel påverkas inte.",
+    wifi_off_btn: "Stäng av",
     calls: "Samtal",
     missed: "missade",
     missed_one: "missat",
@@ -1363,6 +1415,10 @@ const STRINGS = {
     restart_confirm: "Да се рестартира ли рутерът сега? Връзката с интернет, телефонът и телевизията ще бъдат прекъснати за няколко минути.",
     restart_btn: "Рестартиране",
     cancel: "Отказ",
+    wifi_turn_on: "Включване на Wi-Fi",
+    wifi_turn_off: "Изключване на Wi-Fi",
+    wifi_off_confirm: "Да се изключи ли Wi-Fi сега? Безжичните устройства ще загубят връзката си; устройствата с кабел не са засегнати.",
+    wifi_off_btn: "Изключване",
     calls: "Разговори",
     missed: "пропуснати",
     missed_one: "пропуснато",
@@ -1431,6 +1487,10 @@ const STRINGS = {
     restart_confirm: "Перезагрузить роутер сейчас? Интернет, телефон и ТВ будут недоступны несколько минут.",
     restart_btn: "Перезагрузить",
     cancel: "Отмена",
+    wifi_turn_on: "Включить Wi-Fi",
+    wifi_turn_off: "Выключить Wi-Fi",
+    wifi_off_confirm: "Выключить Wi-Fi сейчас? Беспроводные устройства потеряют соединение; устройства, подключённые кабелем, не затронуты.",
+    wifi_off_btn: "Выключить",
     calls: "Звонки",
     missed: "непринятых",
     missed_one: "непринятый",
@@ -1499,6 +1559,10 @@ const STRINGS = {
     restart_confirm: "Перезапустити роутер зараз? Інтернет, телефон і ТБ будуть недоступні кілька хвилин.",
     restart_btn: "Перезапуск",
     cancel: "Скасувати",
+    wifi_turn_on: "Увімкнути Wi-Fi",
+    wifi_turn_off: "Вимкнути Wi-Fi",
+    wifi_off_confirm: "Вимкнути Wi-Fi зараз? Бездротові пристрої втратять з'єднання; пристрої, під'єднані кабелем, не постраждають.",
+    wifi_off_btn: "Вимкнути",
     calls: "Дзвінки",
     missed: "пропущених",
     missed_one: "пропущений",
@@ -1568,6 +1632,10 @@ const STRINGS = {
     restart_confirm: "Újraindítja most a routert? Az internet-, telefon- és tévékapcsolat néhány percre megszakad.",
     restart_btn: "Újraindítás",
     cancel: "Mégse",
+    wifi_turn_on: "Wi-Fi bekapcsolása",
+    wifi_turn_off: "Wi-Fi kikapcsolása",
+    wifi_off_confirm: "Kikapcsolja most a Wi-Fit? A vezeték nélküli eszközök elveszítik a kapcsolatot; a vezetékes eszközöket ez nem érinti.",
+    wifi_off_btn: "Kikapcsolás",
     calls: "Hívások",
     missed: "nem fogadott",
     temperature: "Hőm.",
@@ -1635,6 +1703,10 @@ const STRINGS = {
     restart_confirm: "Reštartovať router teraz? Internetové, telefónne a TV pripojenie bude na niekoľko minút prerušené.",
     restart_btn: "Reštartovať",
     cancel: "Zrušiť",
+    wifi_turn_on: "Zapnúť Wi-Fi",
+    wifi_turn_off: "Vypnúť Wi-Fi",
+    wifi_off_confirm: "Vypnúť Wi-Fi teraz? Bezdrôtové zariadenia stratia pripojenie; zariadenia pripojené káblom to neovplyvní.",
+    wifi_off_btn: "Vypnúť",
     calls: "Hovory",
     missed: "zmeškaných",
     missed_one: "zmeškaný",
@@ -1704,6 +1776,10 @@ const STRINGS = {
     restart_confirm: "Restartovat router nyní? Připojení k internetu, telefon a televize budou na několik minut přerušeny.",
     restart_btn: "Restartovat",
     cancel: "Zrušit",
+    wifi_turn_on: "Zapnout Wi-Fi",
+    wifi_turn_off: "Vypnout Wi-Fi",
+    wifi_off_confirm: "Vypnout Wi-Fi nyní? Bezdrátová zařízení ztratí připojení; zařízení připojená kabelem to neovlivní.",
+    wifi_off_btn: "Vypnout",
     calls: "Hovory",
     missed: "zmeškaných",
     missed_one: "zmeškaný",
@@ -1773,6 +1849,10 @@ const STRINGS = {
     restart_confirm: "Želite zdaj znova zagnati usmerjevalnik? Internetna, telefonska in TV-povezava bodo za nekaj minut prekinjene.",
     restart_btn: "Znova zaženi",
     cancel: "Prekliči",
+    wifi_turn_on: "Vklopi Wi-Fi",
+    wifi_turn_off: "Izklopi Wi-Fi",
+    wifi_off_confirm: "Želite zdaj izklopiti Wi-Fi? Brezžične naprave bodo izgubile povezavo; žično povezanih naprav to ne prizadene.",
+    wifi_off_btn: "Izklopi",
     calls: "Klici",
     missed: "zgrešenih",
     missed_one: "zgrešen",
@@ -1843,6 +1923,10 @@ const STRINGS = {
     restart_confirm: "Restartēt maršrutētāju tagad? Interneta, tālruņa un TV savienojums tiks pārtraukts uz dažām minūtēm.",
     restart_btn: "Restartēt",
     cancel: "Atcelt",
+    wifi_turn_on: "Ieslēgt Wi-Fi",
+    wifi_turn_off: "Izslēgt Wi-Fi",
+    wifi_off_confirm: "Izslēgt Wi-Fi tagad? Bezvadu ierīces zaudēs savienojumu; ar kabeli pievienotās ierīces netiks ietekmētas.",
+    wifi_off_btn: "Izslēgt",
     calls: "Zvani",
     missed: "neatbildēti",
     missed_one: "neatbildēts",
@@ -1911,6 +1995,10 @@ const STRINGS = {
     restart_confirm: "Επανεκκίνηση του δρομολογητή τώρα; Η σύνδεση στο διαδίκτυο, το τηλέφωνο και η τηλεόραση θα διακοπούν για λίγα λεπτά.",
     restart_btn: "Επανεκκίνηση",
     cancel: "Ακύρωση",
+    wifi_turn_on: "Ενεργοποίηση Wi-Fi",
+    wifi_turn_off: "Απενεργοποίηση Wi-Fi",
+    wifi_off_confirm: "Απενεργοποίηση του Wi-Fi τώρα; Οι ασύρματες συσκευές θα χάσουν τη σύνδεσή τους· οι ενσύρματες συσκευές δεν επηρεάζονται.",
+    wifi_off_btn: "Απενεργοποίηση",
     calls: "Κλήσεις",
     missed: "αναπάντητες",
     missed_one: "αναπάντητη",
@@ -2585,6 +2673,17 @@ const BASE_STYLE = `
           color: color-mix(in srgb, var(--c, var(--ibc-ok)) 50%, var(--primary-text-color)); }
   .chip .icon { width: 14px; height: 14px; }
   .chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
+  .chip.wifi { padding-right: 3px; }
+  .chip > [role="button"] { display: inline-flex; align-items: center; gap: 4px; }
+  /* Wi-Fi on / off switch: outlined track, tinted when on, never filled. */
+  .toggle { all: unset; flex: none; position: relative; box-sizing: border-box; width: 28px; height: 16px; border-radius: 8px; cursor: pointer;
+            border: 1.5px solid color-mix(in srgb, var(--secondary-text-color) 70%, transparent); }
+  .toggle::after { content: ""; position: absolute; top: 2px; left: 2px; width: 9px; height: 9px; border-radius: 50%;
+                   background: var(--secondary-text-color); transition: transform .2s ease; }
+  .toggle[aria-checked="true"] { border-color: color-mix(in srgb, var(--ibc-ok) 70%, var(--primary-text-color)); background: color-mix(in srgb, var(--ibc-ok) 15%, transparent); }
+  .toggle[aria-checked="true"]::after { transform: translateX(12px); background: color-mix(in srgb, var(--ibc-ok) 70%, var(--primary-text-color)); }
+  .toggle:focus-visible { outline: 2px solid var(--primary-color, #03a9f4); outline-offset: 2px; }
+  @media (prefers-reduced-motion: reduce) { .toggle::after { transition: none; } }
   .bar { height: 4px; border-radius: 3px; background: var(--divider-color, rgba(127,127,127,.25)); overflow: hidden; }
   .bar > div { height: 100%; border-radius: 3px; background: var(--c, var(--ibc-accent)); transition: width .6s ease; }
   @media (prefers-reduced-motion: reduce) { .bar > div { transition: none; } }
@@ -2726,6 +2825,8 @@ class InternetBoxBase extends HTMLElement {
       }
       // The restart button opens a confirmation popup before pressing the box's reboot button.
       if (action?.dataset.action === "restart") return this._confirmRestart();
+      // The Wi-Fi switch turns the Wi-Fi on at once, and off after a confirmation popup.
+      if (action?.dataset.action === "wifi") return this._toggleWifi();
       const press = path.find((n) => n.dataset?.press);
       if (press) {
         this._press(press.dataset.press);
@@ -2778,11 +2879,42 @@ class InternetBoxBase extends HTMLElement {
     window.removeEventListener("keydown", this._onKey);
   }
 
-  // Presses a Home Assistant button entity. A failed call is logged (Home Assistant already shows a toast).
-  _press(entityId) {
+  // Calls a Home Assistant service on an entity. A failed call is logged (Home Assistant already shows a toast).
+  _call(domain, service, entityId) {
     Promise.resolve()
-      .then(() => this._hass?.callService("button", "press", { entity_id: entityId }))
-      .catch((err) => console.error("internet-box-card: button.press failed", err));
+      .then(() => this._hass?.callService(domain, service, { entity_id: entityId }))
+      .catch((err) => console.error(`internet-box-card: ${domain}.${service} failed`, err));
+  }
+
+  // Presses a Home Assistant button entity.
+  _press(entityId) {
+    this._call("button", "press", entityId);
+  }
+
+  // Turns the box's Wi-Fi switch on, or opens a confirmation popup before turning it off (wireless devices lose
+  // their connection). Nothing while the switch is unavailable.
+  _toggleWifi() {
+    const wifi = this._s(discover(this._hass, this._config.box).scalars.wifi);
+    if (!wifi || noValue(wifi)) return;
+    const id = wifi.entity_id;
+    if (wifi.state !== "on") return this._call("switch", "turn_on", id);
+    this._openDialog({
+      body: `<h3 id="dialog-title">${svgIcon(ICONS.wifi_off)}${esc(this._t("wifi_turn_off"))}</h3>
+        <div class="hint" id="dialog-msg">${esc(this._t("wifi_off_confirm"))}</div>`,
+      ok: this._t("wifi_off_btn"),
+      onOk: () => this._call("switch", "turn_off", id),
+      from: "wifi",
+    });
+  }
+
+  // Small on / off switch for the Wi-Fi, next to its tile, chip or footer item; none while the switch is
+  // unavailable. Its name is "Wi-Fi", its tooltip the action it does.
+  _wifiToggle(wifi) {
+    if (!wifi || noValue(wifi)) return "";
+    const on = wifi.state === "on";
+    return `<button type="button" class="toggle" role="switch" aria-checked="${on}" data-action="wifi" title="${esc(
+      this._t(on ? "wifi_turn_off" : "wifi_turn_on")
+    )}" aria-label="${esc(this._t("wifi"))}"></button>`;
   }
 
   // Opens the restart confirmation popup; on confirmation, presses the box's reboot button.
@@ -3043,9 +3175,9 @@ class InternetBoxBase extends HTMLElement {
       const on = wifi.state === "on";
       const text = noValue(wifi) ? `${this._t("wifi")} · ${this._t("unavailable")}` : on ? this._t("wifi_on") : this._t("wifi_off");
       chips.push(
-        `<span class="chip clickable ${on ? "ok" : "off"}" role="button" tabindex="0" data-entity="${wifi.entity_id}">${svgIcon(on ? ICONS.wifi : ICONS.wifi_off)}${esc(
-          text
-        )}</span>`
+        `<span class="chip wifi clickable ${on ? "ok" : "off"}" data-entity="${wifi.entity_id}"><span role="button" tabindex="0">${svgIcon(
+          on ? ICONS.wifi : ICONS.wifi_off
+        )}${esc(text)}</span>${this._wifiToggle(wifi)}</span>`
       );
     }
     return chips.length ? `<div class="chips">${chips.join("")}</div>` : "";
@@ -3157,7 +3289,8 @@ const FULL_STYLE = `
   .tile.svc.ok { --c: var(--ibc-ok); } .tile.svc.warn { --c: var(--ibc-warn); }
   .tiles.svc-row { display: flex; flex-wrap: wrap; }
   .tiles.svc-row .tile { flex: 1 1 auto; }
-  .tile:has(.reset) { padding-right: 6px; }
+  .tile:has(.reset, .toggle) { padding-right: 6px; }
+  .tile .toggle { margin-left: auto; }
   .tile:has(.reset) .v { overflow: hidden; text-overflow: ellipsis; }
   .tile .reset { margin-left: auto; flex: none; display: grid; place-items: center; width: 22px; height: 22px; padding: 0;
     border: none; border-radius: 50%; cursor: pointer; color: color-mix(in srgb, var(--c) 60%, var(--primary-text-color));
@@ -3233,7 +3366,7 @@ class InternetBoxCard extends InternetBoxBase {
 
   _network(box) {
     const sc = box.scalars;
-    if (!sc.rate_down && !sc.rate_up && !sc.sync_down && !sc.sync_up) return "";
+    const rates = sc.rate_down || sc.rate_up || sc.sync_down || sc.sync_up;
     const router = this._s(sc.router);
     const facts = [];
     if (router?.attributes?.IPv4)
@@ -3251,10 +3384,12 @@ class InternetBoxCard extends InternetBoxBase {
           this._config
         )}</span>`
       );
-    const hist = this._config.show_history === false ? null : this._history([sc.rate_down, sc.rate_up].filter(Boolean));
+    // Without any rate or sync sensor, the IP address and the uptime are still shown.
+    if (!rates && !facts.length) return "";
+    const hist = !rates || this._config.show_history === false ? null : this._history([sc.rate_down, sc.rate_up].filter(Boolean));
     return `<div>
       <div class="section-title">${svgIcon(ICONS.network)}${this._t("network")}</div>
-      <div class="grid2">${this._rateTiles(sc, hist)}</div>
+      ${rates ? `<div class="grid2">${this._rateTiles(sc, hist)}</div>` : ""}
       ${facts.length ? `<div class="facts">${facts.join("")}</div>` : ""}
     </div>`;
   }
@@ -3322,11 +3457,12 @@ class InternetBoxCard extends InternetBoxBase {
     if (wifi) {
       const on = wifi.state === "on";
       const unknown = noValue(wifi);
-      tiles.push(`<div class="tile svc clickable ${on ? "ok" : unknown ? "off" : ""}" role="button" tabindex="0" data-key="${wifi.entity_id}" data-entity="${
+      // As on the Calls tile, the keyboard target is the label: the switch must not sit inside a role="button".
+      tiles.push(`<div class="tile svc clickable ${on ? "ok" : unknown ? "off" : ""}" data-key="${wifi.entity_id}" data-entity="${
         wifi.entity_id
-      }">${svgIcon(on || unknown ? ICONS.wifi : ICONS.wifi_off)}<div><div class="k">${this._t("wifi")}</div><div class="v">${this._t(
+      }">${svgIcon(on || unknown ? ICONS.wifi : ICONS.wifi_off)}<div role="button" tabindex="0"><div class="k">${this._t("wifi")}</div><div class="v">${this._t(
         unknown ? "unavailable" : on ? "on" : "off"
-      )}</div></div></div>`);
+      )}</div></div>${this._wifiToggle(wifi)}</div>`);
     }
     const calls = this._missedCalls(sc);
     if (calls) {
@@ -3383,6 +3519,9 @@ const MINI_STYLE = `
     background: color-mix(in srgb, var(--ibc-warn) 15%, transparent); }
   .foot .reset:hover { background: color-mix(in srgb, var(--ibc-warn) 28%, transparent); }
   .foot .reset .icon { width: 12px; height: 12px; }
+  .foot .toggle { margin-left: 3px; width: 24px; height: 14px; }
+  .foot .toggle::after { width: 7px; height: 7px; }
+  .foot .toggle[aria-checked="true"]::after { transform: translateX(10px); }
 `;
 
 // The detail button (top right, `zoom: false` removes it) switches the mini card to the full card, with the
@@ -3484,9 +3623,9 @@ class InternetBoxMiniCard extends InternetBoxCard {
       const on = wifi.state === "on";
       const unknown = noValue(wifi);
       const label = unknown ? ` title="${esc(`${this._t("wifi")} · ${this._t("unavailable")}`)}" aria-label="${esc(`${this._t("wifi")} · ${this._t("unavailable")}`)}"` : "";
-      foot.push(`<span class="clickable ${on ? "ok" : unknown ? "off" : ""}" role="button" tabindex="0" data-key="${wifi.entity_id}" data-entity="${
-        wifi.entity_id
-      }"${label}>${svgIcon(on || unknown ? ICONS.wifi : ICONS.wifi_off)}${this._t("wifi")}${unknown ? " —" : ""}</span>`);
+      foot.push(`<span class="clickable ${on ? "ok" : unknown ? "off" : ""}" data-key="${wifi.entity_id}" data-entity="${wifi.entity_id}"><span role="button" tabindex="0"${label}>${svgIcon(
+        on || unknown ? ICONS.wifi : ICONS.wifi_off
+      )}${this._t("wifi")}${unknown ? " —" : ""}</span>${this._wifiToggle(wifi)}</span>`);
     }
     // Missed calls, always shown when the box reports them: in orange with "mark as read" when there are some,
     // plain at 0, as on the Calls tile of the full card.

@@ -37,6 +37,7 @@ Entities are **discovered automatically**, you don't have to pick them one by on
 - Temperature gauges and fans speed
 - Storage: free space of the disk partitions and RAID status
 - Services: Wi-Fi state, missed calls and connected devices (the mini card footer always shows the missed calls, orange when there are some)
+- A switch next to the Wi-Fi state (Services tile, header chip and mini card footer) turns the box's Wi-Fi on, or off after a confirmation popup; hidden while the Wi-Fi switch is unavailable
 - A check button next to the missed calls marks them as read, shown only when there are missed calls and the integration has that button
 - A restart button at the top right of the full card reboots the box, after a confirmation popup; shown only when the integration exposes it
 - Colors turn orange / red when a threshold is crossed (temperatures, disk usage, missed calls); the temperature and disk usage thresholds can be set
