@@ -754,9 +754,9 @@ const STRINGS = {
     uptime: "Време рада",
     firmware: "Фирмвер",
     devices_short: "Уређаји",
-    wifi: "Wi-Fi",
-    wifi_on: "Wi-Fi укључен",
-    wifi_off: "Wi-Fi искључен",
+    wifi: "Вај-фај",
+    wifi_on: "Вај-фај укључен",
+    wifi_off: "Вај-фај искључен",
     on: "Укључено",
     off: "Искључено",
     mark_read: "Означи позиве као прочитане",
@@ -764,9 +764,9 @@ const STRINGS = {
     restart_confirm: "Поново покренути рутер сада? Интернет, телефонска и ТВ веза биће прекинуте на неколико минута.",
     restart_btn: "Поново покрени",
     cancel: "Откажи",
-    wifi_turn_on: "Укључи Wi-Fi",
-    wifi_turn_off: "Искључи Wi-Fi",
-    wifi_off_confirm: "Искључити Wi-Fi сада? Бежични уређаји ће изгубити везу; уређаји повезани каблом нису погођени.",
+    wifi_turn_on: "Укључи Вај-фај",
+    wifi_turn_off: "Искључи Вај-фај",
+    wifi_off_confirm: "Искључити Вај-фај сада? Бежични уређаји ће изгубити везу; уређаји повезани каблом нису погођени.",
     wifi_off_btn: "Искључи",
     calls: "Позиви",
     missed: "пропуштених",
@@ -803,7 +803,7 @@ const STRINGS = {
     show_history: "Прикажи историју протока за 24 ч",
     show_system: "Прикажи систем (температуре, вентилатори)",
     show_storage: "Прикажи складиште",
-    show_services: "Прикажи услуге (Wi-Fi, позиви, уређаји)",
+    show_services: "Прикажи услуге (Вај-фај, позиви, уређаји)",
     zoom: "Дугме за детаље",
     zoom_helper: "Дугме у горњем десном углу које пребацује мини картицу на пун приказ и назад",
     rate_unit: "Јединица брзине преноса",
@@ -2892,10 +2892,10 @@ class InternetBoxBase extends HTMLElement {
   }
 
   // Turns the box's Wi-Fi switch on, or opens a confirmation popup before turning it off (wireless devices lose
-  // their connection). Nothing while the switch is unavailable.
+  // their connection). Nothing while the switch is unavailable, nor for an entity that is not a switch.
   _toggleWifi() {
     const wifi = this._s(discover(this._hass, this._config.box).scalars.wifi);
-    if (!wifi || noValue(wifi)) return;
+    if (!wifi?.entity_id?.startsWith("switch.") || noValue(wifi)) return;
     const id = wifi.entity_id;
     if (wifi.state !== "on") return this._call("switch", "turn_on", id);
     this._openDialog({

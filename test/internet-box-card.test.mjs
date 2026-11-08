@@ -818,4 +818,14 @@ test("Wi-Fi switch: turns the Wi-Fi on at once, off only after the confirmation 
   assert.deepEqual(JSON.parse(JSON.stringify(on.calls)), [["switch", "turn_off", { entity_id: WIFI }]]);
 
   for (const state of ["unavailable", "unknown"]) assert.deepEqual(await run(state), { calls: [], dialog: null }, state);
+
+  // Only a switch entity is turned on or off.
+  const el = await mockCard({});
+  const calls = [];
+  el._hass.callService = (...c) => calls.push(c);
+  el._openDialog = () => assert.fail("dialog opened");
+  el._s = (id) => (id ? { ...el._hass.states[id], entity_id: "sensor.freebox_wifi" } : undefined);
+  el._toggleWifi();
+  await new Promise((r) => setTimeout(r));
+  assert.deepEqual(calls, []);
 });

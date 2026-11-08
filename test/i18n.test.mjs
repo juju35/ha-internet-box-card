@@ -49,8 +49,8 @@ test("I18N parity: every language has rate units", () => {
   }
 });
 
-// Brands, the Wi-Fi name and units stay in Latin script in the Cyrillic translation.
-const LATIN_ALLOWED = /Freebox|Livebox|SFR Box|Bbox|Wi-Fi|[kMG]?[bB]\/s|\b(h|d|min)\b/g;
+// Brands and units stay in Latin script in the Cyrillic translation; Wi-Fi is written "Вај-фај".
+const LATIN_ALLOWED = /Freebox|Livebox|SFR Box|Bbox|[kMG]?[bB]\/s|\b(h|d|min)\b/g;
 
 test("I18N Serbian: sr has no Latin letters and sr-Latn no Cyrillic, brands and units aside", () => {
   for (const [k, v] of Object.entries(STRINGS.sr)) {

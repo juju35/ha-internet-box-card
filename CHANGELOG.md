@@ -7,6 +7,7 @@
 
 ### Fixes
 - The IP address and the uptime are shown in the Network section even when the box has no rate or line sync sensor.
+- Serbian (Cyrillic): Wi-Fi is written "Вај-фај", without Latin letters.
 
 ## 2.6.0 - 2026-11-08
 
