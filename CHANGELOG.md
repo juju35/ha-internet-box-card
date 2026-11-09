@@ -1,5 +1,12 @@
 # Changelog
 
+## 2.8.1 - 2026-11-09
+
+### Fixes
+- Livebox on a fibre line (GPON or SFP, for example the Arcadyan "Livebox Fibre"): the box is now discovered and its download / upload rates read from the WAN interface statistics sensors (`WAN_GPON Rate Rx / Tx`), as the integration creates no `down_rate` / `up_rate` sensor there; the box was previously missing from the editor and reported as not found even with its device id (#61). The Wi-Fi, Ethernet and DS-Lite interface rates are never taken for the box rates.
+- Livebox: the Arcadyan Livebox Fibre (`ArcadyanLBFIBRE_OFR`) is drawn as a Livebox 5 (#61).
+- Livebox: the missed calls are counted from the "call missed" binary sensor (its `missed_calls` list), no longer from the `callers` sensor, which counts every call, missed or not (#61). Without that sensor, the `callers` list is filtered on the missed ones.
+
 ## 2.8.0 - 2026-11-08
 
 ### Changes

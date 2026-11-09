@@ -111,6 +111,7 @@ test("boxes of other operators are discovered from their own entity keys", () =>
     "sensor.l_up": lbEnt("sensor.l_up", "up_rate"),
     "switch.l_wifi": lbEnt("switch.l_wifi", "wifi_switch"),
     "sensor.l_callers": lbEnt("sensor.l_callers", "callers"),
+    "binary_sensor.l_missed": lbEnt("binary_sensor.l_missed", "callmissed"),
     "button.l_restart": lbEnt("button.l_restart", "restart_btn"),
     "button.l_clear": lbEnt("button.l_clear", "cmissed_clear_btn"),
   };
@@ -120,7 +121,9 @@ test("boxes of other operators are discovered from their own entity keys", () =>
   assert.equal(lb.operator.name, "Livebox");
   assert.equal(lb.scalars.rate_down, "sensor.l_down");
   assert.equal(lb.scalars.wifi, "switch.l_wifi");
-  assert.equal(lb.scalars.missed, "sensor.l_callers");
+  // The missed calls come from the "call missed" binary sensor; `callers` counts every call and is only a fallback.
+  assert.equal(lb.scalars.missed, "binary_sensor.l_missed");
+  assert.equal(lb.scalars.missed_total, "sensor.l_callers");
   assert.equal(lb.scalars.reboot, "button.l_restart");
   assert.equal(lb.scalars.mark_read, "button.l_clear");
 
@@ -176,6 +179,64 @@ test("boxes of other operators are discovered from their own entity keys", () =>
   assert.equal(bb2.device, null);
   assert.equal(bb2.scalars.rate_down, "sensor.bbox_currently_used_download_bandwidth");
   assert.equal(bb2.scalars.rate_up, "sensor.bbox_currently_used_upload_bandwidth");
+});
+
+test("Livebox on fibre: discovered and rated from the WAN GPON interface statistics (#61)", () => {
+  // No down_rate / up_rate sensor on a GPON or SFP line: the integration only exposes the per-interface rates,
+  // whose translation keys are built from the interface name. Only the WAN interface counts, never Wi-Fi, Ethernet
+  // or the DS-Lite tunnel.
+  const devs = { lb: { id: "lb", name: "Livebox Fibre", model: "ArcadyanLBFIBRE_OFR", manufacturer: "Arcadyan", config_entries: ["e"] } };
+  const ent = (entity_id, translation_key) => ({ entity_id, platform: "livebox", translation_key, device_id: "lb" });
+  const ents = {
+    "sensor.livebox_fibre_wan_gpon_rate_rx": ent("sensor.livebox_fibre_wan_gpon_rate_rx", "WAN_GPON_rate_rx"),
+    "sensor.livebox_fibre_wan_gpon_rate_tx": ent("sensor.livebox_fibre_wan_gpon_rate_tx", "WAN_GPON_rate_tx"),
+    "sensor.livebox_fibre_eth1_rate_rx": ent("sensor.livebox_fibre_eth1_rate_rx", "eth1_rate_rx"),
+    "sensor.livebox_fibre_wan_ds_lite_tunnel_rate_rx": ent("sensor.livebox_fibre_wan_ds_lite_tunnel_rate_rx", "WAN_DS_LITE_TUNNEL_rate_rx"),
+    "sensor.livebox_fibre_2_4ghz_private_ssid_rate_rx": ent("sensor.livebox_fibre_2_4ghz_private_ssid_rate_rx", "2.4GHz_Private_SSID_rate_rx"),
+    "binary_sensor.livebox_fibre_wan_status": ent("binary_sensor.livebox_fibre_wan_status", "connectivity"),
+  };
+  const states = {};
+  for (const id of Object.keys(ents)) states[id] = st("12.5", { unit_of_measurement: "Mbit/s" });
+  const hass = { states, entities: ents, devices: devs };
+  assert.equal(JSON.stringify(listBoxes(hass)), JSON.stringify([{ value: "lb", label: "Livebox Fibre" }]));
+  const box = discover(hass, "lb");
+  assert.equal(box.operator.name, "Livebox");
+  assert.equal(box.scalars.rate_down, "sensor.livebox_fibre_wan_gpon_rate_rx");
+  assert.equal(box.scalars.rate_up, "sensor.livebox_fibre_wan_gpon_rate_tx");
+  assert.equal(box.scalars.wan, "binary_sensor.livebox_fibre_wan_status");
+  // The same device id given by hand is accepted too.
+  assert.equal(discover(hass, "lb").id, "lb");
+
+  // The canonical keys win when both exist (xDSL line with interface statistics too), whatever the entity order.
+  const both = {
+    ...ents,
+    "sensor.a_down": ent("sensor.a_down", "down_rate"),
+    "sensor.z_up": ent("sensor.z_up", "up_rate"),
+  };
+  const bothStates = { ...states, "sensor.a_down": st("1"), "sensor.z_up": st("1") };
+  const b = discover({ states: bothStates, entities: both, devices: devs }, "lb");
+  assert.equal(b.scalars.rate_down, "sensor.a_down");
+  assert.equal(b.scalars.rate_up, "sensor.z_up");
+
+  // The Arcadyan Livebox Fibre is drawn as a Livebox 5.
+  const { boxModel } = load("internet-box-card.js", ["boxModel"]);
+  assert.equal(boxModel(box, {}).id, "livebox_5");
+});
+
+test("Livebox: the missed calls are counted from the call-missed sensor, never from the total of calls (#61)", () => {
+  const { missedCount } = load("internet-box-card.js", ["missedCount"]);
+  const s = (entity_id, state, attributes = {}) => ({ entity_id, state, attributes });
+  const callers = [{ status: "missed" }, { status: "in" }, { status: "missed" }, { status: "out" }];
+  // `callmissed` binary sensor with its missed_calls list; off means none; unavailable means no value.
+  assert.equal(missedCount(s("binary_sensor.lb_missed", "on", { missed_calls: callers.slice(0, 2) })), 2);
+  assert.equal(missedCount(s("binary_sensor.lb_missed", "off", { missed_calls: [] })), 0);
+  assert.equal(missedCount(s("binary_sensor.lb_missed", "off")), 0);
+  assert.equal(missedCount(s("binary_sensor.lb_missed", "unavailable")), null);
+  // `callers` total (fallback): only the calls whose status is "missed", not the 4 of the state.
+  assert.equal(missedCount(s("sensor.lb_callers", "4", { callers })), 2);
+  // Freebox: the state is the count.
+  assert.equal(missedCount(s("sensor.freebox_missed_calls", "3")), 3);
+  assert.equal(missedCount(s("sensor.freebox_missed_calls", "unknown")), null);
 });
 
 test("the reboot button is discovered by its translation key, its device class, or the default entity id", () => {

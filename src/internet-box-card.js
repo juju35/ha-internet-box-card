@@ -2100,15 +2100,23 @@ const OPERATORS = {
     models: [
       { id: "livebox_7", name: "Livebox 7", re: /livebox\s*7|lb7/i },
       { id: "livebox_6", name: "Livebox 6", re: /livebox\s*6|lb6/i },
-      { id: "livebox_5", name: "Livebox 5", re: /livebox\s*5|lb5/i },
+      // The Arcadyan "Livebox Fibre" (ModelName ArcadyanLBFIBRE_OFR, ProductClass "Livebox Fibre") is a Livebox 5.
+      { id: "livebox_5", name: "Livebox 5", re: /livebox\s*5|lb5|arcadyanlbfibre/i },
       { id: "livebox_4", name: "Livebox 4", re: /livebox\s*4|lb4/i },
       { id: "livebox_s", name: "Livebox S", re: /livebox\s*s\b|lbs\b/i },
     ],
     // `wan`: the WAN connectivity binary sensor ("WAN Status", its link_type attribute gives the kind of line).
+    // `missed`: the "call missed" binary sensor, whose `missed_calls` attribute lists the missed calls (the `callers`
+    // sensor counts every call, missed or not: `missed_total` is only a fallback, filtered on status "missed").
     keys: {
-      rate_down: "down_rate", rate_up: "up_rate", missed: "callers", wifi: "wifi_switch", mark_read: "cmissed_clear_btn", reboot: "restart_btn",
-      wan: "connectivity",
+      rate_down: "down_rate", rate_up: "up_rate", missed: "callmissed", missed_total: "callers", wifi: "wifi_switch",
+      mark_read: "cmissed_clear_btn", reboot: "restart_btn", wan: "connectivity",
     },
+    // On a fibre line (GPON or SFP) the integration creates no down_rate / up_rate sensor: the throughput comes from
+    // the WAN interface statistics, whose translation keys are built from the interface name (WAN_GPON_rate_rx).
+    // `alt` holds patterns on the translation key, used when the canonical key is missing (never Wi-Fi or Ethernet
+    // interfaces, nor the DS-Lite tunnel).
+    alt: { rate_down: /^wan_(gpon|sfp)_rate_rx$/i, rate_up: /^wan_(gpon|sfp)_rate_tx$/i },
   },
   sfr_box: {
     platform: "sfr_box", name: "SFR Box", color: "#e2001a", logo: IMG_SFR,
@@ -2176,6 +2184,19 @@ const num = (s) => {
 /** True when Home Assistant has no value for the entity (unavailable, e.g. while the box restarts, or unknown):
  *  the card then shows it as unavailable, never as a real state (Wi-Fi off, 0 missed calls, offline, RAID OK). */
 const noValue = (s) => !s || s.state === "unavailable" || s.state === "unknown";
+
+/** Number of missed calls from the missed-calls entity, or null while it has no value. A counting sensor (Freebox)
+ *  gives it as its state; a binary sensor listing the missed calls (Livebox `callmissed`) as the length of its
+ *  `missed_calls` attribute (0 when off); the Livebox `callers` total only through its `callers` list, keeping the
+ *  calls whose status is "missed". */
+const missedCount = (s) => {
+  if (noValue(s)) return null;
+  const a = s.attributes || {};
+  if (Array.isArray(a.missed_calls)) return a.missed_calls.length;
+  if (s.entity_id?.startsWith("binary_sensor.")) return s.state === "on" ? null : 0;
+  if (Array.isArray(a.callers)) return a.callers.filter((c) => c?.status === "missed").length;
+  return num(s);
+};
 
 const RATE_FACTORS = {
   "b/s": 1, "bit/s": 1 / 8, "kbit/s": 125, "mbit/s": 125e3, "gbit/s": 125e6,
@@ -2440,11 +2461,15 @@ const registry = (hass) => {
   return list;
 };
 
-/** True when an entity is the operator's "download rate" sensor (by translation key, or entity id for a legacy one),
- *  or its downstream line sync rate for an operator without throughput sensors (SFR Box). */
+/** True when the entity's translation key matches the operator's alternate pattern for a rate slot (Livebox fibre). */
+const isAltRate = (op, e, slot) => !!(op.alt?.[slot] && e.entity_id.startsWith("sensor.") && op.alt[slot].test(e.translation_key || ""));
+
+/** True when an entity is the operator's "download rate" sensor (by translation key, an alternate key pattern, or
+ *  entity id for a legacy one), or its downstream line sync rate for an operator without throughput sensors (SFR Box). */
 const isRateDown = (op, e) =>
   (op.keys.rate_down && e.translation_key === op.keys.rate_down) ||
   (op.keys.sync_down && e.translation_key === op.keys.sync_down) ||
+  isAltRate(op, e, "rate_down") ||
   (op.legacy?.rate_down?.test(e.entity_id));
 
 /** The operator of a device, from the platform of its registry entities, or undefined. */
@@ -2583,11 +2608,16 @@ const discover = (hass, boxId) => {
         const k = e.translation_key;
         const a = hass.states[id].attributes;
         // Each data slot is matched by the operator's translation key, or by an entity-id pattern for a legacy one.
+        // The canonical rate key wins over an alternate one (the alternate only fills an empty slot), and the
+        // missed-calls sensor over the total of calls.
         if ((keys.rate_down && k === keys.rate_down) || (legacy?.rate_down?.test(id))) box.scalars.rate_down = id;
         else if ((keys.rate_up && k === keys.rate_up) || (legacy?.rate_up?.test(id))) box.scalars.rate_up = id;
+        else if (isAltRate(op, e, "rate_down")) box.scalars.rate_down ??= id;
+        else if (isAltRate(op, e, "rate_up")) box.scalars.rate_up ??= id;
         else if (keys.sync_down && k === keys.sync_down) box.scalars.sync_down = id;
         else if (keys.sync_up && k === keys.sync_up) box.scalars.sync_up = id;
         else if (keys.missed && k === keys.missed) box.scalars.missed = id;
+        else if (keys.missed_total && k === keys.missed_total) box.scalars.missed_total = id;
         else if (domain === "binary_sensor" && keys.wan && k === keys.wan) box.scalars.wan = id;
         else if (domain === "binary_sensor" && keys.lines?.[k]) {
           box.scalars.line = id;
@@ -3026,9 +3056,9 @@ class InternetBoxBase extends HTMLElement {
   // Missed calls sensor, its count (null while unavailable) and the "mark as read" button (only when there are some
   // and the button is available), or null without the sensor.
   _missedCalls(sc) {
-    const missed = this._s(sc.missed);
+    const missed = this._s(sc.missed) || this._s(sc.missed_total);
     if (!missed) return null;
-    const n = num(missed);
+    const n = missedCount(missed);
     const button = this._s(sc.mark_read);
     const markRead = n > 0 && button?.state !== "unavailable" && button;
     const reset = markRead
