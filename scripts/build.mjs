@@ -3,6 +3,7 @@
 // Usage: node scripts/build.mjs  (dist/ is not committed: CI and the release workflow build it)
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
+import { splitDist } from "./i18n-split.mjs";
 
 const root = fileURLToPath(new URL("..", import.meta.url));
 const pkg = JSON.parse(readFileSync(`${root}package.json`, "utf8"));
@@ -20,3 +21,7 @@ writeFileSync(`${root}dist/internet-box-card.js`, out);
 // Same file under the former name, attached to the releases for manual installs that still load it.
 writeFileSync(`${root}dist/freebox-card.js`, out);
 console.log(`Built dist/internet-box-card.js and dist/freebox-card.js (${(out.length / 1024).toFixed(1)} KB)`);
+
+// Translations: English stays in the bundle, each other language goes to dist/internet-box-card.i18n.<lang>.js,
+// fetched when a card needs it (scripts/i18n-split.mjs).
+if (process.argv[1] === fileURLToPath(import.meta.url)) splitDist(`${root}dist`, "internet-box-card.js", { version: pkg.version, aliases: ["freebox-card.js"] });

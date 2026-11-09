@@ -85,8 +85,8 @@ Or manually:
 
 ### Manual
 
-1. Download `internet-box-card.js` from the [latest release](https://github.com/juju35/ha-internet-box-card/releases/latest)
-2. Copy it to `/config/www/internet-box-card.js`
+1. Download `internet-box-card.js` and the `internet-box-card.i18n.*.js` translation files from the [latest release](https://github.com/juju35/ha-internet-box-card/releases/latest)
+2. Copy them all to `/config/www/` (without the translation files, the cards show in English)
 3. Go to **Settings → Dashboards → ⋮ → Resources** → Add resource:
    - URL: `/local/internet-box-card.js`
    - Type: **JavaScript Module**
