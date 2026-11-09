@@ -438,6 +438,8 @@ const ICONS = {
   up: "M15,20H9V12H4.16L12,4.16L19.84,12H15V20Z",
   temp: "M15 13V5A3 3 0 0 0 9 5V13A5 5 0 1 0 15 13M12 4A1 1 0 0 1 13 5V8H11V5A1 1 0 0 1 12 4Z",
   fan: "M12,11A1,1 0 0,0 11,12A1,1 0 0,0 12,13A1,1 0 0,0 13,12A1,1 0 0,0 12,11M12.5,2C17,2 17.11,5.57 14.75,6.75C13.76,7.24 13.32,8.29 13.13,9.22C13.61,9.42 14.03,9.73 14.35,10.13C18.05,8.13 22.03,8.92 22.03,12.5C22.03,17 18.46,17.1 17.28,14.73C16.78,13.74 15.72,13.3 14.79,13.11C14.59,13.59 14.28,14 13.88,14.34C15.87,18.03 15.08,22 11.5,22C7,22 6.91,18.42 9.27,17.24C10.25,16.75 10.69,15.71 10.89,14.79C10.4,14.59 9.97,14.27 9.65,13.87C5.96,15.85 2,15.07 2,11.5C2,7 5.56,6.89 6.74,9.26C7.24,10.25 8.29,10.68 9.22,10.87C9.41,10.39 9.73,9.97 10.14,9.65C8.15,5.96 8.94,2 12.5,2Z",
+  // mdi:speedometer, for the last speed test.
+  speedtest: "M12,16A3,3 0 0,1 9,13C9,11.88 9.61,10.9 10.5,10.39L20.21,4.77L14.68,14.35C14.18,15.33 13.17,16 12,16M12,3C13.81,3 15.5,3.5 16.97,4.32L14.87,5.53C14,5.19 13,5 12,5A8,8 0 0,0 4,13C4,15.21 4.89,17.21 6.34,18.65H6.35C6.74,19.04 6.74,19.67 6.35,20.06C5.96,20.45 5.32,20.45 4.93,20.07V20.07C3.12,18.26 2,15.76 2,13A10,10 0 0,1 12,3M22,13C22,15.76 20.88,18.26 19.07,20.07V20.07C18.68,20.45 18.05,20.45 17.66,20.06C17.27,19.67 17.27,19.04 17.66,18.65V18.65C19.11,17.2 20,15.21 20,13C20,12 19.81,11 19.46,10.1L20.67,8C21.5,9.5 22,11.18 22,13Z",
   timer: "M12,20A7,7 0 0,1 5,13A7,7 0 0,1 12,6A7,7 0 0,1 19,13A7,7 0 0,1 12,20M19.03,7.39L20.45,5.97C20,5.46 19.55,5 19.04,4.56L17.62,6C16.07,4.74 14.12,4 12,4A9,9 0 0,0 3,13A9,9 0 0,0 12,22C17,22 21,17.97 21,13C21,10.88 20.26,8.93 19.03,7.39M11,14H13V8H11M15,1H9V3H15V1Z",
   network: "M13,19H14A1,1 0 0,1 15,20H22V22H15A1,1 0 0,1 14,23H10A1,1 0 0,1 9,22H2V20H9A1,1 0 0,1 10,19H11V17H4A1,1 0 0,1 3,16V12A1,1 0 0,1 4,11H20A1,1 0 0,1 21,12V16A1,1 0 0,1 20,17H13V19M4,3H20A1,1 0 0,1 21,4V8A1,1 0 0,1 20,9H4A1,1 0 0,1 3,8V4A1,1 0 0,1 4,3M9,7H10V5H9V7M9,15H10V13H9V15M5,5V7H7V5H5M5,13V15H7V13H5Z",
   ip: "M16.36,14C16.44,13.34 16.5,12.68 16.5,12C16.5,11.32 16.44,10.66 16.36,10H19.74C19.9,10.64 20,11.31 20,12C20,12.69 19.9,13.36 19.74,14M14.59,19.56C15.19,18.45 15.65,17.25 15.97,16H18.92C17.96,17.65 16.43,18.93 14.59,19.56M14.34,14H9.66C9.56,13.34 9.5,12.68 9.5,12C9.5,11.32 9.56,10.65 9.66,10H14.34C14.43,10.65 14.5,11.32 14.5,12C14.5,12.68 14.43,13.34 14.34,14M12,19.96C11.17,18.76 10.5,17.43 10.09,16H13.91C13.5,17.43 12.83,18.76 12,19.96M8,8H5.08C6.03,6.34 7.57,5.06 9.4,4.44C8.8,5.55 8.35,6.75 8,8M5.08,16H8C8.35,17.25 8.8,18.45 9.4,19.56C7.57,18.93 6.03,17.65 5.08,16M4.26,14C4.1,13.36 4,12.69 4,12C4,11.31 4.1,10.64 4.26,10H7.64C7.56,10.66 7.5,11.32 7.5,12C7.5,12.68 7.56,13.34 7.64,14M12,4.03C12.83,5.23 13.5,6.57 13.91,8H10.09C10.5,6.57 11.17,5.23 12,4.03M18.92,8H15.97C15.65,6.75 15.19,5.55 14.59,4.44C16.43,5.07 17.96,6.34 18.92,8M12,2C6.47,2 2,6.5 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z",
@@ -516,6 +518,8 @@ const STRINGS = {
     show_system: "Show system (temperatures, fans)",
     show_storage: "Show storage",
     show_services: "Show services (Wi-Fi, calls, devices)",
+    show_speedtest: "Show the last speed test (Speedtest.net)",
+    speedtest: "Speed test",
     zoom: "Detail button",
     zoom_helper: "Button at the top right that shows the full card in place of the mini card, and back",
     rate_unit: "Rate unit",
@@ -588,6 +592,8 @@ const STRINGS = {
     show_system: "Afficher le système (températures, ventilateurs)",
     show_storage: "Afficher le stockage",
     show_services: "Afficher les services (Wi-Fi, appels, appareils)",
+    show_speedtest: "Afficher le dernier test de débit (Speedtest.net)",
+    speedtest: "Test de débit",
     zoom: "Bouton détail",
     zoom_helper: "Bouton en haut à droite qui affiche la carte complète à la place de la mini carte, et inversement",
     rate_unit: "Unité des débits",
@@ -659,6 +665,8 @@ const STRINGS = {
     show_system: "System anzeigen (Temperaturen, Lüfter)",
     show_storage: "Speicher anzeigen",
     show_services: "Dienste anzeigen (WLAN, Anrufe, Geräte)",
+    show_speedtest: "Letzten Geschwindigkeitstest anzeigen (Speedtest.net)",
+    speedtest: "Geschwindigkeitstest",
     zoom: "Detail-Schaltfläche",
     zoom_helper: "Schaltfläche oben rechts, die anstelle der Mini-Karte die vollständige Karte anzeigt und umgekehrt",
     rate_unit: "Einheit der Datenrate",
@@ -731,6 +739,8 @@ const STRINGS = {
     show_system: "Mostrar el sistema (temperaturas, ventiladores)",
     show_storage: "Mostrar el almacenamiento",
     show_services: "Mostrar los servicios (Wi-Fi, llamadas, dispositivos)",
+    show_speedtest: "Mostrar el último test de velocidad (Speedtest.net)",
+    speedtest: "Test de velocidad",
     zoom: "Botón de detalle",
     zoom_helper: "Botón arriba a la derecha que muestra la tarjeta completa en lugar de la minitarjeta, y viceversa",
     rate_unit: "Unidad de velocidad",
@@ -804,6 +814,8 @@ const STRINGS = {
     show_system: "Прикажи систем (температуре, вентилатори)",
     show_storage: "Прикажи складиште",
     show_services: "Прикажи услуге (Вај-фај, позиви, уређаји)",
+    show_speedtest: "Прикажи последњи тест брзине (Speedtest.net)",
+    speedtest: "Тест брзине",
     zoom: "Дугме за детаље",
     zoom_helper: "Дугме у горњем десном углу које пребацује мини картицу на пун приказ и назад",
     rate_unit: "Јединица брзине преноса",
@@ -877,6 +889,8 @@ const STRINGS = {
     show_system: "Prikaži sistem (temperature, ventilatori)",
     show_storage: "Prikaži skladište",
     show_services: "Prikaži usluge (Wi-Fi, pozivi, uređaji)",
+    show_speedtest: "Prikaži poslednji test brzine (Speedtest.net)",
+    speedtest: "Test brzine",
     zoom: "Dugme za detalje",
     zoom_helper: "Dugme u gornjem desnom uglu koje prebacuje mini karticu na pun prikaz i nazad",
     rate_unit: "Jedinica brzine prenosa",
@@ -949,6 +963,8 @@ const STRINGS = {
     show_system: "Mostra il sistema (temperature, ventole)",
     show_storage: "Mostra l'archiviazione",
     show_services: "Mostra i servizi (Wi-Fi, chiamate, dispositivi)",
+    show_speedtest: "Mostra l'ultimo test di velocità (Speedtest.net)",
+    speedtest: "Test di velocità",
     zoom: "Pulsante dettagli",
     zoom_helper: "Pulsante in alto a destra che mostra la scheda completa al posto della mini scheda, e viceversa",
     rate_unit: "Unità di velocità",
@@ -1020,6 +1036,8 @@ const STRINGS = {
     show_system: "Systeem tonen (temperaturen, ventilatoren)",
     show_storage: "Opslag tonen",
     show_services: "Diensten tonen (Wi-Fi, oproepen, apparaten)",
+    show_speedtest: "Laatste snelheidstest tonen (Speedtest.net)",
+    speedtest: "Snelheidstest",
     zoom: "Detailknop",
     zoom_helper: "Knop rechtsboven die de volledige kaart toont in plaats van de minikaart, en terug",
     rate_unit: "Eenheid van snelheid",
@@ -1092,6 +1110,8 @@ const STRINGS = {
     show_system: "Mostrar o sistema (temperaturas, ventoinhas)",
     show_storage: "Mostrar o armazenamento",
     show_services: "Mostrar os serviços (Wi-Fi, chamadas, dispositivos)",
+    show_speedtest: "Mostrar o último teste de velocidade (Speedtest.net)",
+    speedtest: "Teste de velocidade",
     zoom: "Botão de detalhe",
     zoom_helper: "Botão no canto superior direito que mostra o cartão completo em vez do minicartão, e vice-versa",
     rate_unit: "Unidade de velocidade",
@@ -1166,6 +1186,8 @@ const STRINGS = {
     show_system: "Pokaż system (temperatury, wentylatory)",
     show_storage: "Pokaż pamięć masową",
     show_services: "Pokaż usługi (Wi-Fi, połączenia, urządzenia)",
+    show_speedtest: "Pokaż ostatni test prędkości (Speedtest.net)",
+    speedtest: "Test prędkości",
     zoom: "Przycisk szczegółów",
     zoom_helper: "Przycisk w prawym górnym rogu, który pokazuje pełną kartę zamiast minikarty, i z powrotem",
     rate_unit: "Jednostka prędkości",
@@ -1238,6 +1260,8 @@ const STRINGS = {
     show_system: "Afișează sistemul (temperaturi, ventilatoare)",
     show_storage: "Afișează stocarea",
     show_services: "Afișează serviciile (Wi-Fi, apeluri, dispozitive)",
+    show_speedtest: "Afișează ultimul test de viteză (Speedtest.net)",
+    speedtest: "Test de viteză",
     zoom: "Buton de detalii",
     zoom_helper: "Buton din dreapta sus care afișează cardul complet în locul minicardului, și invers",
     rate_unit: "Unitatea vitezei de transfer",
@@ -1310,6 +1334,8 @@ const STRINGS = {
     show_system: "Vis system (temperaturer, blæsere)",
     show_storage: "Vis lager",
     show_services: "Vis tjenester (Wi-Fi, opkald, enheder)",
+    show_speedtest: "Vis den seneste hastighedstest (Speedtest.net)",
+    speedtest: "Hastighedstest",
     zoom: "Detaljeknap",
     zoom_helper: "Knap øverst til højre, der viser hele kortet i stedet for minikortet og tilbage igen",
     rate_unit: "Enhed for hastighed",
@@ -1382,6 +1408,8 @@ const STRINGS = {
     show_system: "Visa system (temperaturer, fläktar)",
     show_storage: "Visa lagring",
     show_services: "Visa tjänster (Wi-Fi, samtal, enheter)",
+    show_speedtest: "Visa det senaste hastighetstestet (Speedtest.net)",
+    speedtest: "Hastighetstest",
     zoom: "Detaljknapp",
     zoom_helper: "Knapp uppe till höger som visar hela kortet i stället för minikortet, och tillbaka",
     rate_unit: "Enhet för hastighet",
@@ -1454,6 +1482,8 @@ const STRINGS = {
     show_system: "Показване на системата (температури, вентилатори)",
     show_storage: "Показване на хранилището",
     show_services: "Показване на услугите (Wi-Fi, обаждания, устройства)",
+    show_speedtest: "Показване на последния тест на скоростта (Speedtest.net)",
+    speedtest: "Тест на скоростта",
     zoom: "Бутон за подробности",
     zoom_helper: "Бутон горе вдясно, който показва пълната карта вместо мини картата и обратно",
     rate_unit: "Мерна единица за скорост",
@@ -1526,6 +1556,8 @@ const STRINGS = {
     show_system: "Показывать систему (температуры, вентиляторы)",
     show_storage: "Показывать хранилище",
     show_services: "Показывать сервисы (Wi-Fi, звонки, устройства)",
+    show_speedtest: "Показывать последний тест скорости (Speedtest.net)",
+    speedtest: "Тест скорости",
     zoom: "Кнопка подробностей",
     zoom_helper: "Кнопка в правом верхнем углу, которая показывает полную карточку вместо мини-карточки и обратно",
     rate_unit: "Единица скорости",
@@ -1599,6 +1631,8 @@ const STRINGS = {
     show_system: "Показувати систему (температури, вентилятори)",
     show_storage: "Показувати сховище",
     show_services: "Показувати сервіси (Wi-Fi, дзвінки, пристрої)",
+    show_speedtest: "Показувати останній тест швидкості (Speedtest.net)",
+    speedtest: "Тест швидкості",
     zoom: "Кнопка подробиць",
     zoom_helper: "Кнопка у правому верхньому куті, яка показує повну картку замість мінікартки, і навпаки",
     rate_unit: "Одиниця швидкості",
@@ -1670,6 +1704,8 @@ const STRINGS = {
     show_system: "Rendszer megjelenítése (hőmérsékletek, ventilátorok)",
     show_storage: "Tárhely megjelenítése",
     show_services: "Szolgáltatások megjelenítése (Wi-Fi, hívások, eszközök)",
+    show_speedtest: "Utolsó sebességteszt megjelenítése (Speedtest.net)",
+    speedtest: "Sebességteszt",
     zoom: "Részletek gomb",
     zoom_helper: "Gomb a jobb felső sarokban, amely a minikártya helyett a teljes kártyát jeleníti meg, és vissza",
     rate_unit: "Sebesség mértékegysége",
@@ -1743,6 +1779,8 @@ const STRINGS = {
     show_system: "Zobraziť systém (teploty, ventilátory)",
     show_storage: "Zobraziť úložisko",
     show_services: "Zobraziť služby (Wi-Fi, hovory, zariadenia)",
+    show_speedtest: "Zobraziť posledný test rýchlosti (Speedtest.net)",
+    speedtest: "Test rýchlosti",
     zoom: "Tlačidlo podrobností",
     zoom_helper: "Tlačidlo vpravo hore, ktoré namiesto minikarty zobrazí celú kartu, a naopak",
     rate_unit: "Jednotka rýchlosti",
@@ -1816,6 +1854,8 @@ const STRINGS = {
     show_system: "Zobrazit systém (teploty, ventilátory)",
     show_storage: "Zobrazit úložiště",
     show_services: "Zobrazit služby (Wi-Fi, hovory, zařízení)",
+    show_speedtest: "Zobrazit poslední test rychlosti (Speedtest.net)",
+    speedtest: "Test rychlosti",
     zoom: "Tlačítko podrobností",
     zoom_helper: "Tlačítko vpravo nahoře, které místo minikarty zobrazí celou kartu, a zpět",
     rate_unit: "Jednotka rychlosti",
@@ -1890,6 +1930,8 @@ const STRINGS = {
     show_system: "Prikaži sistem (temperature, ventilatorji)",
     show_storage: "Prikaži shrambo",
     show_services: "Prikaži storitve (Wi-Fi, klici, naprave)",
+    show_speedtest: "Prikaži zadnji preizkus hitrosti (Speedtest.net)",
+    speedtest: "Preizkus hitrosti",
     zoom: "Gumb za podrobnosti",
     zoom_helper: "Gumb zgoraj desno, ki namesto mini kartice prikaže celotno kartico, in nazaj",
     rate_unit: "Enota hitrosti",
@@ -1962,6 +2004,8 @@ const STRINGS = {
     show_system: "Rādīt sistēmu (temperatūras, ventilatori)",
     show_storage: "Rādīt krātuvi",
     show_services: "Rādīt pakalpojumus (Wi-Fi, zvani, ierīces)",
+    show_speedtest: "Rādīt pēdējo ātruma testu (Speedtest.net)",
+    speedtest: "Ātruma tests",
     zoom: "Detaļu poga",
     zoom_helper: "Poga augšējā labajā stūrī, kas minikartītes vietā parāda pilno kartīti, un atpakaļ",
     rate_unit: "Ātruma mērvienība",
@@ -2034,6 +2078,8 @@ const STRINGS = {
     show_system: "Εμφάνιση συστήματος (θερμοκρασίες, ανεμιστήρες)",
     show_storage: "Εμφάνιση αποθήκευσης",
     show_services: "Εμφάνιση υπηρεσιών (Wi-Fi, κλήσεις, συσκευές)",
+    show_speedtest: "Εμφάνιση του τελευταίου τεστ ταχύτητας (Speedtest.net)",
+    speedtest: "Τεστ ταχύτητας",
     zoom: "Κουμπί λεπτομερειών",
     zoom_helper: "Κουμπί πάνω δεξιά που εμφανίζει την πλήρη κάρτα στη θέση της μίνι κάρτας, και αντίστροφα",
     rate_unit: "Μονάδα ταχύτητας",
@@ -2559,6 +2605,18 @@ const emptyBox = () => ({ id: null, device: null, operator: null, lineType: null
  * registries (hass.entities, hass.devices) and the list of the operators' entities that have a state, not on
  * hass.states, which Home Assistant replaces on every state change.
  */
+// The Speedtest.net integration's last test: download, upload (Mbit/s) and ping (ms) sensors, by translation key. Not part
+// of the box: the same for every box card.
+const SPEEDTEST_KEYS = ["download", "upload", "ping"];
+const discoverSpeedtest = (hass) => {
+  const found = {};
+  for (const e of Object.values(hass.entities || {})) {
+    if (e.platform !== "speedtestdotnet" || e.hidden || !e.entity_id.startsWith("sensor.") || !SPEEDTEST_KEYS.includes(e.translation_key)) continue;
+    if (hass.states[e.entity_id]) found[e.translation_key] = e.entity_id;
+  }
+  return found.download || found.upload ? found : null;
+};
+
 const discover = (hass, boxId) => {
   const found = registry(hass);
   const holder = hass.entities || hass.states;
@@ -3113,6 +3171,7 @@ class InternetBoxBase extends HTMLElement {
       ...box.trackers,
     ];
     for (const id of ids) sig.push(h.states[id]);
+    for (const id of Object.values(discoverSpeedtest(h) || {})) sig.push(h.states[id]);
     if (this._s(box.scalars.router)?.attributes?.uptime) sig.push(Math.floor(Date.now() / 60e3));
     return sig;
   }
@@ -3427,6 +3486,23 @@ class InternetBoxCard extends InternetBoxBase {
           this._config
         )}</span>`
       );
+    const sp = this._config.show_speedtest !== false ? discoverSpeedtest(this._hass) : null;
+    if (sp) {
+      const dl = this._s(sp.download);
+      const ul = this._s(sp.upload);
+      const ping = Number.parseFloat(this._s(sp.ping)?.state);
+      const parts = [
+        dl ? `↓ ${fmtRate(toBps(dl), this._hass, this._config)}` : "",
+        ul ? `↑ ${fmtRate(toBps(ul), this._hass, this._config)}` : "",
+        Number.isFinite(ping) ? `${Math.round(ping)} ms` : "",
+      ].filter(Boolean);
+      const when = (dl || ul)?.last_changed;
+      facts.push(
+        `<span class="clickable speedtest" role="button" tabindex="0" data-entity="${sp.download || sp.upload}" title="${esc(
+          `${this._t("speedtest")}${when ? ` · ${new Date(when).toLocaleString(numLang(this._hass, this._config))}` : ""}`
+        )}">${svgIcon(ICONS.speedtest)}${esc(parts.join(" · "))}</span>`
+      );
+    }
     // Without any rate or sync sensor, the IP address and the uptime are still shown.
     if (!rates && !facts.length) return "";
     const hist = !rates || this._config.show_history === false ? null : this._history([sc.rate_down, sc.rate_up].filter(Boolean));
@@ -3861,7 +3937,7 @@ class InternetBoxEditorBase extends HTMLElement {
 
 class InternetBoxCardEditor extends InternetBoxEditorBase {
   static get toggles() {
-    return ["show_network", "show_history", "show_system", "show_storage", "show_services"];
+    return ["show_network", "show_history", "show_speedtest", "show_system", "show_storage", "show_services"];
   }
 }
 

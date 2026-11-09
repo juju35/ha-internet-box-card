@@ -33,6 +33,7 @@ Entities are **discovered automatically**, you don't have to pick them one by on
 - Header icon of the kind of connection (fibre, xDSL, 4G / 5G, else a box) in the operator colour, with the operator logo as a badge; accent colour, website and admin links follow the detected operator
 - Picture and commercial name of the box model, detected automatically or set with the `model` option, and firmware version
 - Connection status and type (FTTH, xDSL…), public IPv4 (IPv6 on hover) and uptime. The status is the real link state when the integration exposes it (Livebox WAN status, SFR Box WAN / DSL / FTTH status, with "Syncing" while the DSL line trains and "Line fault" on a line defect), else the box's own tracker
+- The last speed test of the [Speedtest.net](https://www.home-assistant.io/integrations/speedtestdotnet/) integration (download, upload, ping) next to the uptime, found automatically
 - Download / upload rates, in bytes (kB/s, MB/s) or bits (kb/s, Mb/s), with their last 24 hours drawn behind each tile, on the full card and the mini card (recorder statistics)
 - Temperature gauges and fans speed
 - Storage: free space of the disk partitions and RAID status
@@ -163,6 +164,7 @@ language: fr
 | `show_history` | both | `true` | 24 h curve behind the download / upload tiles, from the recorder's 5-minute statistics (rate sensors with a `state_class`), on a time axis: the curve breaks where the recorder has no data |
 | `show_system` | both | `true` | Temperatures and fans (hottest temperature on the mini card) |
 | `show_storage` | full | `true` | Disk partitions and RAID status |
+| `show_speedtest` | full | `true` | The last Speedtest.net test in the network section (download, upload and ping, in the rate unit chosen; its time on hover), when that integration is set up |
 | `show_services` | full | `true` | Wi-Fi, missed calls and connected devices |
 | `temp_warning` | both | `75` | Temperature (in °C, whatever the sensor's unit) from which a temperature turns orange |
 | `temp_critical` | both | `90` | Temperature (in °C) from which a temperature turns red |

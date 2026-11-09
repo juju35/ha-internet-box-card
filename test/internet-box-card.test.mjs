@@ -895,3 +895,19 @@ test("Wi-Fi switch: turns the Wi-Fi on at once, off only after the confirmation 
   await new Promise((r) => setTimeout(r));
   assert.deepEqual(calls, []);
 });
+
+test("the last Speedtest.net test is a fact of the network section, hidden with show_speedtest: false", async () => {
+  const el = await mockCard({});
+  const add = (id, key, state, unit) => {
+    el._hass.entities[id] = { entity_id: id, platform: "speedtestdotnet", translation_key: key };
+    el._hass.states[id] = { entity_id: id, state, attributes: { unit_of_measurement: unit }, last_changed: "2026-11-09T06:00:00Z" };
+  };
+  add("sensor.speedtest_download", "download", "845.2", "Mbit/s");
+  add("sensor.speedtest_upload", "upload", "512", "Mbit/s");
+  add("sensor.speedtest_ping", "ping", "9.4", "ms");
+  const html = el._network({ scalars: { router: ROUTER_ID } });
+  assert.match(html, /class="clickable speedtest" role="button" tabindex="0" data-entity="sensor\.speedtest_download"/);
+  assert.match(html, /↓ 106 MB\/s · ↑ 64\.0 MB\/s · 9 ms/);
+  el._config = { ...el._config, show_speedtest: false };
+  assert.doesNotMatch(el._network({ scalars: { router: ROUTER_ID } }), /speedtest/);
+});

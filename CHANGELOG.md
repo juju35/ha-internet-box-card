@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.10.0 - 2026-11-09
+
+### Features
+- **Speed test**: the last test of the Speedtest.net integration (download, upload, ping) shows in the network section next to the uptime, found automatically, in the rate unit chosen; a click opens its download sensor. `show_speedtest: false` hides it.
+
 ## 2.9.1 - 2026-11-09
 
 ### Fixes
