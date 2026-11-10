@@ -242,3 +242,14 @@ test("the full and mini cards render the new boxes: external IP, uptime sensor, 
   delete swisscom.devices.box;
   assert.match(renderWith(InternetBoxCard, swisscom), /Internet-Box/);
 });
+
+test("the generic pictures take the provider's colour, the French operators' drawings keep their own", () => {
+  const { modelPic, OPERATORS, IMG_BOX } = load("internet-box-card.js", ["modelPic", "OPERATORS", "IMG_BOX"]);
+  const fritz = OPERATORS.fritz.models.find((m) => m.id === "fritz_box");
+  const tinted = decodeURIComponent(modelPic(fritz, "#1f6fd1"));
+  assert.match(tinted, /#1f6fd1/);
+  assert.equal(modelPic(fritz, "#1f6fd1"), modelPic(fritz, "#1f6fd1"));
+  assert.equal(modelPic(fritz), IMG_BOX.generic_router);
+  const livebox = OPERATORS.livebox.models.find((m) => m.id === "livebox_7");
+  assert.equal(modelPic(livebox, "#ff7900"), IMG_BOX.livebox_7);
+});

@@ -408,9 +408,11 @@ const bboxFibreSvg = () => {
 };
 
 // Generic form factors, shared by the boxes of the other integrations (FRITZ!Box, Vodafone Station, Swisscom,
-// Sagemcom F@st, Huawei LTE, ZTE, Starlink): neutral drawings of a kind of device, not of a given product.
+// Sagemcom F@st, Huawei LTE, ZTE, Starlink): neutral drawings of a kind of device, not of a given product. Each takes
+// an optional accent colour (the provider's), used for its status lights and a thin trim; without one, the lights
+// keep the neutral green / blue of the README pictures.
 // Wide desktop router with two antennas at the back.
-const genRouterSvg = () => {
+const genRouterSvg = ({ accent } = {}) => {
   const w = 176;
   const h = 34;
   const x = (300 - w) / 2;
@@ -421,11 +423,12 @@ const genRouterSvg = () => {
   for (const ax of [x + 26, x + w - 26]) s += `<rect x="${ax - 4}" y="${top - 82}" width="8" height="86" rx="4" fill="url(#grta)"/>`;
   s += `<rect x="${x}" y="${top}" width="${w}" height="${h}" rx="10" fill="url(#grtb)"/>`;
   s += `<rect x="${x + 6}" y="${top + 3}" width="${w - 12}" height="3" rx="1.5" fill="#fff" opacity=".08"/>`;
-  for (let i = 0; i < 5; i++) s += `<circle cx="${x + 30 + i * 13}" cy="${top + 21}" r="2.4" fill="${i < 4 ? "#3ad64f" : "#4f8fe6"}"/>`;
+  if (accent) s += `<rect x="${x + 12}" y="${bottom - 4}" width="${w - 24}" height="2" rx="1" fill="${accent}"/>`;
+  for (let i = 0; i < 5; i++) s += `<circle cx="${x + 30 + i * 13}" cy="${top + 21}" r="2.4" fill="${accent || (i < 4 ? "#3ad64f" : "#4f8fe6")}"/>`;
   return svgDoc(300, 160, defs, s);
 };
 // Low rounded hub without antennas, with a status light bar.
-const genHubSvg = () => {
+const genHubSvg = ({ accent } = {}) => {
   const w = 150;
   const h = 46;
   const x = (300 - w) / 2;
@@ -435,11 +438,11 @@ const genHubSvg = () => {
   let s = `<ellipse cx="150" cy="${bottom + 9}" rx="${Math.round(w * 0.5)}" ry="7" opacity=".25"/>`;
   s += `<rect x="${x}" y="${top}" width="${w}" height="${h}" rx="${h / 2}" fill="url(#ghbb)" stroke="#000" stroke-opacity=".15"/>`;
   s += `<rect x="${x + 14}" y="${top + 5}" width="${w - 28}" height="4" rx="2" fill="#fff" opacity=".7"/>`;
-  s += `<rect x="${150 - 24}" y="${top + h - 15}" width="48" height="5" rx="2.5" fill="#3ad64f"/>`;
+  s += `<rect x="${150 - 24}" y="${top + h - 15}" width="48" height="5" rx="2.5" fill="${accent || "#3ad64f"}"/>`;
   return svgDoc(300, 150, defs, s);
 };
 // Slim upright tower on a foot, with a column of status lights.
-const genTowerSvg = () => {
+const genTowerSvg = ({ accent } = {}) => {
   const w = 64;
   const h = 132;
   const x = (300 - w) / 2;
@@ -450,11 +453,12 @@ const genTowerSvg = () => {
   s += `<rect x="${150 - 30}" y="${bottom + 2}" width="60" height="8" rx="4" fill="#1a1b1d"/>`;
   s += `<rect x="${x}" y="${top}" width="${w}" height="${h}" rx="14" fill="url(#gtwb)"/>`;
   s += `<rect x="${x + 6}" y="${top + 12}" width="4" height="${h - 24}" rx="2" fill="#fff" opacity=".06"/>`;
-  for (let i = 0; i < 4; i++) s += `<circle cx="150" cy="${top + 30 + i * 16}" r="2.6" fill="${i ? "#3ad64f" : "#4f8fe6"}"/>`;
+  if (accent) s += `<rect x="${150 - 30}" y="${bottom + 2}" width="60" height="2" rx="1" fill="${accent}"/>`;
+  for (let i = 0; i < 4; i++) s += `<circle cx="150" cy="${top + 30 + i * 16}" r="2.6" fill="${accent || (i ? "#3ad64f" : "#4f8fe6")}"/>`;
   return svgDoc(300, 172, defs, s);
 };
 // Compact 4G / 5G cube with signal bars on its front.
-const genMobileSvg = () => {
+const genMobileSvg = ({ accent } = {}) => {
   const w = 104;
   const h = 120;
   const x = (300 - w) / 2;
@@ -465,20 +469,22 @@ const genMobileSvg = () => {
   s += `<rect x="${x}" y="${top}" width="${w}" height="${h}" rx="18" fill="url(#gmbb)" stroke="#000" stroke-opacity=".15"/>`;
   for (let i = 0; i < 4; i++) {
     const bh = 8 + i * 7;
-    s += `<rect x="${150 - 22 + i * 12}" y="${top + 62 - bh}" width="8" height="${bh}" rx="2" fill="${i < 3 ? "#2f7fe0" : "#b8bcc4"}"/>`;
+    s += `<rect x="${150 - 22 + i * 12}" y="${top + 62 - bh}" width="8" height="${bh}" rx="2" fill="${i < 3 ? accent || "#2f7fe0" : "#b8bcc4"}"/>`;
   }
-  s += `<rect x="${150 - 22}" y="${top + 84}" width="44" height="4" rx="2" fill="#3ad64f"/>`;
+  s += `<rect x="${150 - 22}" y="${top + 84}" width="44" height="4" rx="2" fill="${accent || "#3ad64f"}"/>`;
   return svgDoc(300, 168, defs, s);
 };
 // Flat satellite dish on a mast.
-const genDishSvg = () => {
+const genDishSvg = ({ accent } = {}) => {
   const defs = grad("gdsb", [[0, "#ffffff"], [1, "#cfd3d9"]], 1, 1);
   let s = `<ellipse cx="150" cy="164" rx="40" ry="6" opacity=".28"/>`;
   s += `<rect x="146" y="96" width="8" height="66" rx="3" fill="#8a8f98"/><rect x="128" y="156" width="44" height="7" rx="3" fill="#6b7078"/>`;
+  if (accent) s += `<circle cx="150" cy="148" r="2.4" fill="${accent}"/>`;
   s += `<g transform="rotate(-18 150 66)"><rect x="96" y="20" width="108" height="92" rx="16" fill="url(#gdsb)" stroke="#000" stroke-opacity=".18"/>`;
   s += `<rect x="104" y="28" width="92" height="76" rx="11" fill="none" stroke="#000" stroke-opacity=".07"/></g>`;
   return svgDoc(300, 176, defs, s);
 };
+const GENERIC = { generic_router: genRouterSvg, generic_hub: genHubSvg, generic_tower: genTowerSvg, generic_mobile: genMobileSvg, generic_dish: genDishSvg };
 
 const svgUri = (svg) => `data:image/svg+xml,${encodeURIComponent(svg)}`;
 // Pictures of the box models, by picture id: a model's `pic`, else its own id (Freebox, Livebox, SFR Box, Bbox drawings,
@@ -506,8 +512,17 @@ const IMG_BOX = {
   generic_mobile: svgUri(genMobileSvg()),
   generic_dish: svgUri(genDishSvg()),
 };
-/** Picture of a model: its shared `pic` drawing, else the drawing named after it. */
-const modelPic = (m) => (m ? IMG_BOX[m.pic ?? m.id] : undefined);
+/** Picture of a model: its shared `pic` drawing, else the drawing named after it. A generic form factor is drawn in
+ *  the provider's accent colour when one is given (status lights and trim), each variant built once. */
+const _tinted = new Map();
+const modelPic = (m, accent) => {
+  if (!m) return undefined;
+  const pic = m.pic ?? m.id;
+  if (!accent || !GENERIC[pic]) return IMG_BOX[pic];
+  const key = `${pic}|${accent}`;
+  if (!_tinted.has(key)) _tinted.set(key, svgUri(GENERIC[pic]({ accent })));
+  return _tinted.get(key);
+};
 const IMG_LOGO = "__IMG_LOGO__";
 const IMG_ORANGE = "__IMG_ORANGE__";
 const IMG_SFR = "__IMG_SFR__";
@@ -3616,7 +3631,8 @@ class InternetBoxBase extends HTMLElement {
       op.logo ? `<img class="logo" src="${op.logo}" alt="${esc(op.name)}">` : ""
     }${line}</a>`;
     // The box picture only when the operator has a matching model drawing.
-    const boxImg = modelPic(model) || null;
+    // The generic form factors take the provider's colour; the French operators' drawings keep their own.
+    const boxImg = modelPic(model, op.color) || null;
     return `
       <div class="header">
         ${c.show_logo !== false ? brand : ""}

@@ -14,7 +14,7 @@
   - **Starlink** (`starlink`): throughput, connectivity, uptime (last restart), reboot, with a satellite connection icon.
 - **Bbox**: the uptime sensor is shown, and the `custom_bbox` fork (for the firmwares the built-in integration can no longer reach) is documented; it creates the same sensors.
 - Public IP and uptime are also read from the integration's own sensors (external IP, uptime as a boot date or a duration), not only from the box tracker.
-- The boxes of the new integrations are drawn with generic form factors (router, hub, tower, 4G / 5G box, dish), with the device's own model name; a provider logo is embedded when its file is in `images/`.
+- The boxes of the new integrations are drawn with generic form factors (router, hub, tower, 4G / 5G box, dish), with the device's own model name, their status lights and trim in the provider's colour; the providers' logos are embedded.
 
 ### Fixes
 - A restart button that has a translation key of its own (a reconnect button) is no longer taken for the box reboot.
