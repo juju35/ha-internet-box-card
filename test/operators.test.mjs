@@ -253,3 +253,24 @@ test("the generic pictures take the provider's colour, the French operators' dra
   const livebox = OPERATORS.livebox.models.find((m) => m.id === "livebox_7");
   assert.equal(modelPic(livebox, "#ff7900"), IMG_BOX.livebox_7);
 });
+
+test("Vodafone: the active connection gives the status pill; the title's own device name is not repeated", () => {
+  const hass = hassOf("vodafone_station", { name: "Vodafone Station", model: "SHG3060" }, [
+    ["sensor.vf_down", "down_stream", "900", { unit_of_measurement: "kB/s", device_class: "data_rate" }],
+    ["sensor.vf_link", "active_connection", "internet_key", { device_class: "enum" }],
+  ]);
+  const html = renderWith(InternetBoxCard, hass);
+  assert.match(html, /chip status clickable ok[^>]*data-entity="sensor\.vf_link"/);
+  assert.match(html, /Online · INTERNET KEY/);
+  assert.equal(lineOf("INTERNET KEY"), "mobile");
+  // Unknown line: no pill rather than a guess.
+  hass.states["sensor.vf_link"].state = "unknown";
+  assert.doesNotMatch(renderWith(InternetBoxCard, hass), /chip status/);
+
+  const hw = hassOf("huawei_lte", { name: "B535-232", model: "B535-232", sw_version: "11.0.5.3" }, [
+    ["sensor.hw_down", "current_download_rate", "52000", { unit_of_measurement: "B/s", device_class: "data_rate" }],
+  ]);
+  const sub = renderWith(InternetBoxCard, hw).match(/<div class="parts">(.*?)<\/div>/)[1];
+  assert.doesNotMatch(sub, /B535-232/);
+  assert.match(sub, /11\.0\.5\.3/);
+});

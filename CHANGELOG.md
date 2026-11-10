@@ -16,7 +16,10 @@
 - Public IP and uptime are also read from the integration's own sensors (external IP, uptime as a boot date or a duration), not only from the box tracker.
 - The boxes of the new integrations are drawn with generic form factors (router, hub, tower, 4G / 5G box, dish), with the device's own model name, their status lights and trim in the provider's colour; the providers' logos are embedded.
 
+- Vodafone Station: the status pill shows the active connection (xDSL, fibre, Internet Key) while there is one.
+
 ### Fixes
+- The device name under the title is left out when the title already contains it (Huawei LTE "B535-232").
 - A restart button that has a translation key of its own (a reconnect button) is no longer taken for the box reboot.
 - The Wi-Fi switch is shown only when the Wi-Fi entity is a switch.
 

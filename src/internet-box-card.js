@@ -2330,6 +2330,7 @@ const OPERATORS = {
     ],
     keys: { rate_down: "down_stream", rate_up: "up_stream", ip: "external_ipv4", ip6: "external_ipv6", infra: "active_connection", wifi: "main" },
     bootClass: true,
+    infraLink: true,
   },
   // Swisscom Internet-Box (swisscom, built in): presence detection only, a device tracker per connected device and
   // no entity for the box itself. The box is the integration: its connected devices are counted.
@@ -2621,7 +2622,7 @@ const lineOf = (type, model) => {
     ? "fibre"
     : /dsl/.test(t)
       ? "dsl"
-      : /\b(4g|5g|lte|mobile|cell)/.test(t)
+      : /\b(4g|5g|lte|mobile|cell|internet.?key)/.test(t)
         ? "mobile"
         : /satellite|starlink/.test(t)
           ? "satellite"
@@ -3558,7 +3559,7 @@ class InternetBoxBase extends HTMLElement {
       (infra && !noValue(infra) ? infra.state : "") ||
       box.lineType ||
       box.operator?.line;
-    return type ? String(type).toUpperCase() : "";
+    return type ? String(type).replace(/_/g, " ").toUpperCase() : "";
   }
 
   // State of the internet link: { entity, cls, key, type }, or null when the box exposes nothing about it. Read from
@@ -3578,6 +3579,11 @@ class InternetBoxBase extends HTMLElement {
       if (line && !noValue(line) && line.state !== "no_defect") return { entity: line.entity_id, cls: "crit", key: "line_fault", type };
       return { entity: real.entity_id, cls: "crit", key: "offline", type };
     }
+    // An integration whose only link entity names the active line (Vodafone Station `active_connection`: dsl, fiber,
+    // internet_key) is online while it names one; without one (unknown) the card says nothing rather than guess.
+    const infra = this._s(sc.infra);
+    if (!sc.router && box.operator?.infraLink && infra && !noValue(infra))
+      return { entity: infra.entity_id, cls: "ok", key: "online", type };
     const router = this._s(sc.router);
     const fallback = router || this._s(sc.wan) || this._s(sc.line);
     if (!fallback || noValue(fallback)) return fallback ? { entity: fallback.entity_id, cls: "off", key: "unavailable", type } : null;
@@ -3623,7 +3629,8 @@ class InternetBoxBase extends HTMLElement {
     const devName = deviceName(box.device);
     const name = c.title || model?.name || devName || op.name;
     const adminUrl = /^https?:\/\//i.test(c.admin_url || "") ? c.admin_url : op.admin || box.device?.configuration_url || "";
-    const sub = [devName && devName !== name ? devName : null, firmware ? `${this._t("firmware")} ${firmware}` : null].filter(Boolean);
+    // The device name is left out when the title already contains it ("Huawei B535-232" over "B535-232").
+    const sub = [devName && !name.toLowerCase().includes(devName.toLowerCase()) ? devName : null, firmware ? `${this._t("firmware")} ${firmware}` : null].filter(Boolean);
     // Icon of the kind of connection, tinted with the operator colour, with the operator logo (every supported
     // operator has one) as a badge, opening its website.
     const line = lineIcon(lineOf(this._linkType(box), model?.name));
