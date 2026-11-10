@@ -2388,7 +2388,7 @@ const BRANDS = {
   delta: { name: "DELTA Fiber", color: "#008ecf", website: "https://www.delta.nl", admin: null, logo: "__IMG_FILE:delta.svg__" },
   telekom: { name: "Telekom", color: "#e20074", website: "https://www.telekom.de", admin: "http://speedport.ip", logo: "__IMG_FILE:telekom.svg__" },
   bt: { name: "BT", color: "#5514b4", website: "https://www.bt.com", admin: "http://192.168.1.254", logo: "__IMG_FILE:bt.svg__" },
-  eir: { name: "eir", color: "#b5006b", website: "https://www.eir.ie", admin: null, logo: "__IMG_FILE:eir.svg__" },
+  eir: { name: "eir", color: "#e40046", website: "https://www.eir.ie", admin: null, logo: "__IMG_FILE:eir.svg__" },
   salt: { name: "Salt", color: "#c8102e", website: "https://www.salt.ch", admin: null, logo: "__IMG_FILE:salt.svg__" },
   masmovil: { name: "MásMóvil", color: "#e5bd00", website: "https://www.masmovil.es", admin: null, logo: "__IMG_FILE:masmovil.svg__" },
   telia: { name: "Telia", color: "#990ae3", website: "https://www.telia.se", admin: null, logo: "__IMG_FILE:telia.svg__" },
