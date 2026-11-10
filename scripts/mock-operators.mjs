@@ -1,6 +1,8 @@
 // Mock Home Assistant data for the other operators, shaped like what each integration really exposes, used to
 // render the per-operator README screenshots. Each operator gives { states, entities, devices, config }.
 
+import { NOW } from "./mock-states.mjs";
+
 const st = (state, attributes = {}) => ({ state, attributes });
 
 // Registry-based integrations: [entity id, device, translation key, state, attributes, name].
@@ -102,7 +104,8 @@ const CLIENTS = [
   ["tablet", "not_home"],
 ];
 const RESTART = { device_class: "restart" };
-const BOOT = new Date(Date.UTC(2026, 9, 28, 6, 12)).toISOString();
+// Uptime sensors (boot dates) a few days before the fixed screenshot clock: 4 d 5 h 48 min.
+const BOOT = new Date(Date.parse(NOW) - (4 * 86400 + 5 * 3600 + 48 * 60) * 1000).toISOString();
 
 // FRITZ!Box, fritz integration: traffic rates (kB/s), WAN connection, external IP, uptime, CPU temperature, main
 // Wi-Fi switch, reboot button.
