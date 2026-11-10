@@ -1,5 +1,10 @@
 # Changelog
 
+## 3.1.0 - 2026-11-10
+
+### Features
+- The header icon takes the colour of the internet link state, like the status pill: green online, orange while the DSL line syncs, red offline or on a line fault, grey when unavailable. It keeps the operator colour when the box exposes no link state. On both the full and the mini card.
+
 ## 3.0.1 - 2026-11-10
 
 ### Fixes

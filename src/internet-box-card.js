@@ -3122,10 +3122,14 @@ const BASE_STYLE = `
   .chip.status .txt { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
   .titles .chips { margin-top: 4px; }
   .logo-link { position: relative; display: flex; align-items: center; justify-content: center; flex: none; align-self: flex-start;
-               width: 40px; height: 40px; border-radius: 50%; background: color-mix(in srgb, var(--ibc-red) 16%, transparent); }
-  .logo-link .icon.type { width: 24px; height: 24px; fill: var(--ibc-accent); stroke: var(--ibc-accent); stroke-width: 0; }
+               width: 40px; height: 40px; border-radius: 50%; background: color-mix(in srgb, var(--ibc-tint) 16%, transparent);
+               --ibc-tint: var(--c, var(--ibc-red)); --ibc-icon: color-mix(in srgb, var(--ibc-tint) 60%, var(--primary-text-color));
+               transition: background-color .3s ease; }
+  /* The pill takes the colour of the link state (.ok / .warn / .crit / .off set --c), the operator's without one. */
+  .logo-link .icon.type { width: 24px; height: 24px; fill: var(--ibc-icon); stroke: var(--ibc-icon); stroke-width: 0; transition: fill .3s ease, stroke .3s ease; }
   .logo-link .icon.type .ln { fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-  .logo-link .icon.type .led { fill: color-mix(in srgb, var(--ibc-red) 16%, var(--card-background-color, #fff)); }
+  .logo-link .icon.type .led { fill: color-mix(in srgb, var(--ibc-tint) 16%, var(--card-background-color, #fff)); }
+  @media (prefers-reduced-motion: reduce) { .logo-link, .logo-link .icon.type { transition: none; } }
   .logo { position: absolute; right: -4px; bottom: -4px; display: block; width: 18px; height: 18px; object-fit: contain; border-radius: 5px; padding: 1px;
           box-sizing: border-box; background: #fff;
           box-shadow: 0 0 0 1px var(--divider-color, rgba(0,0,0,.12)), 0 0 0 3px var(--card-background-color, #fff); }
@@ -3634,10 +3638,12 @@ class InternetBoxBase extends HTMLElement {
     const adminUrl = /^https?:\/\//i.test(c.admin_url || "") ? c.admin_url : op.admin || box.device?.configuration_url || "";
     // The device name is left out when the title already contains it ("Huawei B535-232" over "B535-232").
     const sub = [devName && !name.toLowerCase().includes(devName.toLowerCase()) ? devName : null, firmware ? `${this._t("firmware")} ${firmware}` : null].filter(Boolean);
-    // Icon of the kind of connection, tinted with the operator colour, with the operator logo (every supported
+    // Icon of the kind of connection, tinted with the state of the internet link (online, syncing, offline,
+    // unavailable) — the operator colour when the box exposes no link state — with the operator logo (every supported
     // operator has one) as a badge, opening its website.
     const line = lineIcon(lineOf(this._linkType(box), model?.name));
-    const brand = `<a class="logo-link" href="${esc(op.website)}" target="_blank" rel="noopener noreferrer" title="${esc(op.name)}">${
+    const state = this._link(box)?.cls;
+    const brand = `<a class="logo-link${state ? ` ${state}` : ""}" href="${esc(op.website)}" target="_blank" rel="noopener noreferrer" title="${esc(op.name)}">${
       op.logo ? `<img class="logo" src="${op.logo}" alt="${esc(op.name)}">` : ""
     }${line}</a>`;
     // The box picture only when the operator has a matching model drawing.
