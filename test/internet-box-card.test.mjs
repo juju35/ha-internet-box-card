@@ -913,3 +913,19 @@ test("the last Speedtest.net test is a fact of the network section, hidden with 
   el._config = { ...el._config, show_speedtest: false };
   assert.doesNotMatch(el._network({ scalars: { router: ROUTER_ID } }), /speedtest/);
 });
+
+// A device of another integration linked to the router (FRITZ!Box Tools links network clients, a NAS merged by its
+// MAC address among them, to the box) is no child of the box: its entities of the box's platform are left out.
+test("a device of another config entry linked to the router is not a child of the box", async () => {
+  const mock = await import("../scripts/mock-states.mjs");
+  const hass = { states: structuredClone(mock.states), entities: structuredClone(mock.entities), devices: structuredClone(mock.devices), language: "en" };
+  const router = Object.keys(hass.devices).find((id) => !hass.devices[id].via_device_id);
+  const platform = Object.values(hass.entities).find((e) => e.device_id === router).platform;
+  hass.devices.nas = { id: "nas", name: "NAS", via_device_id: router, config_entries: ["entry_other"] };
+  const id = "sensor.nas_free_space";
+  hass.entities[id] = { entity_id: id, platform, device_id: "nas", translation_key: "partition_free_space" };
+  hass.states[id] = { entity_id: id, state: "10", attributes: { friendly_name: "NAS free space", unit_of_measurement: "%" } };
+  const box = discover(hass, router);
+  assert.ok(box.partitions.length >= 1, "the box disk partition is still found");
+  assert.ok(!box.partitions.some((p) => p.id === id));
+});

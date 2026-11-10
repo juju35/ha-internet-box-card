@@ -2938,9 +2938,12 @@ const discover = (hass, boxId) => {
         const domain = id.split(".")[0];
         const d = hass.devices[e.device_id];
         const own = e.device_id === router;
-        // Disks are child devices of the router; client trackers share its config entry.
-        const child = d && d.via_device_id === router;
         const sameEntry = d && (d.config_entries || []).some((c) => entryIds.has(c));
+        // Disks are child devices of the router, of its own config entry; client trackers share that entry too.
+        // Another integration's device linked to the router (a FRITZ!Box client merged with a NAS by its MAC
+        // address, juju35/ha-nas-card#74) is not a child: its entities are left out. Without config entries in
+        // the registry (old frontend, tests), the link alone decides.
+        const child = d && d.via_device_id === router && (sameEntry || !entryIds.size || !d.config_entries?.length);
         if (e.platform !== op.platform) continue;
         if (domain === "device_tracker") {
           if (own) box.scalars.router = id;

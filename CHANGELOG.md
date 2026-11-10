@@ -1,5 +1,10 @@
 # Changelog
 
+## 3.0.1 - 2026-11-10
+
+### Fixes
+- A device of another integration linked to the box in the device registry is no longer taken for one of the box's own child devices (disks): FRITZ!Box Tools links its network clients to the box or to the mesh repeater they go through, a NAS or a printer merged in by its MAC address among them. Only the children of the box's own config entry are read.
+
 ## 3.0.0 - 2026-11-10
 
 ### Breaking changes
