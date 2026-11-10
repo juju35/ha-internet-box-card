@@ -9,10 +9,29 @@
 [![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-FFDD00?logo=buymeacoffee&logoColor=black)](https://buymeacoffee.com/julienstep9)
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/juju35/ha-internet-box-card/main/images/free.svg" alt="Free" height="48">&nbsp;&nbsp;&nbsp;
-  <img src="https://raw.githubusercontent.com/juju35/ha-internet-box-card/main/images/orange.svg" alt="Orange" height="48">&nbsp;&nbsp;&nbsp;
-  <img src="https://raw.githubusercontent.com/juju35/ha-internet-box-card/main/images/sfr.svg" alt="SFR" height="48">&nbsp;&nbsp;&nbsp;
-  <img src="https://raw.githubusercontent.com/juju35/ha-internet-box-card/main/images/bbox.svg" alt="Bouygues Telecom" height="48">
+  <img src="https://raw.githubusercontent.com/juju35/ha-internet-box-card/main/images/free.svg" alt="Free" height="40">&nbsp;&nbsp;&nbsp;
+  <img src="https://raw.githubusercontent.com/juju35/ha-internet-box-card/main/images/orange.svg" alt="Orange" height="40">&nbsp;&nbsp;&nbsp;
+  <img src="https://raw.githubusercontent.com/juju35/ha-internet-box-card/main/images/sfr.svg" alt="SFR" height="40">&nbsp;&nbsp;&nbsp;
+  <img src="https://raw.githubusercontent.com/juju35/ha-internet-box-card/main/images/bbox.svg" alt="Bouygues Telecom" height="40"><br><br>
+  <img src="https://raw.githubusercontent.com/juju35/ha-internet-box-card/main/images/fritz.svg" alt="FRITZ!" height="40">&nbsp;&nbsp;&nbsp;
+  <img src="https://raw.githubusercontent.com/juju35/ha-internet-box-card/main/images/vodafone.svg" alt="Vodafone" height="40">&nbsp;&nbsp;&nbsp;
+  <img src="https://raw.githubusercontent.com/juju35/ha-internet-box-card/main/images/telekom.svg" alt="Telekom" height="40">&nbsp;&nbsp;&nbsp;
+  <img src="https://raw.githubusercontent.com/juju35/ha-internet-box-card/main/images/swisscom.svg" alt="Swisscom" height="40">&nbsp;&nbsp;&nbsp;
+  <img src="https://raw.githubusercontent.com/juju35/ha-internet-box-card/main/images/salt.svg" alt="Salt" height="40"><br><br>
+  <img src="https://raw.githubusercontent.com/juju35/ha-internet-box-card/main/images/kpn.svg" alt="KPN" height="40">&nbsp;&nbsp;&nbsp;
+  <img src="https://raw.githubusercontent.com/juju35/ha-internet-box-card/main/images/delta.svg" alt="DELTA Fiber" height="40">&nbsp;&nbsp;&nbsp;
+  <img src="https://raw.githubusercontent.com/juju35/ha-internet-box-card/main/images/proximus.svg" alt="Proximus" height="40">&nbsp;&nbsp;&nbsp;
+  <img src="https://raw.githubusercontent.com/juju35/ha-internet-box-card/main/images/bt.svg" alt="BT" height="40">&nbsp;&nbsp;&nbsp;
+  <img src="https://raw.githubusercontent.com/juju35/ha-internet-box-card/main/images/eir.svg" alt="eir" height="40"><br><br>
+  <img src="https://raw.githubusercontent.com/juju35/ha-internet-box-card/main/images/masmovil.svg" alt="MásMóvil" height="40">&nbsp;&nbsp;&nbsp;
+  <img src="https://raw.githubusercontent.com/juju35/ha-internet-box-card/main/images/telia.svg" alt="Telia" height="40">&nbsp;&nbsp;&nbsp;
+  <img src="https://raw.githubusercontent.com/juju35/ha-internet-box-card/main/images/tdc.svg" alt="TDC" height="40">&nbsp;&nbsp;&nbsp;
+  <img src="https://raw.githubusercontent.com/juju35/ha-internet-box-card/main/images/bell.svg" alt="Bell" height="40">&nbsp;&nbsp;&nbsp;
+  <img src="https://raw.githubusercontent.com/juju35/ha-internet-box-card/main/images/optus.svg" alt="Optus" height="40"><br><br>
+  <img src="https://raw.githubusercontent.com/juju35/ha-internet-box-card/main/images/sagemcom.svg" alt="Sagemcom" height="40">&nbsp;&nbsp;&nbsp;
+  <img src="https://raw.githubusercontent.com/juju35/ha-internet-box-card/main/images/huawei.svg" alt="Huawei" height="40">&nbsp;&nbsp;&nbsp;
+  <img src="https://raw.githubusercontent.com/juju35/ha-internet-box-card/main/images/zte.svg" alt="ZTE" height="40">&nbsp;&nbsp;&nbsp;
+  <img src="https://raw.githubusercontent.com/juju35/ha-internet-box-card/main/images/starlink.svg" alt="Starlink" height="40">
 </p>
 
 Lovelace cards for Home Assistant to monitor an internet box at a glance: download / upload rates, connection, temperatures, fans, storage, Wi-Fi, missed calls and connected devices. They work with the **Freebox**, **Livebox** (Orange, KPN), **SFR Box**, **Bbox** (Bouygues Telecom), **FRITZ!Box**, **Vodafone Station**, **Swisscom Internet-Box**, **Sagemcom F@st** (Proximus, KPN, Telekom, BT, Bell…), **Huawei LTE**, **ZTE Hyperbox** and **Starlink** integrations ([by country](#supported-integrations)); each section shows only what the box's integration exposes.
