@@ -1,5 +1,10 @@
 # Changelog
 
+## 3.0.0 - 2026-11-10
+
+### Breaking changes
+- The `freebox-card.js` copy of the bundle is no longer built nor attached to the releases. A dashboard resource that still loads `freebox-card.js` must point to `internet-box-card.js`. The former card types `custom:freebox-card` and `custom:freebox-mini-card` stay registered.
+
 ## 2.11.0 - 2026-11-10
 
 ### Features

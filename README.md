@@ -167,7 +167,7 @@ Or manually:
 
 ### Upgrading from Freebox Card
 
-The cards were called **Freebox Card** / **Freebox Mini Card** before version 2.0.0. The former types `custom:freebox-card` and `custom:freebox-mini-card` stay registered, so existing dashboards keep working. After updating, check that the dashboard resource points to `internet-box-card.js` (releases still attach a `freebox-card.js` copy for manual installs).
+The cards were called **Freebox Card** / **Freebox Mini Card** before version 2.0.0. The former types `custom:freebox-card` and `custom:freebox-mini-card` stay registered, so existing dashboards keep working. After updating, check that the dashboard resource points to `internet-box-card.js`: since 3.0.0 the releases no longer attach the former `freebox-card.js` copy.
 
 ## Configuration
 
@@ -420,7 +420,7 @@ npm run screenshots  # renders the cards with mock data (scripts/mock-states.mjs
 
 1. Bump `version` in `package.json`
 2. Add a `## <version>` section at the top of [CHANGELOG.md](https://github.com/juju35/ha-internet-box-card/blob/main/CHANGELOG.md)
-3. Push to `main`: the **Release** workflow builds the card, creates the tag and the GitHub release with the changelog section as notes, and attaches `internet-box-card.js` (and its `freebox-card.js` copy)
+3. Push to `main`: the **Release** workflow builds the card, creates the tag and the GitHub release with the changelog section as notes, and attaches `internet-box-card.js` with its translation files
 
 ## Translations
 
