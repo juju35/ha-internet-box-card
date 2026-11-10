@@ -2385,7 +2385,7 @@ const OPERATORS = {
 const BRANDS = {
   kpn: { name: "KPN", color: "#009900", website: "https://www.kpn.com", admin: "http://192.168.2.254", logo: "__IMG_FILE:kpn.svg__" },
   proximus: { name: "Proximus", color: "#5c2d91", website: "https://www.proximus.be", admin: "http://192.168.1.1", logo: "__IMG_FILE:proximus.svg__" },
-  delta: { name: "DELTA Fiber", color: "#e4002b", website: "https://www.delta.nl", admin: null, logo: "__IMG_FILE:delta.svg__" },
+  delta: { name: "DELTA Fiber", color: "#008ecf", website: "https://www.delta.nl", admin: null, logo: "__IMG_FILE:delta.svg__" },
   telekom: { name: "Telekom", color: "#e20074", website: "https://www.telekom.de", admin: "http://speedport.ip", logo: "__IMG_FILE:telekom.svg__" },
   bt: { name: "BT", color: "#5514b4", website: "https://www.bt.com", admin: "http://192.168.1.254", logo: "__IMG_FILE:bt.svg__" },
   eir: { name: "eir", color: "#b5006b", website: "https://www.eir.ie", admin: null, logo: "__IMG_FILE:eir.svg__" },
