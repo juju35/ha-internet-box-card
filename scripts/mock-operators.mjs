@@ -83,4 +83,138 @@ const bbox = {
   config: { model: "bbox_fibre" },
 };
 
-export const operators = { livebox: { ...livebox, config: {} }, sfr: { ...sfr, config: {} }, bbox };
+// One registry-based box per integration below: [entity id, translation key, state, attributes, name] on its device.
+const single = (platform, device, rows, clients = []) => {
+  const id = `dev_${platform}`;
+  const entry = `entry_${platform}`;
+  return build(
+    platform,
+    entry,
+    { [id]: { id, config_entries: [entry], ...device } },
+    rows.map(([eid, key, state, attributes, name]) => [eid, id, key, state, attributes, name]),
+    clients
+  );
+};
+const CLIENTS = [
+  ["tv", "home"],
+  ["laptop", "home"],
+  ["phone", "home"],
+  ["tablet", "not_home"],
+];
+const RESTART = { device_class: "restart" };
+const BOOT = new Date(Date.UTC(2026, 9, 28, 6, 12)).toISOString();
+
+// FRITZ!Box, fritz integration: traffic rates (kB/s), WAN connection, external IP, uptime, CPU temperature, main
+// Wi-Fi switch, reboot button.
+const fritz = single(
+  "fritz",
+  { name: "FRITZ!Box 7590 AX", model: "FRITZ!Box 7590 AX", sw_version: "8.02" },
+  [
+    ["sensor.fritz_box_download_throughput", "kb_s_received", "4210", { unit_of_measurement: "kB/s", device_class: "data_rate", state_class: "measurement" }, "Download throughput"],
+    ["sensor.fritz_box_upload_throughput", "kb_s_sent", "612", { unit_of_measurement: "kB/s", device_class: "data_rate", state_class: "measurement" }, "Upload throughput"],
+    ["binary_sensor.fritz_box_connection", "is_connected", "on", { device_class: "connectivity" }, "Connection"],
+    ["sensor.fritz_box_external_ip", "external_ip", "203.0.113.24", {}, "External IP"],
+    ["sensor.fritz_box_last_restart", null, BOOT, { device_class: "uptime" }, "Last restart"],
+    ["sensor.fritz_box_cpu_temperature", "cpu_temperature", "58", { unit_of_measurement: "°C", device_class: "temperature" }, "CPU temperature"],
+    ["switch.fritz_box_wi_fi_main_2_4ghz", "wi_fi_main_2_4ghz", "on", {}, "Wi-Fi main 2.4Ghz"],
+    ["button.fritz_box_restart", null, "unknown", RESTART, "Restart"],
+  ],
+  CLIENTS
+);
+
+// Vodafone Station, vodafone_station integration: rates (kB/s), external IP, active connection, uptime, main Wi-Fi.
+const vodafone = single(
+  "vodafone_station",
+  { name: "Vodafone Station", model: "SHG3060", sw_version: "XS6_4.2.00.10" },
+  [
+    ["sensor.vodafone_station_download_stream", "down_stream", "2860", { unit_of_measurement: "kB/s", device_class: "data_rate", state_class: "measurement" }, "Download stream"],
+    ["sensor.vodafone_station_upload_stream", "up_stream", "420", { unit_of_measurement: "kB/s", device_class: "data_rate", state_class: "measurement" }, "Upload stream"],
+    ["sensor.vodafone_station_external_ipv4", "external_ipv4", "198.51.100.61", {}, "External IPv4"],
+    ["sensor.vodafone_station_active_connection", "active_connection", "fiber", { device_class: "enum" }, "Active connection"],
+    ["sensor.vodafone_station_uptime", null, BOOT, { device_class: "uptime" }, "Uptime"],
+    ["switch.vodafone_station_main", "main", "on", {}, "Wi-Fi"],
+    ["button.vodafone_station_restart", null, "unknown", RESTART, "Restart"],
+  ],
+  CLIENTS
+);
+
+// Swisscom Internet-Box, swisscom integration: connected devices only.
+const swisscomAll = single("swisscom", { name: "unused" }, [], CLIENTS);
+delete swisscomAll.devices.dev_swisscom;
+
+// Sagemcom F@st 5689 (Bell Home Hub 4000), sagemcom_fast integration: reboot button and connected devices.
+const sagemcom = single(
+  "sagemcom_fast",
+  { name: "Sagemcom F@st 5689", model: "F@st 5689", sw_version: "SGRT000060", configuration_url: "http://192.168.2.1" },
+  [["button.sagemcom_fast_5689_reboot", null, "unknown", RESTART, "Reboot"]],
+  CLIENTS
+);
+
+// KPN Box 12 on the Livebox integration (Livebox OS).
+const kpn = single(
+  "livebox",
+  { name: "KPN Box 12", model: "KPN Box 12", sw_version: "V12.C.23.04.36" },
+  [
+    ["sensor.kpn_box_12_downlink_rate", "down_rate", "940", { unit_of_measurement: "Mbit/s", device_class: "data_rate" }, "Downlink rate"],
+    ["sensor.kpn_box_12_uplink_rate", "up_rate", "940", { unit_of_measurement: "Mbit/s", device_class: "data_rate" }, "Uplink rate"],
+    ["binary_sensor.kpn_box_12_wan_status", "connectivity", "on", { device_class: "connectivity", link_type: "gpon" }, "WAN Status"],
+    ["switch.kpn_box_12_wifi", "wifi_switch", "on", {}, "Wi-Fi"],
+    ["button.kpn_box_12_restart", "restart_btn", "unknown", RESTART, "Restart"],
+  ],
+  CLIENTS
+);
+
+// Huawei LTE, huawei_lte integration: rates (B/s), mobile connection, WAN IP, uptime (seconds), Wi-Fi state.
+const huawei = single(
+  "huawei_lte",
+  { name: "B535-232", model: "B535-232", sw_version: "11.0.5.3" },
+  [
+    ["sensor.b535_232_current_download_rate", "current_download_rate", "6450000", { unit_of_measurement: "B/s", device_class: "data_rate", state_class: "measurement" }, "Current download rate"],
+    ["sensor.b535_232_current_upload_rate", "current_upload_rate", "780000", { unit_of_measurement: "B/s", device_class: "data_rate", state_class: "measurement" }, "Current upload rate"],
+    ["binary_sensor.b535_232_mobile_connection", "mobile_connection", "on", { device_class: "connectivity" }, "Mobile connection"],
+    ["sensor.b535_232_wan_ip_address", "wan_ip_address", "100.72.18.4", {}, "WAN IP address"],
+    ["sensor.b535_232_uptime", "uptime", "561600", { unit_of_measurement: "s", device_class: "duration" }, "Uptime"],
+    ["binary_sensor.b535_232_wi_fi_status", "wifi_status", "on", {}, "Wi-Fi status"],
+    ["button.b535_232_restart", null, "unknown", RESTART, "Restart"],
+  ],
+  CLIENTS
+);
+
+// Starlink, starlink integration: throughput (Mbit/s), last restart, connectivity, reboot.
+const starlink = single(
+  "starlink",
+  { name: "Starlink", model: "Starlink", sw_version: "2026.10.30.mr1" },
+  [
+    ["sensor.starlink_downlink_throughput", "downlink_throughput", "182.4", { unit_of_measurement: "Mbit/s", device_class: "data_rate", state_class: "measurement" }, "Downlink throughput"],
+    ["sensor.starlink_uplink_throughput", "uplink_throughput", "21.7", { unit_of_measurement: "Mbit/s", device_class: "data_rate", state_class: "measurement" }, "Uplink throughput"],
+    ["sensor.starlink_last_restart", "last_restart", BOOT, { device_class: "timestamp" }, "Last restart"],
+    ["binary_sensor.starlink_connectivity", null, "on", { device_class: "connectivity" }, "Connectivity"],
+    ["button.starlink_restart", null, "unknown", RESTART, "Restart"],
+  ]
+);
+
+// ZTE Hyperbox, zte_hyperbox integration: rates and restart button, matched by their kind.
+const zte = single(
+  "zte_hyperbox",
+  { name: "ZTE MC8810", model: "MC8810" },
+  [
+    ["sensor.zte_mc8810_download_rate", null, "5120", { unit_of_measurement: "kB/s", device_class: "data_rate", state_class: "measurement" }, "Download rate"],
+    ["sensor.zte_mc8810_upload_rate", null, "640", { unit_of_measurement: "kB/s", device_class: "data_rate", state_class: "measurement" }, "Upload rate"],
+    ["binary_sensor.zte_mc8810_connected", null, "on", { device_class: "connectivity" }, "Connected"],
+    ["button.zte_mc8810_reboot", null, "unknown", RESTART, "Reboot"],
+  ]
+);
+
+export const operators = {
+  livebox: { ...livebox, config: {} },
+  sfr: { ...sfr, config: {} },
+  bbox,
+  fritz: { ...fritz, config: {} },
+  vodafone: { ...vodafone, config: {} },
+  swisscom: { ...swisscomAll, config: {} },
+  sagemcom: { ...sagemcom, config: {} },
+  kpn: { ...kpn, config: {} },
+  huawei: { ...huawei, config: {} },
+  starlink: { ...starlink, config: {} },
+  zte: { ...zte, config: {} },
+};

@@ -2,7 +2,8 @@
  * Internet Box Card for Home Assistant
  * https://github.com/juju35/ha-internet-box-card
  *
- * Lovelace cards for internet boxes: the Freebox, Livebox (Orange), SFR Box and Bbox (Bouygues) integrations.
+ * Lovelace cards for internet boxes: the Freebox, Livebox (Orange, KPN), SFR Box, Bbox (Bouygues), FRITZ!Box,
+ * Vodafone Station, Swisscom Internet-Box, Sagemcom F@st, Huawei LTE, ZTE Hyperbox and Starlink integrations.
  * Entities are discovered automatically from the entity registry (integration platform and translation key),
  * whatever the language and the entity ids; the legacy Bbox integration is found by entity id.
  */
@@ -406,8 +407,82 @@ const bboxFibreSvg = () => {
   return svgDoc(300, 182, defs, s);
 };
 
+// Generic form factors, shared by the boxes of the other integrations (FRITZ!Box, Vodafone Station, Swisscom,
+// Sagemcom F@st, Huawei LTE, ZTE, Starlink): neutral drawings of a kind of device, not of a given product.
+// Wide desktop router with two antennas at the back.
+const genRouterSvg = () => {
+  const w = 176;
+  const h = 34;
+  const x = (300 - w) / 2;
+  const top = 108;
+  const bottom = top + h;
+  const defs = grad("grtb", [[0, "#2b2c30"], [1, "#141518"]]) + grad("grta", [[0, "#3a3b40"], [1, "#1c1d20"]], 1, 0);
+  let s = `<ellipse cx="150" cy="${bottom + 9}" rx="${Math.round(w * 0.52)}" ry="7" opacity=".28"/>`;
+  for (const ax of [x + 26, x + w - 26]) s += `<rect x="${ax - 4}" y="${top - 82}" width="8" height="86" rx="4" fill="url(#grta)"/>`;
+  s += `<rect x="${x}" y="${top}" width="${w}" height="${h}" rx="10" fill="url(#grtb)"/>`;
+  s += `<rect x="${x + 6}" y="${top + 3}" width="${w - 12}" height="3" rx="1.5" fill="#fff" opacity=".08"/>`;
+  for (let i = 0; i < 5; i++) s += `<circle cx="${x + 30 + i * 13}" cy="${top + 21}" r="2.4" fill="${i < 4 ? "#3ad64f" : "#4f8fe6"}"/>`;
+  return svgDoc(300, 160, defs, s);
+};
+// Low rounded hub without antennas, with a status light bar.
+const genHubSvg = () => {
+  const w = 150;
+  const h = 46;
+  const x = (300 - w) / 2;
+  const top = 82;
+  const bottom = top + h;
+  const defs = grad("ghbb", [[0, "#f4f5f7"], [1, "#c9ccd2"]]);
+  let s = `<ellipse cx="150" cy="${bottom + 9}" rx="${Math.round(w * 0.5)}" ry="7" opacity=".25"/>`;
+  s += `<rect x="${x}" y="${top}" width="${w}" height="${h}" rx="${h / 2}" fill="url(#ghbb)" stroke="#000" stroke-opacity=".15"/>`;
+  s += `<rect x="${x + 14}" y="${top + 5}" width="${w - 28}" height="4" rx="2" fill="#fff" opacity=".7"/>`;
+  s += `<rect x="${150 - 24}" y="${top + h - 15}" width="48" height="5" rx="2.5" fill="#3ad64f"/>`;
+  return svgDoc(300, 150, defs, s);
+};
+// Slim upright tower on a foot, with a column of status lights.
+const genTowerSvg = () => {
+  const w = 64;
+  const h = 132;
+  const x = (300 - w) / 2;
+  const top = 18;
+  const bottom = top + h;
+  const defs = grad("gtwb", [[0, "#2a2b2f"], [1, "#111214"]], 1, 0);
+  let s = `<ellipse cx="150" cy="${bottom + 14}" rx="44" ry="7" opacity=".28"/>`;
+  s += `<rect x="${150 - 30}" y="${bottom + 2}" width="60" height="8" rx="4" fill="#1a1b1d"/>`;
+  s += `<rect x="${x}" y="${top}" width="${w}" height="${h}" rx="14" fill="url(#gtwb)"/>`;
+  s += `<rect x="${x + 6}" y="${top + 12}" width="4" height="${h - 24}" rx="2" fill="#fff" opacity=".06"/>`;
+  for (let i = 0; i < 4; i++) s += `<circle cx="150" cy="${top + 30 + i * 16}" r="2.6" fill="${i ? "#3ad64f" : "#4f8fe6"}"/>`;
+  return svgDoc(300, 172, defs, s);
+};
+// Compact 4G / 5G cube with signal bars on its front.
+const genMobileSvg = () => {
+  const w = 104;
+  const h = 120;
+  const x = (300 - w) / 2;
+  const top = 30;
+  const bottom = top + h;
+  const defs = grad("gmbb", [[0, "#fafbfc"], [1, "#d3d6dc"]], 1, 1);
+  let s = `<ellipse cx="150" cy="${bottom + 9}" rx="${Math.round(w * 0.56)}" ry="7" opacity=".25"/>`;
+  s += `<rect x="${x}" y="${top}" width="${w}" height="${h}" rx="18" fill="url(#gmbb)" stroke="#000" stroke-opacity=".15"/>`;
+  for (let i = 0; i < 4; i++) {
+    const bh = 8 + i * 7;
+    s += `<rect x="${150 - 22 + i * 12}" y="${top + 62 - bh}" width="8" height="${bh}" rx="2" fill="${i < 3 ? "#2f7fe0" : "#b8bcc4"}"/>`;
+  }
+  s += `<rect x="${150 - 22}" y="${top + 84}" width="44" height="4" rx="2" fill="#3ad64f"/>`;
+  return svgDoc(300, 168, defs, s);
+};
+// Flat satellite dish on a mast.
+const genDishSvg = () => {
+  const defs = grad("gdsb", [[0, "#ffffff"], [1, "#cfd3d9"]], 1, 1);
+  let s = `<ellipse cx="150" cy="164" rx="40" ry="6" opacity=".28"/>`;
+  s += `<rect x="146" y="96" width="8" height="66" rx="3" fill="#8a8f98"/><rect x="128" y="156" width="44" height="7" rx="3" fill="#6b7078"/>`;
+  s += `<g transform="rotate(-18 150 66)"><rect x="96" y="20" width="108" height="92" rx="16" fill="url(#gdsb)" stroke="#000" stroke-opacity=".18"/>`;
+  s += `<rect x="104" y="28" width="92" height="76" rx="11" fill="none" stroke="#000" stroke-opacity=".07"/></g>`;
+  return svgDoc(300, 176, defs, s);
+};
+
 const svgUri = (svg) => `data:image/svg+xml,${encodeURIComponent(svg)}`;
-// Pictures of the box models, by model id (Freebox, Livebox, SFR Box, Bbox).
+// Pictures of the box models, by picture id: a model's `pic`, else its own id (Freebox, Livebox, SFR Box, Bbox drawings,
+// then the generic form factors of the other integrations).
 const IMG_BOX = {
   ultra: svgUri(ultraSvg()),
   pop: svgUri(popSvg()),
@@ -425,7 +500,14 @@ const IMG_BOX = {
   bbox_miami: svgUri(bboxMiamiSvg()),
   bbox_ultym: svgUri(bboxUltymSvg()),
   bbox_fibre: svgUri(bboxFibreSvg()),
+  generic_router: svgUri(genRouterSvg()),
+  generic_hub: svgUri(genHubSvg()),
+  generic_tower: svgUri(genTowerSvg()),
+  generic_mobile: svgUri(genMobileSvg()),
+  generic_dish: svgUri(genDishSvg()),
 };
+/** Picture of a model: its shared `pic` drawing, else the drawing named after it. */
+const modelPic = (m) => (m ? IMG_BOX[m.pic ?? m.id] : undefined);
 const IMG_LOGO = "__IMG_LOGO__";
 const IMG_ORANGE = "__IMG_ORANGE__";
 const IMG_SFR = "__IMG_SFR__";
@@ -500,7 +582,7 @@ const STRINGS = {
     minutes: "min",
     rpm: "rpm",
     disk: "Disk",
-    no_box: "No internet box found. Is a supported integration (Freebox, Livebox, SFR Box, Bbox) installed?",
+    no_box: "No internet box found. Is a supported integration (Freebox, Livebox, SFR Box, Bbox, FRITZ!Box, Vodafone Station, Swisscom, Sagemcom F@st, Huawei LTE, ZTE Hyperbox, Starlink) installed?",
     unknown_box: "Internet box not found",
     zoom_in: "Show the full card",
     zoom_out: "Back to the compact view",
@@ -575,7 +657,7 @@ const STRINGS = {
     minutes: "min",
     rpm: "tr/min",
     disk: "Disque",
-    no_box: "Aucune box internet trouvée. Une intégration compatible (Freebox, Livebox, SFR Box, Bbox) est-elle installée ?",
+    no_box: "Aucune box internet trouvée. Une intégration compatible (Freebox, Livebox, SFR Box, Bbox, FRITZ!Box, Vodafone Station, Swisscom, Sagemcom F@st, Huawei LTE, ZTE Hyperbox, Starlink) est-elle installée ?",
     unknown_box: "Box internet introuvable",
     zoom_in: "Afficher la carte complète",
     zoom_out: "Revenir à la vue compacte",
@@ -648,7 +730,7 @@ const STRINGS = {
     minutes: "Min.",
     rpm: "U/min",
     disk: "Datenträger",
-    no_box: "Keine Internetbox gefunden. Ist eine unterstützte Integration (Freebox, Livebox, SFR Box, Bbox) installiert?",
+    no_box: "Keine Internetbox gefunden. Ist eine unterstützte Integration (Freebox, Livebox, SFR Box, Bbox, FRITZ!Box, Vodafone Station, Swisscom, Sagemcom F@st, Huawei LTE, ZTE Hyperbox, Starlink) installiert?",
     unknown_box: "Internetbox nicht gefunden",
     zoom_in: "Vollständige Karte anzeigen",
     zoom_out: "Zurück zur kompakten Ansicht",
@@ -722,7 +804,7 @@ const STRINGS = {
     minutes: "min",
     rpm: "rpm",
     disk: "Disco",
-    no_box: "No se ha encontrado ningún router de internet. ¿Hay instalada una integración compatible (Freebox, Livebox, SFR Box, Bbox)?",
+    no_box: "No se ha encontrado ningún router de internet. ¿Hay instalada una integración compatible (Freebox, Livebox, SFR Box, Bbox, FRITZ!Box, Vodafone Station, Swisscom, Sagemcom F@st, Huawei LTE, ZTE Hyperbox, Starlink)?",
     unknown_box: "Router de internet no encontrado",
     zoom_in: "Mostrar la tarjeta completa",
     zoom_out: "Volver a la vista compacta",
@@ -797,7 +879,7 @@ const STRINGS = {
     minutes: "min",
     rpm: "о/мин",
     disk: "Диск",
-    no_box: "Није пронађен ниједан интернет рутер. Да ли је инсталирана подржана интеграција (Freebox, Livebox, SFR Box, Bbox)?",
+    no_box: "Није пронађен ниједан интернет рутер. Да ли је инсталирана подржана интеграција (Freebox, Livebox, SFR Box, Bbox, FRITZ!Box, Vodafone Station, Swisscom, Sagemcom F@st, Huawei LTE, ZTE Hyperbox, Starlink)?",
     unknown_box: "Интернет рутер није пронађен",
     zoom_in: "Прикажи целу картицу",
     zoom_out: "Назад на компактни приказ",
@@ -872,7 +954,7 @@ const STRINGS = {
     minutes: "min",
     rpm: "o/min",
     disk: "Disk",
-    no_box: "Nije pronađen nijedan internet ruter. Da li je instalirana podržana integracija (Freebox, Livebox, SFR Box, Bbox)?",
+    no_box: "Nije pronađen nijedan internet ruter. Da li je instalirana podržana integracija (Freebox, Livebox, SFR Box, Bbox, FRITZ!Box, Vodafone Station, Swisscom, Sagemcom F@st, Huawei LTE, ZTE Hyperbox, Starlink)?",
     unknown_box: "Internet ruter nije pronađen",
     zoom_in: "Prikaži celu karticu",
     zoom_out: "Nazad na kompaktni prikaz",
@@ -946,7 +1028,7 @@ const STRINGS = {
     minutes: "min",
     rpm: "giri/min",
     disk: "Disco",
-    no_box: "Nessun modem internet trovato. È installata un'integrazione compatibile (Freebox, Livebox, SFR Box, Bbox)?",
+    no_box: "Nessun modem internet trovato. È installata un'integrazione compatibile (Freebox, Livebox, SFR Box, Bbox, FRITZ!Box, Vodafone Station, Swisscom, Sagemcom F@st, Huawei LTE, ZTE Hyperbox, Starlink)?",
     unknown_box: "Modem internet non trovato",
     zoom_in: "Mostra la scheda completa",
     zoom_out: "Torna alla vista compatta",
@@ -1019,7 +1101,7 @@ const STRINGS = {
     minutes: "min",
     rpm: "tpm",
     disk: "Schijf",
-    no_box: "Geen internetmodem gevonden. Is er een ondersteunde integratie (Freebox, Livebox, SFR Box, Bbox) geïnstalleerd?",
+    no_box: "Geen internetmodem gevonden. Is er een ondersteunde integratie (Freebox, Livebox, SFR Box, Bbox, FRITZ!Box, Vodafone Station, Swisscom, Sagemcom F@st, Huawei LTE, ZTE Hyperbox, Starlink) geïnstalleerd?",
     unknown_box: "Internetmodem niet gevonden",
     zoom_in: "Volledige kaart tonen",
     zoom_out: "Terug naar de compacte weergave",
@@ -1093,7 +1175,7 @@ const STRINGS = {
     minutes: "min",
     rpm: "rpm",
     disk: "Disco",
-    no_box: "Nenhum router de internet encontrado. Está instalada uma integração compatível (Freebox, Livebox, SFR Box, Bbox)?",
+    no_box: "Nenhum router de internet encontrado. Está instalada uma integração compatível (Freebox, Livebox, SFR Box, Bbox, FRITZ!Box, Vodafone Station, Swisscom, Sagemcom F@st, Huawei LTE, ZTE Hyperbox, Starlink)?",
     unknown_box: "Router de internet não encontrado",
     zoom_in: "Mostrar o cartão completo",
     zoom_out: "Voltar à vista compacta",
@@ -1169,7 +1251,7 @@ const STRINGS = {
     minutes: "min",
     rpm: "obr./min",
     disk: "Dysk",
-    no_box: "Nie znaleziono routera internetowego. Czy zainstalowano obsługiwaną integrację (Freebox, Livebox, SFR Box, Bbox)?",
+    no_box: "Nie znaleziono routera internetowego. Czy zainstalowano obsługiwaną integrację (Freebox, Livebox, SFR Box, Bbox, FRITZ!Box, Vodafone Station, Swisscom, Sagemcom F@st, Huawei LTE, ZTE Hyperbox, Starlink)?",
     unknown_box: "Nie znaleziono routera internetowego",
     zoom_in: "Pokaż pełną kartę",
     zoom_out: "Wróć do widoku kompaktowego",
@@ -1243,7 +1325,7 @@ const STRINGS = {
     minutes: "min",
     rpm: "rot/min",
     disk: "Disc",
-    no_box: "Nu a fost găsit niciun router de internet. Este instalată o integrare compatibilă (Freebox, Livebox, SFR Box, Bbox)?",
+    no_box: "Nu a fost găsit niciun router de internet. Este instalată o integrare compatibilă (Freebox, Livebox, SFR Box, Bbox, FRITZ!Box, Vodafone Station, Swisscom, Sagemcom F@st, Huawei LTE, ZTE Hyperbox, Starlink)?",
     unknown_box: "Routerul de internet nu a fost găsit",
     zoom_in: "Afișează cardul complet",
     zoom_out: "Înapoi la vizualizarea compactă",
@@ -1317,7 +1399,7 @@ const STRINGS = {
     minutes: "min",
     rpm: "o/min",
     disk: "Disk",
-    no_box: "Der blev ikke fundet nogen internetrouter. Er en understøttet integration (Freebox, Livebox, SFR Box, Bbox) installeret?",
+    no_box: "Der blev ikke fundet nogen internetrouter. Er en understøttet integration (Freebox, Livebox, SFR Box, Bbox, FRITZ!Box, Vodafone Station, Swisscom, Sagemcom F@st, Huawei LTE, ZTE Hyperbox, Starlink) installeret?",
     unknown_box: "Internetrouteren blev ikke fundet",
     zoom_in: "Vis hele kortet",
     zoom_out: "Tilbage til kompakt visning",
@@ -1391,7 +1473,7 @@ const STRINGS = {
     minutes: "min",
     rpm: "v/min",
     disk: "Disk",
-    no_box: "Ingen internetrouter hittades. Är en integration som stöds (Freebox, Livebox, SFR Box, Bbox) installerad?",
+    no_box: "Ingen internetrouter hittades. Är en integration som stöds (Freebox, Livebox, SFR Box, Bbox, FRITZ!Box, Vodafone Station, Swisscom, Sagemcom F@st, Huawei LTE, ZTE Hyperbox, Starlink) installerad?",
     unknown_box: "Internetroutern hittades inte",
     zoom_in: "Visa hela kortet",
     zoom_out: "Tillbaka till kompakt vy",
@@ -1465,7 +1547,7 @@ const STRINGS = {
     minutes: "мин",
     rpm: "об/мин",
     disk: "Диск",
-    no_box: "Не е намерен интернет рутер. Инсталирана ли е поддържана интеграция (Freebox, Livebox, SFR Box, Bbox)?",
+    no_box: "Не е намерен интернет рутер. Инсталирана ли е поддържана интеграция (Freebox, Livebox, SFR Box, Bbox, FRITZ!Box, Vodafone Station, Swisscom, Sagemcom F@st, Huawei LTE, ZTE Hyperbox, Starlink)?",
     unknown_box: "Интернет рутерът не е намерен",
     zoom_in: "Показване на пълната карта",
     zoom_out: "Обратно към компактния изглед",
@@ -1539,7 +1621,7 @@ const STRINGS = {
     minutes: "мин",
     rpm: "об/мин",
     disk: "Диск",
-    no_box: "Интернет-роутер не найден. Установлена ли поддерживаемая интеграция (Freebox, Livebox, SFR Box, Bbox)?",
+    no_box: "Интернет-роутер не найден. Установлена ли поддерживаемая интеграция (Freebox, Livebox, SFR Box, Bbox, FRITZ!Box, Vodafone Station, Swisscom, Sagemcom F@st, Huawei LTE, ZTE Hyperbox, Starlink)?",
     unknown_box: "Интернет-роутер не найден",
     zoom_in: "Показать полную карточку",
     zoom_out: "Вернуться к компактному виду",
@@ -1614,7 +1696,7 @@ const STRINGS = {
     minutes: "хв",
     rpm: "об/хв",
     disk: "Диск",
-    no_box: "Інтернет-роутер не знайдено. Чи встановлено підтримувану інтеграцію (Freebox, Livebox, SFR Box, Bbox)?",
+    no_box: "Інтернет-роутер не знайдено. Чи встановлено підтримувану інтеграцію (Freebox, Livebox, SFR Box, Bbox, FRITZ!Box, Vodafone Station, Swisscom, Sagemcom F@st, Huawei LTE, ZTE Hyperbox, Starlink)?",
     unknown_box: "Інтернет-роутер не знайдено",
     zoom_in: "Показати повну картку",
     zoom_out: "Повернутися до компактного вигляду",
@@ -1687,7 +1769,7 @@ const STRINGS = {
     minutes: "p",
     rpm: "f/perc",
     disk: "Lemez",
-    no_box: "Nem található internetes router. Telepítve van egy támogatott integráció (Freebox, Livebox, SFR Box, Bbox)?",
+    no_box: "Nem található internetes router. Telepítve van egy támogatott integráció (Freebox, Livebox, SFR Box, Bbox, FRITZ!Box, Vodafone Station, Swisscom, Sagemcom F@st, Huawei LTE, ZTE Hyperbox, Starlink)?",
     unknown_box: "Az internetes router nem található",
     zoom_in: "Teljes kártya megjelenítése",
     zoom_out: "Vissza a kompakt nézethez",
@@ -1762,7 +1844,7 @@ const STRINGS = {
     minutes: "min",
     rpm: "ot./min",
     disk: "Disk",
-    no_box: "Nenašiel sa žiadny internetový router. Je nainštalovaná podporovaná integrácia (Freebox, Livebox, SFR Box, Bbox)?",
+    no_box: "Nenašiel sa žiadny internetový router. Je nainštalovaná podporovaná integrácia (Freebox, Livebox, SFR Box, Bbox, FRITZ!Box, Vodafone Station, Swisscom, Sagemcom F@st, Huawei LTE, ZTE Hyperbox, Starlink)?",
     unknown_box: "Internetový router sa nenašiel",
     zoom_in: "Zobraziť celú kartu",
     zoom_out: "Späť na kompaktné zobrazenie",
@@ -1837,7 +1919,7 @@ const STRINGS = {
     minutes: "min",
     rpm: "ot./min",
     disk: "Disk",
-    no_box: "Nebyl nalezen žádný internetový router. Je nainstalována podporovaná integrace (Freebox, Livebox, SFR Box, Bbox)?",
+    no_box: "Nebyl nalezen žádný internetový router. Je nainstalována podporovaná integrace (Freebox, Livebox, SFR Box, Bbox, FRITZ!Box, Vodafone Station, Swisscom, Sagemcom F@st, Huawei LTE, ZTE Hyperbox, Starlink)?",
     unknown_box: "Internetový router nebyl nalezen",
     zoom_in: "Zobrazit celou kartu",
     zoom_out: "Zpět na kompaktní zobrazení",
@@ -1913,7 +1995,7 @@ const STRINGS = {
     minutes: "min",
     rpm: "vrt./min",
     disk: "Disk",
-    no_box: "Internetnega usmerjevalnika ni bilo mogoče najti. Ali je nameščena podprta integracija (Freebox, Livebox, SFR Box, Bbox)?",
+    no_box: "Internetnega usmerjevalnika ni bilo mogoče najti. Ali je nameščena podprta integracija (Freebox, Livebox, SFR Box, Bbox, FRITZ!Box, Vodafone Station, Swisscom, Sagemcom F@st, Huawei LTE, ZTE Hyperbox, Starlink)?",
     unknown_box: "Internetnega usmerjevalnika ni mogoče najti",
     zoom_in: "Prikaži celotno kartico",
     zoom_out: "Nazaj na strnjeni pogled",
@@ -1987,7 +2069,7 @@ const STRINGS = {
     minutes: "min",
     rpm: "1/min",
     disk: "Disks",
-    no_box: "Netika atrasts neviens interneta maršrutētājs. Vai ir instalēta atbalstīta integrācija (Freebox, Livebox, SFR Box, Bbox)?",
+    no_box: "Netika atrasts neviens interneta maršrutētājs. Vai ir instalēta atbalstīta integrācija (Freebox, Livebox, SFR Box, Bbox, FRITZ!Box, Vodafone Station, Swisscom, Sagemcom F@st, Huawei LTE, ZTE Hyperbox, Starlink)?",
     unknown_box: "Interneta maršrutētājs nav atrasts",
     zoom_in: "Rādīt pilno kartīti",
     zoom_out: "Atpakaļ uz kompakto skatu",
@@ -2061,7 +2143,7 @@ const STRINGS = {
     minutes: "λεπ.",
     rpm: "σ.α.λ.",
     disk: "Δίσκος",
-    no_box: "Δεν βρέθηκε δρομολογητής διαδικτύου. Είναι εγκατεστημένη μια υποστηριζόμενη ενσωμάτωση (Freebox, Livebox, SFR Box, Bbox);",
+    no_box: "Δεν βρέθηκε δρομολογητής διαδικτύου. Είναι εγκατεστημένη μια υποστηριζόμενη ενσωμάτωση (Freebox, Livebox, SFR Box, Bbox, FRITZ!Box, Vodafone Station, Swisscom, Sagemcom F@st, Huawei LTE, ZTE Hyperbox, Starlink);",
     unknown_box: "Δεν βρέθηκε ο δρομολογητής διαδικτύου",
     zoom_in: "Εμφάνιση πλήρους κάρτας",
     zoom_out: "Επιστροφή στη συμπαγή προβολή",
@@ -2150,6 +2232,8 @@ const OPERATORS = {
       { id: "livebox_5", name: "Livebox 5", re: /livebox\s*5|lb5|arcadyanlbfibre/i },
       { id: "livebox_4", name: "Livebox 4", re: /livebox\s*4|lb4/i },
       { id: "livebox_s", name: "Livebox S", re: /livebox\s*s\b|lbs\b/i },
+      // KPN (Netherlands) runs Livebox OS on its Box 12 (firmware V12.C…), supported by the same integration.
+      { id: "kpn_box_12", name: "KPN Box 12", re: /kpn|box\s*12\b|^v12\./i, pic: "generic_hub", brand: "kpn" },
     ],
     // `wan`: the WAN connectivity binary sensor ("WAN Status", its link_type attribute gives the kind of line).
     // `missed`: the "call missed" binary sensor, whose `missed_calls` attribute lists the missed calls (the `callers`
@@ -2191,8 +2275,126 @@ const OPERATORS = {
       { id: "bbox_miami", name: "Bbox Miami", re: /miami/i },
     ],
     // Legacy integration: hardcoded English names, no translation keys, so it is discovered by entity-id suffix.
-    keys: {}, legacy: { rate_down: /_currently_used_download_bandwidth$/, rate_up: /_currently_used_upload_bandwidth$/ },
+    // The core `bbox` platform and its `custom_bbox` fork (hass_custom_bbox, for the firmwares that the core one can no
+    // longer reach since Home Assistant 2022.7) create the same sensors, uptime included (a boot date).
+    keys: {},
+    legacy: { rate_down: /_currently_used_download_bandwidth$/, rate_up: /_currently_used_upload_bandwidth$/, boot: /_uptime$/ },
   },
+  // FRITZ!Box (fritz, built in): AVM / FRITZ! routers, sold by 1&1, O2, Telekom and many providers in Germany,
+  // Austria, Switzerland and the Netherlands. Traffic rates in kB/s, the DSL line sync rates (kept as sync rates,
+  // shown only without traffic sensors), the WAN connection, external IPs, the box uptime (device_uptime, no
+  // translation key) and the main Wi-Fi switches (one per band: wi_fi_main_2_4ghz, wi_fi_main_5ghz…).
+  fritz: {
+    platform: "fritz", name: "FRITZ!Box", color: "#1f6fd1", logo: "__IMG_FILE:fritz.svg__",
+    website: "https://fritz.com", admin: "http://fritz.box", syncLine: "DSL",
+    models: [
+      { id: "fritz_box_cable", name: "FRITZ!Box Cable", re: /fritz!?\s*box\s*6\d{3}/i, pic: "generic_tower", fromDevice: true },
+      { id: "fritz_box", name: "FRITZ!Box", re: /fritz/i, pic: "generic_router", fromDevice: true },
+    ],
+    keys: {
+      rate_down: "kb_s_received", rate_up: "kb_s_sent", sync_down: "link_kb_s_received", sync_up: "link_kb_s_sent",
+      wan: "is_connected", ip: "external_ip", ip6: "external_ipv6",
+    },
+    alt: { wifi: /^wi_fi_main/ },
+    bootClass: true,
+  },
+  // Vodafone Station (vodafone_station, built in): Sercomm, Technicolor and UltraHub routers of Vodafone in Italy,
+  // the United Kingdom, Ireland and Germany. Rates in kB/s, external IPs, active connection (DSL, fibre, Internet
+  // Key), uptime (sys_uptime, no translation key), main Wi-Fi switch; its reconnect buttons are restart buttons too,
+  // with a translation key, never taken for the reboot.
+  vodafone_station: {
+    platform: "vodafone_station", name: "Vodafone Station", color: "#e60000", logo: "__IMG_FILE:vodafone.svg__",
+    website: "https://www.vodafone.com", admin: "http://192.168.1.1",
+    models: [
+      { id: "vodafone_gigabox", name: "Vodafone Gigabox", re: /gigabox/i, pic: "generic_tower" },
+      { id: "vodafone_power_station", name: "Vodafone Power Station", re: /shg30[0-9]0|power\s*station/i, pic: "generic_tower" },
+      { id: "vodafone_wifi6_station", name: "Vodafone WiFi 6 Station", re: /rhg3006|cga6444|wi-?fi\s*6\s*station/i, pic: "generic_hub" },
+      { id: "vodafone_ultra_hub", name: "Vodafone Ultra Hub", re: /ultra\s*hub|fg4278|dgm4980/i, pic: "generic_tower" },
+      { id: "vodafone_vox", name: "Vodafone Vox 3.0", re: /thg3000|vox/i, pic: "generic_hub" },
+      { id: "vodafone_h300s", name: "Vodafone H300S", re: /h300s/i, pic: "generic_hub" },
+    ],
+    keys: { rate_down: "down_stream", rate_up: "up_stream", ip: "external_ipv4", ip6: "external_ipv6", infra: "active_connection", wifi: "main" },
+    bootClass: true,
+  },
+  // Swisscom Internet-Box (swisscom, built in): presence detection only, a device tracker per connected device and
+  // no entity for the box itself. The box is the integration: its connected devices are counted.
+  swisscom: {
+    platform: "swisscom", name: "Swisscom Internet-Box", color: "#1b2f78", logo: "__IMG_FILE:swisscom.svg__",
+    website: "https://www.swisscom.ch", admin: "http://internetbox.home", trackersOnly: true, defaultModel: "internet_box",
+    models: [{ id: "internet_box", name: "Internet-Box", re: /internet-?box/i, pic: "generic_hub" }],
+    keys: {},
+  },
+  // Sagemcom F@st (sagemcom_fast, custom): the reboot button (device_class restart) on the gateway device, and a
+  // tracker per connected device. The F@st routers are rebranded by many providers: the model gives the provider.
+  sagemcom_fast: {
+    platform: "sagemcom_fast", name: "Sagemcom F@st", color: "#00838f", logo: "__IMG_FILE:sagemcom.svg__",
+    website: "https://www.sagemcom.com", admin: null, anchorRestart: true,
+    models: [
+      { id: "proximus_bbox3", name: "Proximus b-box 3", re: /3865/i, pic: "generic_tower", brand: "proximus" },
+      { id: "kpn_experia_box_12", name: "KPN Experia Box 12", re: /5359|experia/i, pic: "generic_tower", brand: "kpn" },
+      { id: "kpn_fast_4360", name: "KPN F@st 4360Air", re: /4360/i, pic: "generic_router", brand: "kpn" },
+      { id: "delta_fast_3890", name: "DELTA F@st 3890V3", re: /3890/i, pic: "generic_tower", brand: "delta" },
+      { id: "telekom_speedport_pro", name: "Telekom Speedport Pro", re: /speedport/i, pic: "generic_tower", brand: "telekom" },
+      { id: "bt_smart_hub", name: "BT Smart Hub", re: /5364|smart\s*hub/i, pic: "generic_tower", brand: "bt" },
+      { id: "eir_f3000", name: "eir F3000", re: /5366|f3000/i, pic: "generic_router", brand: "eir" },
+      { id: "salt_fibrebox_x6", name: "Salt FibreBox X6", re: /5688|fibrebox/i, pic: "generic_tower", brand: "salt" },
+      { id: "masmovil_fast_5655", name: "MásMóvil F@st 5655", re: /5655/i, pic: "generic_router", brand: "masmovil" },
+      { id: "telia_fast_5370", name: "Telia F@st 5370e", re: /5370/i, pic: "generic_router", brand: "telia" },
+      { id: "tdc_fast_5380", name: "TDC F@st 5380", re: /5380/i, pic: "generic_router", brand: "tdc" },
+      { id: "bell_home_hub_4000", name: "Bell Home Hub 4000", re: /5689|home\s*hub\s*4000/i, pic: "generic_tower", brand: "bell" },
+      { id: "bell_home_hub_3000", name: "Bell Home Hub 3000", re: /5566|home\s*hub\s*3000/i, pic: "generic_tower", brand: "bell" },
+      { id: "optus_fast_3864", name: "Optus F@st 3864", re: /3864/i, pic: "generic_router", brand: "optus" },
+      { id: "sagemcom_fast", name: "Sagemcom F@st", re: /f@st|sagemcom/i, pic: "generic_router", fromDevice: true },
+    ],
+    keys: {},
+  },
+  // Huawei LTE (huawei_lte, built in): 4G / 5G routers (B535, B818, H122…). Rates in B/s, mobile connection, WAN IPs,
+  // uptime in seconds, Wi-Fi state (read only: a binary sensor), restart button (device_class restart, no key).
+  huawei_lte: {
+    platform: "huawei_lte", name: "Huawei LTE", color: "#c7000b", logo: "__IMG_FILE:huawei.svg__",
+    website: "https://consumer.huawei.com", admin: "http://192.168.8.1", line: "LTE",
+    models: [{ id: "huawei_lte_router", name: "Huawei 4G / 5G router", re: /./, pic: "generic_mobile", fromDevice: true, prefix: "Huawei" }],
+    keys: {
+      rate_down: "current_download_rate", rate_up: "current_upload_rate", wan: "mobile_connection",
+      ip: "wan_ip_address", ip6: "wan_ipv6_address", boot: "uptime", wifi: "wifi_status",
+    },
+  },
+  // ZTE Hyperbox (zte_hyperbox, custom): MC8810 Hyperbox 5G Lite. Its sensors are matched by their kind (data rate,
+  // restart button, connectivity), the integration's keys being unknown to the card.
+  zte_hyperbox: {
+    platform: "zte_hyperbox", name: "ZTE Hyperbox", color: "#0068b7", logo: "__IMG_FILE:zte.svg__",
+    website: "https://www.zte.com", admin: "http://192.168.0.1", line: "5G", guess: true, anchorRestart: true,
+    models: [{ id: "zte_mc8810", name: "ZTE Hyperbox 5G Lite", re: /./, pic: "generic_mobile" }],
+    keys: {},
+    bootClass: true,
+  },
+  // Starlink (starlink, built in): the dish's throughput in bit/s, last restart (a date), connectivity (device_class
+  // connectivity, no key) and reboot button.
+  starlink: {
+    platform: "starlink", name: "Starlink", color: "#3c4a5c", logo: "__IMG_FILE:starlink.svg__",
+    website: "https://www.starlink.com", admin: "http://192.168.100.1", line: "SATELLITE",
+    models: [{ id: "starlink", name: "Starlink", re: /./, pic: "generic_dish" }],
+    keys: { rate_down: "downlink_throughput", rate_up: "uplink_throughput", boot: "last_restart" },
+    wanClass: true,
+  },
+};
+
+// Internet providers that ship a box supported through another integration (its model's `brand`): their name,
+// accent colour and links replace the integration's on the card. A provider with no admin address leaves the box's
+// own configuration URL (the device's), as the Sagemcom F@st integration sets it.
+const BRANDS = {
+  kpn: { name: "KPN", color: "#009900", website: "https://www.kpn.com", admin: "http://192.168.2.254", logo: "__IMG_FILE:kpn.svg__" },
+  proximus: { name: "Proximus", color: "#5c2d91", website: "https://www.proximus.be", admin: "http://192.168.1.1", logo: "__IMG_FILE:proximus.svg__" },
+  delta: { name: "DELTA Fiber", color: "#e4002b", website: "https://www.delta.nl", admin: null, logo: "__IMG_FILE:delta.svg__" },
+  telekom: { name: "Telekom", color: "#e20074", website: "https://www.telekom.de", admin: "http://speedport.ip", logo: "__IMG_FILE:telekom.svg__" },
+  bt: { name: "BT", color: "#5514b4", website: "https://www.bt.com", admin: "http://192.168.1.254", logo: "__IMG_FILE:bt.svg__" },
+  eir: { name: "eir", color: "#b5006b", website: "https://www.eir.ie", admin: null, logo: "__IMG_FILE:eir.svg__" },
+  salt: { name: "Salt", color: "#c8102e", website: "https://www.salt.ch", admin: null, logo: "__IMG_FILE:salt.svg__" },
+  masmovil: { name: "MásMóvil", color: "#e5bd00", website: "https://www.masmovil.es", admin: null, logo: "__IMG_FILE:masmovil.svg__" },
+  telia: { name: "Telia", color: "#990ae3", website: "https://www.telia.se", admin: null, logo: "__IMG_FILE:telia.svg__" },
+  tdc: { name: "TDC", color: "#1f3a93", website: "https://tdc.dk", admin: null, logo: "__IMG_FILE:tdc.svg__" },
+  bell: { name: "Bell", color: "#00549a", website: "https://www.bell.ca", admin: "http://192.168.2.1", logo: "__IMG_FILE:bell.svg__" },
+  optus: { name: "Optus", color: "#008a8a", website: "https://www.optus.com.au", admin: null, logo: "__IMG_FILE:optus.svg__" },
 };
 
 // ---------------------------------------------------------------------------
@@ -2331,6 +2533,17 @@ const parseDate = (raw, timeZone) => {
   }
 };
 
+/** Seconds since the box started, from an uptime sensor: a boot date (device_class uptime / timestamp), or a duration
+ *  (Huawei LTE: seconds, or the sensor's own time unit); null while it has no value. */
+const bootSec = (s) => {
+  if (noValue(s)) return null;
+  const unit = String(s.attributes?.unit_of_measurement || "").toLowerCase();
+  const v = Number(s.state);
+  if (unit && Number.isFinite(v)) return Math.max(0, v * ({ ms: 1e-3, s: 1, min: 60, h: 3600, d: 86400 }[unit] ?? 1));
+  const ms = Date.parse(s.state);
+  return Number.isFinite(ms) ? Math.max(0, (Date.now() - ms) / 1000) : null;
+};
+
 /** Seconds since the boot date exposed by the router device tracker ("uptime" attribute). */
 const uptimeSec = (tracker, timeZone) => {
   const raw = tracker?.attributes?.uptime;
@@ -2385,10 +2598,19 @@ const LINE_ICONS = {
   fibre: '<circle cx="12" cy="6" r="2"/><path class="ln" d="M12 12V8.5M8 6H6M18 6h-2M9.2 3.2 8 2M14.8 3.2 16 2"/>',
   dsl: '<path class="ln" d="M12 12v-1.5l-2.5-1.8 5-2-5-2 2.5-1.7V1.5"/>',
   mobile: '<path class="ln" d="M12 12V6.5M8.6 5.6a4.8 4.8 0 0 1 6.8 0M6.2 3.2a8.2 8.2 0 0 1 11.6 0"/>',
+  satellite: '<path class="ln" d="M12 12V8M7.5 3.5l9 4.5M9 2.6a5 5 0 0 0 6.4 7.6"/><circle cx="17.5" cy="3.5" r="1.3"/>',
 };
 const lineOf = (type, model) => {
   const t = `${type || ""} ${model || ""}`.toLowerCase();
-  return /ftth|fib|pon\b/.test(t) ? "fibre" : /dsl/.test(t) ? "dsl" : /\b(4g|5g|lte|mobile|cell)/.test(t) ? "mobile" : "box";
+  return /ftth|fib|pon\b/.test(t)
+    ? "fibre"
+    : /dsl/.test(t)
+      ? "dsl"
+      : /\b(4g|5g|lte|mobile|cell)/.test(t)
+        ? "mobile"
+        : /satellite|starlink/.test(t)
+          ? "satellite"
+          : "box";
 };
 const lineIcon = (kind) => `<svg class="icon type" viewBox="0 0 24 24" aria-hidden="true">${BOX_BODY}${LINE_ICONS[kind]}</svg>`;
 const svgIcon = (path, cls = "") => `<svg class="icon ${cls}" viewBox="0 0 24 24"><path d="${path}"/></svg>`;
@@ -2507,8 +2729,21 @@ const registry = (hass) => {
   return list;
 };
 
-/** True when the entity's translation key matches the operator's alternate pattern for a rate slot (Livebox fibre). */
-const isAltRate = (op, e, slot) => !!(op.alt?.[slot] && e.entity_id.startsWith("sensor.") && op.alt[slot].test(e.translation_key || ""));
+/** True when the entity's translation key matches the operator's alternate pattern for a slot: a rate slot (Livebox
+ *  fibre, a sensor) or the Wi-Fi (the FRITZ!Box main Wi-Fi switches, one per band). */
+const isAlt = (op, e, slot) =>
+  !!(op.alt?.[slot] && (!/^rate_/.test(slot) || e.entity_id.startsWith("sensor.")) && op.alt[slot].test(e.translation_key || ""));
+const isAltRate = isAlt;
+
+// Integrations whose keys the card does not know (`guess`): rate sensors told apart by their translation key or id.
+const GUESS_DOWN = /down|rx\b|_rx|receiv/i;
+const GUESS_UP = /(^|[^a-z])up(load|link|_|$)|tx\b|_tx|sent|send/i;
+/** "down" / "up" for a data-rate sensor of a `guess` operator, by its translation key or entity id, else null. */
+const guessRate = (hass, e) => {
+  if (!e.entity_id.startsWith("sensor.") || hass.states[e.entity_id]?.attributes?.device_class !== "data_rate") return null;
+  const name = `${e.translation_key || ""} ${e.entity_id}`;
+  return GUESS_DOWN.test(name) ? "down" : GUESS_UP.test(name) ? "up" : null;
+};
 
 /** True when an entity is the operator's "download rate" sensor (by translation key, an alternate key pattern, or
  *  entity id for a legacy one), or its downstream line sync rate for an operator without throughput sensors (SFR Box). */
@@ -2517,6 +2752,24 @@ const isRateDown = (op, e) =>
   (op.keys.sync_down && e.translation_key === op.keys.sync_down) ||
   isAltRate(op, e, "rate_down") ||
   (op.legacy?.rate_down?.test(e.entity_id));
+
+/** True when an entity marks the box device: its download rate (see isRateDown), else, for an integration whose box
+ *  has no rate sensor, its restart button (Sagemcom F@st), or a guessed download rate (ZTE Hyperbox). */
+const isAnchor = (hass, op, e) =>
+  isRateDown(op, e) ||
+  (op.anchorRestart && e.entity_id.startsWith("button.") && !e.translation_key && hass.states[e.entity_id]?.attributes?.device_class === "restart") ||
+  (op.guess && guessRate(hass, e) === "down");
+
+/** Boxes of the integrations that expose no entity for the box itself, only trackers (Swisscom): the integration is
+ *  the box, keyed "platform:<integration>". */
+const trackerBoxes = (hass) => {
+  const out = [];
+  for (const op of Object.values(OPERATORS)) {
+    if (op.trackersOnly && registry(hass).some((e) => e.platform === op.platform && e.entity_id.startsWith("device_tracker.")))
+      out.push({ value: `platform:${op.platform}`, label: op.name });
+  }
+  return out;
+};
 
 /** The operator of a device, from the platform of its registry entities, or undefined. */
 const opOfDevice = (hass, deviceId) => {
@@ -2575,11 +2828,11 @@ const listBoxes = (hass) => {
   const seen = new Map();
   for (const e of registry(hass)) {
     const op = OPERATORS[e.platform];
-    if (op && isRateDown(op, e) && e.device_id && !seen.has(e.device_id))
+    if (op && isAnchor(hass, op, e) && e.device_id && !seen.has(e.device_id))
       seen.set(e.device_id, deviceName(hass.devices?.[e.device_id]) || e.device_id);
   }
   const list = [...seen.entries()].map(([value, label]) => ({ value, label }));
-  for (const b of legacyBoxes(hass)) if (!seen.has(b.value)) list.push(b);
+  for (const b of [...legacyBoxes(hass), ...trackerBoxes(hass)]) if (!seen.has(b.value)) list.push(b);
   return list;
 };
 
@@ -2595,7 +2848,21 @@ const fillLegacy = (hass, box, prefix) => {
   for (const id of Object.keys(hass.states).sort()) {
     if (legacyOwn(op.legacy.rate_down, id, prefix)) box.scalars.rate_down = id;
     else if (legacyOwn(op.legacy.rate_up, id, prefix)) box.scalars.rate_up = id;
+    else if (legacyOwn(op.legacy.boot, id, prefix)) box.scalars.boot = id;
   }
+};
+
+/** Fill a box of an integration that only has trackers (Swisscom): every tracker of the integration is counted. */
+const fillTrackers = (hass, box, value) => {
+  const op = OPERATORS[value.slice("platform:".length)];
+  if (!op) return;
+  box.id = value;
+  box.operator = op;
+  box.device = null;
+  box.trackers = registry(hass)
+    .filter((e) => e.platform === op.platform && e.entity_id.startsWith("device_tracker."))
+    .map((e) => e.entity_id)
+    .sort();
 };
 
 const emptyBox = () => ({ id: null, device: null, operator: null, lineType: null, scalars: {}, temps: [], fans: [], partitions: [], raids: [], trackers: [] });
@@ -2635,7 +2902,10 @@ const discover = (hass, boxId) => {
   const routers = listBoxes(hass).map((b) => b.value);
   const router = boxId ? (routers.includes(boxId) ? boxId : null) : routers[0];
   const dev = router ? hass.devices?.[router] : null;
-  if (router && !dev) {
+  if (router?.startsWith("platform:")) {
+    // Integration without a box entity (Swisscom): its trackers only.
+    fillTrackers(hass, box, router);
+  } else if (router && !dev) {
     // Legacy operator (Bbox): no device, entities found in hass.states by their id pattern.
     fillLegacy(hass, box, router);
   } else if (router && dev) {
@@ -2655,6 +2925,7 @@ const discover = (hass, boxId) => {
         // Disks are child devices of the router; client trackers share its config entry.
         const child = d && d.via_device_id === router;
         const sameEntry = d && (d.config_entries || []).some((c) => entryIds.has(c));
+        if (e.platform !== op.platform) continue;
         if (domain === "device_tracker") {
           if (own) box.scalars.router = id;
           // Most client trackers have no device (Home Assistant gives one only when another integration
@@ -2672,11 +2943,21 @@ const discover = (hass, boxId) => {
         else if ((keys.rate_up && k === keys.rate_up) || (legacy?.rate_up?.test(id))) box.scalars.rate_up = id;
         else if (isAltRate(op, e, "rate_down")) box.scalars.rate_down ??= id;
         else if (isAltRate(op, e, "rate_up")) box.scalars.rate_up ??= id;
+        else if (own && op.guess && guessRate(hass, e) === "down") box.scalars.rate_down ??= id;
+        else if (own && op.guess && guessRate(hass, e) === "up") box.scalars.rate_up ??= id;
         else if (keys.sync_down && k === keys.sync_down) box.scalars.sync_down = id;
         else if (keys.sync_up && k === keys.sync_up) box.scalars.sync_up = id;
         else if (keys.missed && k === keys.missed) box.scalars.missed = id;
         else if (keys.missed_total && k === keys.missed_total) box.scalars.missed_total = id;
         else if (domain === "binary_sensor" && keys.wan && k === keys.wan) box.scalars.wan = id;
+        // A connectivity binary sensor without translation key (Starlink, the guessed ZTE one) when the operator has
+        // no keyed WAN sensor.
+        else if (own && domain === "binary_sensor" && (op.wanClass || op.guess) && !k && a.device_class === "connectivity") box.scalars.wan ??= id;
+        else if (domain === "sensor" && keys.ip && k === keys.ip) box.scalars.ip = id;
+        else if (domain === "sensor" && keys.ip6 && k === keys.ip6) box.scalars.ip6 = id;
+        else if (domain === "sensor" && keys.boot && k === keys.boot) box.scalars.boot = id;
+        // The box uptime sensor without translation key (FRITZ!Box device_uptime, Vodafone sys_uptime): a boot date.
+        else if (own && domain === "sensor" && op.bootClass && !k && (a.device_class === "uptime" || a.device_class === "timestamp")) box.scalars.boot ??= id;
         else if (domain === "binary_sensor" && keys.lines?.[k]) {
           box.scalars.line = id;
           box.lineType = keys.lines[k];
@@ -2684,14 +2965,20 @@ const discover = (hass, boxId) => {
         else if (domain === "sensor" && keys.line_status && k === keys.line_status) box.scalars.line_status = id;
         else if (domain === "sensor" && keys.infra && k === keys.infra) box.scalars.infra = id;
         else if (keys.wifi && k === keys.wifi) box.scalars.wifi = id;
+        else if (isAlt(op, e, "wifi")) box.scalars.wifi ??= id;
         else if (own && domain === "button" && keys.mark_read && k === keys.mark_read) box.scalars.mark_read = id;
-        else if (own && domain === "button" && ((keys.reboot && k === keys.reboot) || a.device_class === "restart")) box.scalars.reboot = id;
+        // A restart button with a translation key of its own is a reconnect button (FRITZ!Box `reconnect`, Vodafone
+        // `dsl_reconnect`…), never the reboot.
+        else if (own && domain === "button" && ((keys.reboot && k === keys.reboot) || (!k && a.device_class === "restart"))) box.scalars.reboot = id;
         else if (keys.partition && k === keys.partition) box.partitions.push({ id, device: d });
         else if (keys.raid && k === keys.raid) box.raids.push(id);
-        else if (own && domain === "sensor" && !k && a.device_class === "temperature") box.temps.push({ id, name: shortName(hass, id, dev) });
+        // Temperatures: the box's temperature sensors, with a key (FRITZ!Box cpu_temperature) or not (Freebox).
+        else if (own && domain === "sensor" && a.device_class === "temperature") box.temps.push({ id, name: shortName(hass, id, dev) });
         else if (own && domain === "sensor" && !k && /^(rpm|tr\/min)$/i.test(a.unit_of_measurement || ""))
           box.fans.push({ id, name: shortName(hass, id, dev) });
       }
+      // The DSL line sync rates of a box that has them tell its kind of line (FRITZ!Box on DSL).
+      if (op.syncLine && box.scalars.sync_down) box.lineType ??= op.syncLine;
     }
   } else if (!entries.length && !boxId) {
     // No registry (old frontend, tests): fall back on the default English entity ids.
@@ -2725,10 +3012,26 @@ const detectModel = (box) => {
   return ids ? models.find((m) => m.re.test(ids)) : undefined;
 };
 
-/** Model of the box: the one set with the `model` option, else the detected one. */
+/** Model of the box: the one set with the `model` option, else the detected one, else the operator's default model
+ *  (an integration without device, whose box has a single kind of picture: Swisscom). A model whose `fromDevice` is
+ *  set takes the device's own model as its name (a "FRITZ!Box 7590" rather than "FRITZ!Box"). */
 const boxModel = (box, config) => {
   const models = box?.operator?.models ?? MODELS;
-  return models.find((m) => m.id === config?.model) ?? detectModel(box);
+  const m =
+    models.find((x) => x.id === config?.model) ??
+    detectModel(box) ??
+    (box?.operator?.defaultModel ? models.find((x) => x.id === box.operator.defaultModel) : undefined);
+  if (!m?.fromDevice) return m;
+  const own = box?.device?.model;
+  return own ? { ...m, name: /^\s*[a-z]?\d/i.test(own) && m.prefix ? `${m.prefix} ${own}` : own } : m;
+};
+
+/** Branding of the box: its operator's, overridden by the brand of its model when the model belongs to another
+ *  internet provider than the integration's (a KPN Box 12 on the Livebox integration, a Bell Home Hub on Sagemcom). */
+const brandOf = (box, config) => {
+  const op = box?.operator || OPERATORS.freebox;
+  const brand = BRANDS[boxModel(box, config)?.brand];
+  return brand ? { ...op, ...brand } : op;
 };
 
 /** Label of a partition: its friendly name without the device name and the "free space" words, as the core
@@ -3011,7 +3314,8 @@ class InternetBoxBase extends HTMLElement {
   // Small on / off switch for the Wi-Fi, next to its tile, chip or footer item; none while the switch is
   // unavailable. Its name is "Wi-Fi", its tooltip the action it does.
   _wifiToggle(wifi) {
-    if (!wifi || noValue(wifi)) return "";
+    // Only a Wi-Fi switch can be turned on and off (the Huawei LTE Wi-Fi state is a read-only binary sensor).
+    if (!wifi || noValue(wifi) || !wifi.entity_id.startsWith("switch.")) return "";
     const on = wifi.state === "on";
     return `<button type="button" class="toggle" role="switch" aria-checked="${on}" data-action="wifi" title="${esc(
       this._t(on ? "wifi_turn_off" : "wifi_turn_on")
@@ -3133,8 +3437,17 @@ class InternetBoxBase extends HTMLElement {
     return level(v, threshold(this._config, `${metric}_warning`), threshold(this._config, `${metric}_critical`));
   }
 
-  _uptime(router) {
-    return uptimeSec(router, this._hass.config?.time_zone);
+  // Seconds since the box started: the router tracker's boot date (Freebox), else the box's uptime sensor, a boot
+  // date (FRITZ!Box, Vodafone, Starlink, Bbox) or a number of seconds (Huawei LTE).
+  _uptime(router, box) {
+    const fromTracker = uptimeSec(router, this._hass.config?.time_zone);
+    if (fromTracker !== null || !box?.scalars.boot) return fromTracker;
+    return bootSec(this._s(box.scalars.boot));
+  }
+
+  // Entity opened by a click on the uptime: the router tracker when it gives it, else the uptime sensor.
+  _uptimeEntity(router, box) {
+    return router?.attributes?.uptime ? router.entity_id : box?.scalars.boot || router?.entity_id;
   }
 
   // Download / upload rate tile, shared by the full and the mini card.
@@ -3172,7 +3485,7 @@ class InternetBoxBase extends HTMLElement {
     ];
     for (const id of ids) sig.push(h.states[id]);
     for (const id of Object.values(discoverSpeedtest(h) || {})) sig.push(h.states[id]);
-    if (this._s(box.scalars.router)?.attributes?.uptime) sig.push(Math.floor(Date.now() / 60e3));
+    if (this._s(box.scalars.router)?.attributes?.uptime || box.scalars.boot) sig.push(Math.floor(Date.now() / 60e3));
     return sig;
   }
 
@@ -3228,7 +3541,8 @@ class InternetBoxBase extends HTMLElement {
       this._s(sc.router)?.attributes?.connection_type ||
       this._s(sc.wan)?.attributes?.link_type ||
       (infra && !noValue(infra) ? infra.state : "") ||
-      box.lineType;
+      box.lineType ||
+      box.operator?.line;
     return type ? String(type).toUpperCase() : "";
   }
 
@@ -3287,13 +3601,13 @@ class InternetBoxBase extends HTMLElement {
 
   _header(box, withChips) {
     const c = this._config;
-    const op = box.operator || OPERATORS.freebox;
+    const model = boxModel(box, c);
+    const op = brandOf(box, c);
     const router = this._s(box.scalars.router);
     const firmware = box.device?.sw_version || router?.attributes?.firmware_version;
     const devName = deviceName(box.device);
-    const model = boxModel(box, c);
     const name = c.title || model?.name || devName || op.name;
-    const adminUrl = /^https?:\/\//i.test(c.admin_url || "") ? c.admin_url : op.admin;
+    const adminUrl = /^https?:\/\//i.test(c.admin_url || "") ? c.admin_url : op.admin || box.device?.configuration_url || "";
     const sub = [devName && devName !== name ? devName : null, firmware ? `${this._t("firmware")} ${firmware}` : null].filter(Boolean);
     // Icon of the kind of connection, tinted with the operator colour, with the operator logo (every supported
     // operator has one) as a badge, opening its website.
@@ -3302,7 +3616,7 @@ class InternetBoxBase extends HTMLElement {
       op.logo ? `<img class="logo" src="${op.logo}" alt="${esc(op.name)}">` : ""
     }${line}</a>`;
     // The box picture only when the operator has a matching model drawing.
-    const boxImg = model && IMG_BOX[model.id] ? IMG_BOX[model.id] : null;
+    const boxImg = modelPic(model) || null;
     return `
       <div class="header">
         ${c.show_logo !== false ? brand : ""}
@@ -3460,7 +3774,7 @@ class InternetBoxCard extends InternetBoxBase {
     if (c.show_storage !== false) parts.push(this._storage(box));
     if (c.show_services !== false) parts.push(this._services(box));
     return `<style>${BASE_STYLE}${FULL_STYLE}</style>
-      <ha-card style="--ibc-red:${(box.operator || OPERATORS.freebox).color}">
+      <ha-card style="--ibc-red:${brandOf(box, this._config).color}">
         ${this._header(box, true)}
         <div class="content">${parts.filter(Boolean).join("")}</div>
       </ha-card>`;
@@ -3471,16 +3785,22 @@ class InternetBoxCard extends InternetBoxBase {
     const rates = sc.rate_down || sc.rate_up || sc.sync_down || sc.sync_up;
     const router = this._s(sc.router);
     const facts = [];
-    if (router?.attributes?.IPv4)
+    // Public IP: the router tracker's attributes (Freebox), else the integration's external IP sensors.
+    const ip4 = this._s(sc.ip);
+    const ip6 = this._s(sc.ip6);
+    const ip = router?.attributes?.IPv4
+      ? { entity: router.entity_id, v4: router.attributes.IPv4, v6: router.attributes.IPv6 }
+      : ip4 && !noValue(ip4)
+        ? { entity: ip4.entity_id, v4: ip4.state, v6: ip6 && !noValue(ip6) ? ip6.state : "" }
+        : null;
+    if (ip)
       facts.push(
-        `<span class="clickable" role="button" tabindex="0" data-entity="${router.entity_id}" title="${esc(router.attributes.IPv6 || "")}">${svgIcon(ICONS.ip)}${esc(
-          router.attributes.IPv4
-        )}</span>`
+        `<span class="clickable" role="button" tabindex="0" data-entity="${ip.entity}" title="${esc(ip.v6 || "")}">${svgIcon(ICONS.ip)}${esc(ip.v4)}</span>`
       );
-    const up = this._uptime(router);
+    const up = this._uptime(router, box);
     if (up !== null)
       facts.push(
-        `<span class="clickable" role="button" tabindex="0" data-entity="${router.entity_id}">${svgIcon(ICONS.timer)}${this._t("uptime")} ${fmtUptime(
+        `<span class="clickable" role="button" tabindex="0" data-entity="${this._uptimeEntity(router, box)}">${svgIcon(ICONS.timer)}${this._t("uptime")} ${fmtUptime(
           up,
           this._hass,
           this._config
@@ -3757,10 +4077,10 @@ class InternetBoxMiniCard extends InternetBoxCard {
         label
       )}"><span role="button" tabindex="0" aria-label="${esc(label)}">${svgIcon(n > 0 ? ICONS.phone_missed : ICONS.phone)}${n ?? "—"}</span>${reset}</span>`);
     }
-    const up = this._uptime(router);
+    const up = this._uptime(router, box);
     if (up !== null) foot.push(`<span data-key="uptime">${svgIcon(ICONS.timer)}${fmtUptime(up, this._hass, this._config)}</span>`);
     return `<style>${BASE_STYLE}${MINI_STYLE}</style>
-      <ha-card style="--ibc-red:${(box.operator || OPERATORS.freebox).color}">
+      <ha-card style="--ibc-red:${brandOf(box, this._config).color}">
         ${this._header(box, false)}
         <div class="content">
           ${parts.join("")}
@@ -3971,12 +4291,12 @@ for (const card of [
   {
     type: "internet-box-card",
     name: "Internet Box Card",
-    description: "Monitor an internet box (Freebox, Livebox, SFR Box, Bbox): download / upload, temperatures, fans, storage, Wi-Fi, calls and connected devices.",
+    description: "Monitor an internet box (Freebox, Livebox, SFR Box, Bbox, FRITZ!Box, Vodafone Station, Swisscom, Sagemcom F@st, Huawei LTE, ZTE Hyperbox, Starlink): download / upload, temperatures, fans, storage, Wi-Fi, calls and connected devices.",
   },
   {
     type: "internet-box-mini-card",
     name: "Internet Box Mini Card",
-    description: "Compact internet box overview (Freebox, Livebox, SFR Box, Bbox): download / upload, connection, temperature, Wi-Fi and uptime, with a button to show the full card.",
+    description: "Compact internet box overview (Freebox, Livebox, SFR Box, Bbox, FRITZ!Box, Vodafone Station, Swisscom, Sagemcom F@st, Huawei LTE, ZTE Hyperbox, Starlink): download / upload, connection, temperature, Wi-Fi and uptime, with a button to show the full card.",
   },
 ]) {
   if (!window.customCards.some((c) => c.type === card.type))

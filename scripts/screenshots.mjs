@@ -14,12 +14,14 @@ import { freezeAnimations, saveIfChanged } from "./capture.mjs";
 const root = fileURLToPath(new URL("..", import.meta.url));
 const cardJs = readFileSync(`${root}dist/internet-box-card.js`, "utf8");
 
-// README copies of the drawn model pictures, per operator: images/freebox-<model>.svg, images/livebox-<model>.svg…
+// README copies of the drawn model pictures, per operator: images/freebox-<model>.svg, images/livebox-<model>.svg…, and
+// one file per shared generic form factor (images/generic-router.svg…), whatever the number of models drawn with it.
 const { IMG_BOX, OPERATORS } = load("internet-box-card.js", ["IMG_BOX", "OPERATORS"]);
 for (const op of Object.values(OPERATORS)) {
   for (const m of op.models) {
-    const base = (op.platform === "freebox" ? `freebox-${m.id}` : m.id).replace(/_/g, "-");
-    writeFileSync(`${root}images/${base}.svg`, `${decodeURIComponent(IMG_BOX[m.id].slice("data:image/svg+xml,".length))}\n`);
+    const pic = m.pic ?? m.id;
+    const base = (op.platform === "freebox" && !m.pic ? `freebox-${pic}` : pic).replace(/_/g, "-");
+    writeFileSync(`${root}images/${base}.svg`, `${decodeURIComponent(IMG_BOX[pic].slice("data:image/svg+xml,".length))}\n`);
   }
 }
 

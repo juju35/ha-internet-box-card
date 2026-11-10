@@ -285,11 +285,13 @@ test("every model of every operator has its drawn picture, also shown in the REA
   const { readFileSync } = await import("node:fs");
   for (const op of Object.values(OPERATORS)) {
     for (const m of op.models) {
-      assert.match(IMG_BOX[m.id], /^data:image\/svg\+xml,/, m.id);
+      // A model is drawn on its own (its id) or with a shared generic form factor (its `pic`).
+      const pic = m.pic ?? m.id;
+      assert.match(IMG_BOX[pic], /^data:image\/svg\+xml,/, m.id);
       // images/<operator>-<model>.svg is the README copy of the same drawing (npm run screenshots writes it).
-      const base = (op.platform === "freebox" ? `freebox-${m.id}` : m.id).replace(/_/g, "-");
+      const base = (op.platform === "freebox" && !m.pic ? `freebox-${pic}` : pic).replace(/_/g, "-");
       const file = readFileSync(new URL(`../images/${base}.svg`, import.meta.url), "utf8");
-      assert.equal(file.trim(), decodeURIComponent(IMG_BOX[m.id].slice("data:image/svg+xml,".length)), m.id);
+      assert.equal(file.trim(), decodeURIComponent(IMG_BOX[pic].slice("data:image/svg+xml,".length)), m.id);
     }
   }
 });
@@ -312,7 +314,7 @@ test("the editor model dropdown lists the models of the box's operator", () => {
   const lbStates = { "sensor.lb_down": { entity_id: "sensor.lb_down", ...st("10", { unit_of_measurement: "kB/s" }) } };
   assert.equal(
     modelOptions({ states: lbStates, entities: lbEntities, devices: lbDevices }).join(),
-    ",livebox_7,livebox_6,livebox_5,livebox_4,livebox_s"
+    ",livebox_7,livebox_6,livebox_5,livebox_4,livebox_s,kpn_box_12"
   );
 });
 

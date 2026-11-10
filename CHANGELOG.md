@@ -1,5 +1,25 @@
 # Changelog
 
+## 2.11.0 - 2026-11-10
+
+### Features
+- **Eight more integrations**, grouped by country in the README:
+  - **FRITZ!Box** (`fritz`, Germany and neighbours): download / upload rates, WAN connection, external IPv4 / IPv6, uptime, CPU temperature, main Wi-Fi switch, connected devices, reboot; the DSL line sync rates when there is no traffic sensor.
+  - **Vodafone Station** (`vodafone_station`, Germany, Italy, United Kingdom, Ireland): rates, active connection, external IPs, uptime, main Wi-Fi switch, connected devices, reboot.
+  - **Swisscom Internet-Box** (`swisscom`, Switzerland): connected devices (the integration has no entity for the box, so the integration is the box, `box: platform:swisscom`).
+  - **Sagemcom F@st** (`sagemcom_fast`, custom): found by its reboot button, with connected devices; the gateway model gives the provider and its colour and links: Telekom Speedport Pro, BT Smart Hub, eir F3000, Salt FibreBox X6, KPN Experia Box 12 and F@st 4360Air, DELTA F@st 3890V3, Proximus b-box 3, MásMóvil, Telia, TDC, Bell Home Hub 3000 / 4000, Optus.
+  - **KPN Box 12** on the Livebox integration (Livebox OS), with the KPN colour and links.
+  - **Huawei LTE** (`huawei_lte`): rates, mobile connection, WAN IPs, uptime, Wi-Fi state (read only, no switch), reboot.
+  - **ZTE Hyperbox** (`zte_hyperbox`, custom): rates, connection and reboot recognised by their kind.
+  - **Starlink** (`starlink`): throughput, connectivity, uptime (last restart), reboot, with a satellite connection icon.
+- **Bbox**: the uptime sensor is shown, and the `custom_bbox` fork (for the firmwares the built-in integration can no longer reach) is documented; it creates the same sensors.
+- Public IP and uptime are also read from the integration's own sensors (external IP, uptime as a boot date or a duration), not only from the box tracker.
+- The boxes of the new integrations are drawn with generic form factors (router, hub, tower, 4G / 5G box, dish), with the device's own model name; a provider logo is embedded when its file is in `images/`.
+
+### Fixes
+- A restart button that has a translation key of its own (a reconnect button) is no longer taken for the box reboot.
+- The Wi-Fi switch is shown only when the Wi-Fi entity is a switch.
+
 ## 2.10.1 - 2026-11-09
 
 ### Maintenance
