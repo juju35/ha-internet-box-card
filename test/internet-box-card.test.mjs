@@ -954,6 +954,58 @@ test("the last Speedtest.net test is a fact of the network section, hidden with 
   assert.doesNotMatch(el._network({ scalars: { router: ROUTER_ID } }), /speedtest/);
 });
 
+test("another speed test (LibreSpeed…) through entities.speedtest: its sensors only, not mixed with Speedtest.net's; Fast.com found", async () => {
+  const el = await mockCard({});
+  const add = (id, platform, key, state, unit) => {
+    if (platform) el._hass.entities[id] = { entity_id: id, platform, translation_key: key };
+    el._hass.states[id] = { entity_id: id, state, attributes: { unit_of_measurement: unit }, last_changed: "2026-11-09T06:00:00Z" };
+  };
+  add("sensor.fast_com_download", "fastdotcom", "download", "400", "Mbit/s");
+  let html = el._network({ scalars: { router: ROUTER_ID } });
+  assert.match(html, /data-entity="sensor\.fast_com_download"/);
+  assert.match(html, /↓ 50\.0 MB\/s</);
+  add("sensor.speedtest_upload", "speedtestdotnet", "upload", "512", "Mbit/s");
+  add("sensor.librespeed_download", null, null, "800", "Mbit/s");
+  add("sensor.librespeed_ping", null, null, "12", "ms");
+  el._config = { ...el._config, entities: { speedtest: { download: "sensor.librespeed_download", ping: "sensor.librespeed_ping" } } };
+  html = el._network({ scalars: { router: ROUTER_ID } });
+  assert.match(html, /data-entity="sensor\.librespeed_download"/);
+  assert.match(html, /↓ 100 MB\/s · 12 ms/);
+  assert.doesNotMatch(html, /↑/);
+});
+
+test("entities: the box's sensors of the user's choice replace the ones found, the same object while nothing changes", () => {
+  const lib = load("internet-box-card.js", ["boxFor", "discover"]);
+  const hass = { states: { ...baseStates(), "sensor.wan_in": { entity_id: "sensor.wan_in", ...st("2000", { unit_of_measurement: "kB/s" }) } }, entities, devices, language: "en" };
+  const config = { box: "router", entities: { rate_down: "sensor.wan_in", wifi: "not an id" } };
+  const found = lib.discover(hass, "router");
+  const own = lib.boxFor(hass, config);
+  assert.equal(found.scalars.rate_down, "sensor.down");
+  assert.equal(own.scalars.rate_down, "sensor.wan_in");
+  assert.equal(own.scalars.wifi, found.scalars.wifi);
+  assert.equal(lib.boxFor(hass, { ...config }), own);
+  assert.equal(lib.boxFor(hass, { box: "router" }), found);
+});
+
+test("editor: the box rates and a speed test chosen under entities, emptied ones dropped", () => {
+  const { InternetBoxCardEditor } = load("internet-box-card.js", ["InternetBoxCardEditor"]);
+  const hass = { states: baseStates(), entities, devices, language: "en" };
+  const ed = new InternetBoxCardEditor();
+  ed.appendChild = () => {};
+  const emitted = [];
+  ed.dispatchEvent = (ev) => emitted.push(ev.detail.config);
+  ed.setConfig({ box: "router" });
+  ed.hass = hass;
+  const fold = ed._form.schema.find((f) => f.name === "entities");
+  assert.equal(fold.type, "expandable");
+  assert.equal(ed._form.computeLabel({ name: "download" }), "Speed test: download");
+  const change = (value) => ed._form.listeners["value-changed"]({ stopPropagation() {}, detail: { value } });
+  change({ ...ed._config, entities: { rate_down: "", speedtest: { download: "sensor.librespeed_download", upload: "" } } });
+  assert.deepEqual(JSON.parse(JSON.stringify(emitted.at(-1).entities)), { speedtest: { download: "sensor.librespeed_download" } });
+  change({ ...ed._config, entities: { speedtest: { download: "" } } });
+  assert.equal("entities" in emitted.at(-1), false);
+});
+
 // A device of another integration linked to the router (FRITZ!Box Tools links network clients, a NAS merged by its
 // MAC address among them, to the box) is no child of the box: its entities of the box's platform are left out.
 test("a device of another config entry linked to the router is not a child of the box", async () => {

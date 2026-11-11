@@ -617,6 +617,12 @@ const STRINGS = {
     show_services: "Show services (Wi-Fi, calls, devices)",
     show_speedtest: "Show the last speed test (Speedtest.net)",
     speedtest: "Speed test",
+    entities: "Sensors of your choice",
+    ent_rate_down: "Box download rate",
+    ent_rate_up: "Box upload rate",
+    ent_download: "Speed test: download",
+    ent_upload: "Speed test: upload",
+    ent_ping: "Speed test: ping",
     zoom: "Detail button",
     zoom_helper: "Button at the top right that shows the full card in place of the mini card, and back",
     rate_unit: "Rate unit",
@@ -691,6 +697,12 @@ const STRINGS = {
     show_services: "Afficher les services (Wi-Fi, appels, appareils)",
     show_speedtest: "Afficher le dernier test de débit (Speedtest.net)",
     speedtest: "Test de débit",
+    entities: "Capteurs de votre choix",
+    ent_rate_down: "Débit descendant de la box",
+    ent_rate_up: "Débit montant de la box",
+    ent_download: "Test de débit : descendant",
+    ent_upload: "Test de débit : montant",
+    ent_ping: "Test de débit : ping",
     zoom: "Bouton détail",
     zoom_helper: "Bouton en haut à droite qui affiche la carte complète à la place de la mini carte, et inversement",
     rate_unit: "Unité des débits",
@@ -764,6 +776,12 @@ const STRINGS = {
     show_services: "Dienste anzeigen (WLAN, Anrufe, Geräte)",
     show_speedtest: "Letzten Geschwindigkeitstest anzeigen (Speedtest.net)",
     speedtest: "Geschwindigkeitstest",
+    entities: "Sensoren Ihrer Wahl",
+    ent_rate_down: "Download-Rate der Box",
+    ent_rate_up: "Upload-Rate der Box",
+    ent_download: "Geschwindigkeitstest: Download",
+    ent_upload: "Geschwindigkeitstest: Upload",
+    ent_ping: "Geschwindigkeitstest: Ping",
     zoom: "Detail-Schaltfläche",
     zoom_helper: "Schaltfläche oben rechts, die anstelle der Mini-Karte die vollständige Karte anzeigt und umgekehrt",
     rate_unit: "Einheit der Datenrate",
@@ -838,6 +856,12 @@ const STRINGS = {
     show_services: "Mostrar los servicios (Wi-Fi, llamadas, dispositivos)",
     show_speedtest: "Mostrar el último test de velocidad (Speedtest.net)",
     speedtest: "Test de velocidad",
+    entities: "Sensores a su elección",
+    ent_rate_down: "Velocidad de descarga del router",
+    ent_rate_up: "Velocidad de subida del router",
+    ent_download: "Test de velocidad: descarga",
+    ent_upload: "Test de velocidad: subida",
+    ent_ping: "Test de velocidad: ping",
     zoom: "Botón de detalle",
     zoom_helper: "Botón arriba a la derecha que muestra la tarjeta completa en lugar de la minitarjeta, y viceversa",
     rate_unit: "Unidad de velocidad",
@@ -913,6 +937,12 @@ const STRINGS = {
     show_services: "Прикажи услуге (Вај-фај, позиви, уређаји)",
     show_speedtest: "Прикажи последњи тест брзине (Speedtest.net)",
     speedtest: "Тест брзине",
+    entities: "Сензори по вашем избору",
+    ent_rate_down: "Брзина преузимања рутера",
+    ent_rate_up: "Брзина слања рутера",
+    ent_download: "Тест брзине: преузимање",
+    ent_upload: "Тест брзине: слање",
+    ent_ping: "Тест брзине: пинг",
     zoom: "Дугме за детаље",
     zoom_helper: "Дугме у горњем десном углу које пребацује мини картицу на пун приказ и назад",
     rate_unit: "Јединица брзине преноса",
@@ -988,6 +1018,12 @@ const STRINGS = {
     show_services: "Prikaži usluge (Wi-Fi, pozivi, uređaji)",
     show_speedtest: "Prikaži poslednji test brzine (Speedtest.net)",
     speedtest: "Test brzine",
+    entities: "Senzori po vašem izboru",
+    ent_rate_down: "Brzina preuzimanja rutera",
+    ent_rate_up: "Brzina slanja rutera",
+    ent_download: "Test brzine: preuzimanje",
+    ent_upload: "Test brzine: slanje",
+    ent_ping: "Test brzine: ping",
     zoom: "Dugme za detalje",
     zoom_helper: "Dugme u gornjem desnom uglu koje prebacuje mini karticu na pun prikaz i nazad",
     rate_unit: "Jedinica brzine prenosa",
@@ -1062,6 +1098,12 @@ const STRINGS = {
     show_services: "Mostra i servizi (Wi-Fi, chiamate, dispositivi)",
     show_speedtest: "Mostra l'ultimo test di velocità (Speedtest.net)",
     speedtest: "Test di velocità",
+    entities: "Sensori a scelta",
+    ent_rate_down: "Velocità di download del router",
+    ent_rate_up: "Velocità di upload del router",
+    ent_download: "Test di velocità: download",
+    ent_upload: "Test di velocità: upload",
+    ent_ping: "Test di velocità: ping",
     zoom: "Pulsante dettagli",
     zoom_helper: "Pulsante in alto a destra che mostra la scheda completa al posto della mini scheda, e viceversa",
     rate_unit: "Unità di velocità",
@@ -1135,6 +1177,12 @@ const STRINGS = {
     show_services: "Diensten tonen (Wi-Fi, oproepen, apparaten)",
     show_speedtest: "Laatste snelheidstest tonen (Speedtest.net)",
     speedtest: "Snelheidstest",
+    entities: "Sensoren naar keuze",
+    ent_rate_down: "Downloadsnelheid van de router",
+    ent_rate_up: "Uploadsnelheid van de router",
+    ent_download: "Snelheidstest: download",
+    ent_upload: "Snelheidstest: upload",
+    ent_ping: "Snelheidstest: ping",
     zoom: "Detailknop",
     zoom_helper: "Knop rechtsboven die de volledige kaart toont in plaats van de minikaart, en terug",
     rate_unit: "Eenheid van snelheid",
@@ -1209,6 +1257,12 @@ const STRINGS = {
     show_services: "Mostrar os serviços (Wi-Fi, chamadas, dispositivos)",
     show_speedtest: "Mostrar o último teste de velocidade (Speedtest.net)",
     speedtest: "Teste de velocidade",
+    entities: "Sensores à sua escolha",
+    ent_rate_down: "Velocidade de download do router",
+    ent_rate_up: "Velocidade de upload do router",
+    ent_download: "Teste de velocidade: download",
+    ent_upload: "Teste de velocidade: upload",
+    ent_ping: "Teste de velocidade: ping",
     zoom: "Botão de detalhe",
     zoom_helper: "Botão no canto superior direito que mostra o cartão completo em vez do minicartão, e vice-versa",
     rate_unit: "Unidade de velocidade",
@@ -1285,6 +1339,12 @@ const STRINGS = {
     show_services: "Pokaż usługi (Wi-Fi, połączenia, urządzenia)",
     show_speedtest: "Pokaż ostatni test prędkości (Speedtest.net)",
     speedtest: "Test prędkości",
+    entities: "Wybrane czujniki",
+    ent_rate_down: "Prędkość pobierania routera",
+    ent_rate_up: "Prędkość wysyłania routera",
+    ent_download: "Test prędkości: pobieranie",
+    ent_upload: "Test prędkości: wysyłanie",
+    ent_ping: "Test prędkości: ping",
     zoom: "Przycisk szczegółów",
     zoom_helper: "Przycisk w prawym górnym rogu, który pokazuje pełną kartę zamiast minikarty, i z powrotem",
     rate_unit: "Jednostka prędkości",
@@ -1359,6 +1419,12 @@ const STRINGS = {
     show_services: "Afișează serviciile (Wi-Fi, apeluri, dispozitive)",
     show_speedtest: "Afișează ultimul test de viteză (Speedtest.net)",
     speedtest: "Test de viteză",
+    entities: "Senzori la alegere",
+    ent_rate_down: "Viteza de descărcare a routerului",
+    ent_rate_up: "Viteza de încărcare a routerului",
+    ent_download: "Test de viteză: descărcare",
+    ent_upload: "Test de viteză: încărcare",
+    ent_ping: "Test de viteză: ping",
     zoom: "Buton de detalii",
     zoom_helper: "Buton din dreapta sus care afișează cardul complet în locul minicardului, și invers",
     rate_unit: "Unitatea vitezei de transfer",
@@ -1433,6 +1499,12 @@ const STRINGS = {
     show_services: "Vis tjenester (Wi-Fi, opkald, enheder)",
     show_speedtest: "Vis den seneste hastighedstest (Speedtest.net)",
     speedtest: "Hastighedstest",
+    entities: "Sensorer efter eget valg",
+    ent_rate_down: "Routerens downloadhastighed",
+    ent_rate_up: "Routerens uploadhastighed",
+    ent_download: "Hastighedstest: download",
+    ent_upload: "Hastighedstest: upload",
+    ent_ping: "Hastighedstest: ping",
     zoom: "Detaljeknap",
     zoom_helper: "Knap øverst til højre, der viser hele kortet i stedet for minikortet og tilbage igen",
     rate_unit: "Enhed for hastighed",
@@ -1507,6 +1579,12 @@ const STRINGS = {
     show_services: "Visa tjänster (Wi-Fi, samtal, enheter)",
     show_speedtest: "Visa det senaste hastighetstestet (Speedtest.net)",
     speedtest: "Hastighetstest",
+    entities: "Valfria sensorer",
+    ent_rate_down: "Routerns nedladdningshastighet",
+    ent_rate_up: "Routerns uppladdningshastighet",
+    ent_download: "Hastighetstest: nedladdning",
+    ent_upload: "Hastighetstest: uppladdning",
+    ent_ping: "Hastighetstest: ping",
     zoom: "Detaljknapp",
     zoom_helper: "Knapp uppe till höger som visar hela kortet i stället för minikortet, och tillbaka",
     rate_unit: "Enhet för hastighet",
@@ -1581,6 +1659,12 @@ const STRINGS = {
     show_services: "Показване на услугите (Wi-Fi, обаждания, устройства)",
     show_speedtest: "Показване на последния тест на скоростта (Speedtest.net)",
     speedtest: "Тест на скоростта",
+    entities: "Сензори по ваш избор",
+    ent_rate_down: "Скорост на изтегляне на рутера",
+    ent_rate_up: "Скорост на качване на рутера",
+    ent_download: "Тест на скоростта: изтегляне",
+    ent_upload: "Тест на скоростта: качване",
+    ent_ping: "Тест на скоростта: пинг",
     zoom: "Бутон за подробности",
     zoom_helper: "Бутон горе вдясно, който показва пълната карта вместо мини картата и обратно",
     rate_unit: "Мерна единица за скорост",
@@ -1655,6 +1739,12 @@ const STRINGS = {
     show_services: "Показывать сервисы (Wi-Fi, звонки, устройства)",
     show_speedtest: "Показывать последний тест скорости (Speedtest.net)",
     speedtest: "Тест скорости",
+    entities: "Датчики на выбор",
+    ent_rate_down: "Скорость загрузки роутера",
+    ent_rate_up: "Скорость отдачи роутера",
+    ent_download: "Тест скорости: загрузка",
+    ent_upload: "Тест скорости: отдача",
+    ent_ping: "Тест скорости: пинг",
     zoom: "Кнопка подробностей",
     zoom_helper: "Кнопка в правом верхнем углу, которая показывает полную карточку вместо мини-карточки и обратно",
     rate_unit: "Единица скорости",
@@ -1730,6 +1820,12 @@ const STRINGS = {
     show_services: "Показувати сервіси (Wi-Fi, дзвінки, пристрої)",
     show_speedtest: "Показувати останній тест швидкості (Speedtest.net)",
     speedtest: "Тест швидкості",
+    entities: "Датчики на вибір",
+    ent_rate_down: "Швидкість завантаження роутера",
+    ent_rate_up: "Швидкість віддачі роутера",
+    ent_download: "Тест швидкості: завантаження",
+    ent_upload: "Тест швидкості: віддача",
+    ent_ping: "Тест швидкості: пінг",
     zoom: "Кнопка подробиць",
     zoom_helper: "Кнопка у правому верхньому куті, яка показує повну картку замість мінікартки, і навпаки",
     rate_unit: "Одиниця швидкості",
@@ -1803,6 +1899,12 @@ const STRINGS = {
     show_services: "Szolgáltatások megjelenítése (Wi-Fi, hívások, eszközök)",
     show_speedtest: "Utolsó sebességteszt megjelenítése (Speedtest.net)",
     speedtest: "Sebességteszt",
+    entities: "Választott érzékelők",
+    ent_rate_down: "A router letöltési sebessége",
+    ent_rate_up: "A router feltöltési sebessége",
+    ent_download: "Sebességteszt: letöltés",
+    ent_upload: "Sebességteszt: feltöltés",
+    ent_ping: "Sebességteszt: ping",
     zoom: "Részletek gomb",
     zoom_helper: "Gomb a jobb felső sarokban, amely a minikártya helyett a teljes kártyát jeleníti meg, és vissza",
     rate_unit: "Sebesség mértékegysége",
@@ -1878,6 +1980,12 @@ const STRINGS = {
     show_services: "Zobraziť služby (Wi-Fi, hovory, zariadenia)",
     show_speedtest: "Zobraziť posledný test rýchlosti (Speedtest.net)",
     speedtest: "Test rýchlosti",
+    entities: "Senzory podľa vlastného výberu",
+    ent_rate_down: "Rýchlosť sťahovania routera",
+    ent_rate_up: "Rýchlosť odosielania routera",
+    ent_download: "Test rýchlosti: sťahovanie",
+    ent_upload: "Test rýchlosti: odosielanie",
+    ent_ping: "Test rýchlosti: ping",
     zoom: "Tlačidlo podrobností",
     zoom_helper: "Tlačidlo vpravo hore, ktoré namiesto minikarty zobrazí celú kartu, a naopak",
     rate_unit: "Jednotka rýchlosti",
@@ -1953,6 +2061,12 @@ const STRINGS = {
     show_services: "Zobrazit služby (Wi-Fi, hovory, zařízení)",
     show_speedtest: "Zobrazit poslední test rychlosti (Speedtest.net)",
     speedtest: "Test rychlosti",
+    entities: "Senzory dle vlastního výběru",
+    ent_rate_down: "Rychlost stahování routeru",
+    ent_rate_up: "Rychlost odesílání routeru",
+    ent_download: "Test rychlosti: stahování",
+    ent_upload: "Test rychlosti: odesílání",
+    ent_ping: "Test rychlosti: ping",
     zoom: "Tlačítko podrobností",
     zoom_helper: "Tlačítko vpravo nahoře, které místo minikarty zobrazí celou kartu, a zpět",
     rate_unit: "Jednotka rychlosti",
@@ -2029,6 +2143,12 @@ const STRINGS = {
     show_services: "Prikaži storitve (Wi-Fi, klici, naprave)",
     show_speedtest: "Prikaži zadnji preizkus hitrosti (Speedtest.net)",
     speedtest: "Preizkus hitrosti",
+    entities: "Senzorji po vaši izbiri",
+    ent_rate_down: "Hitrost prenosa usmerjevalnika",
+    ent_rate_up: "Hitrost nalaganja usmerjevalnika",
+    ent_download: "Preizkus hitrosti: prenos",
+    ent_upload: "Preizkus hitrosti: nalaganje",
+    ent_ping: "Preizkus hitrosti: ping",
     zoom: "Gumb za podrobnosti",
     zoom_helper: "Gumb zgoraj desno, ki namesto mini kartice prikaže celotno kartico, in nazaj",
     rate_unit: "Enota hitrosti",
@@ -2103,6 +2223,12 @@ const STRINGS = {
     show_services: "Rādīt pakalpojumus (Wi-Fi, zvani, ierīces)",
     show_speedtest: "Rādīt pēdējo ātruma testu (Speedtest.net)",
     speedtest: "Ātruma tests",
+    entities: "Jūsu izvēlēti sensori",
+    ent_rate_down: "Maršrutētāja lejupielādes ātrums",
+    ent_rate_up: "Maršrutētāja augšupielādes ātrums",
+    ent_download: "Ātruma tests: lejupielāde",
+    ent_upload: "Ātruma tests: augšupielāde",
+    ent_ping: "Ātruma tests: ping",
     zoom: "Detaļu poga",
     zoom_helper: "Poga augšējā labajā stūrī, kas minikartītes vietā parāda pilno kartīti, un atpakaļ",
     rate_unit: "Ātruma mērvienība",
@@ -2177,6 +2303,12 @@ const STRINGS = {
     show_services: "Εμφάνιση υπηρεσιών (Wi-Fi, κλήσεις, συσκευές)",
     show_speedtest: "Εμφάνιση του τελευταίου τεστ ταχύτητας (Speedtest.net)",
     speedtest: "Τεστ ταχύτητας",
+    entities: "Αισθητήρες της επιλογής σας",
+    ent_rate_down: "Ταχύτητα λήψης του router",
+    ent_rate_up: "Ταχύτητα αποστολής του router",
+    ent_download: "Τεστ ταχύτητας: λήψη",
+    ent_upload: "Τεστ ταχύτητας: αποστολή",
+    ent_ping: "Τεστ ταχύτητας: ping",
     zoom: "Κουμπί λεπτομερειών",
     zoom_helper: "Κουμπί πάνω δεξιά που εμφανίζει την πλήρη κάρτα στη θέση της μίνι κάρτας, και αντίστροφα",
     rate_unit: "Μονάδα ταχύτητας",
@@ -2915,17 +3047,56 @@ const emptyBox = () => ({ id: null, device: null, operator: null, lineType: null
  * registries (hass.entities, hass.devices) and the list of the operators' entities that have a state, not on
  * hass.states, which Home Assistant replaces on every state change.
  */
-// The Speedtest.net integration's last test: download, upload (Mbit/s) and ping (ms) sensors, by translation key. Not part
-// of the box: the same for every box card.
+// The last speed test: download, upload (Mbit/s) and ping (ms) sensors, by translation key, of the Speedtest.net
+// integration (else of Fast.com, download only). Not part of the box: the same for every box card. The `entities`
+// option's `speedtest` sets the sensors of another speed test (LibreSpeed, Speedtest Tracker…).
 const SPEEDTEST_KEYS = ["download", "upload", "ping"];
-const discoverSpeedtest = (hass) => {
-  const found = {};
+const SPEEDTEST_PLATFORMS = ["speedtestdotnet", "fastdotcom"];
+const isEntityId = (v) => typeof v === "string" && /^[a-z_]+\.[a-z0-9_]+$/.test(v);
+const discoverSpeedtest = (hass, config) => {
+  const byPlatform = {};
   for (const e of Object.values(hass.entities || {})) {
-    if (e.platform !== "speedtestdotnet" || e.hidden || !e.entity_id.startsWith("sensor.") || !SPEEDTEST_KEYS.includes(e.translation_key)) continue;
-    if (hass.states[e.entity_id]) found[e.translation_key] = e.entity_id;
+    if (!SPEEDTEST_PLATFORMS.includes(e.platform) || e.hidden || !e.entity_id.startsWith("sensor.") || !SPEEDTEST_KEYS.includes(e.translation_key)) continue;
+    if (hass.states[e.entity_id]) (byPlatform[e.platform] ??= {})[e.translation_key] = e.entity_id;
   }
+  const found = { ...(byPlatform.speedtestdotnet || byPlatform.fastdotcom || {}) };
+  const own = config?.entities?.speedtest;
+  if (own && typeof own === "object") {
+    const chosen = SPEEDTEST_KEYS.filter((k) => isEntityId(own[k]));
+    // Sensors of another speed test: theirs only, not mixed with Speedtest.net's
+    if (chosen.length) for (const k of SPEEDTEST_KEYS) found[k] = isEntityId(own[k]) ? own[k] : undefined;
+  }
+  for (const k of SPEEDTEST_KEYS) if (!found[k]) delete found[k];
   return found.download || found.upload ? found : null;
 };
+
+// The `entities` option's box values: sensors of the user's choice, replacing those found on the box.
+const BOX_KEYS = ["rate_down", "rate_up", "sync_down", "sync_up", "ip", "boot", "wifi", "missed"];
+const withEntitiesCache = new WeakMap();
+const withEntities = (box, entities) => {
+  if (!box || !entities || typeof entities !== "object") return box;
+  const own = BOX_KEYS.filter((k) => isEntityId(entities[k]));
+  if (!own.length) return box;
+  const key = own.map((k) => `${k}=${entities[k]}`).join(",");
+  const hit = withEntitiesCache.get(box);
+  if (hit?.key === key) return hit.result;
+  const result = { ...box, scalars: { ...box.scalars, ...Object.fromEntries(own.map((k) => [k, entities[k]])) } };
+  withEntitiesCache.set(box, { key, result });
+  return result;
+};
+// The editor's pickers of `entities`, and the option without the ones left empty (none: no option).
+const EDITOR_ENTITIES = new Set(["rate_down", "rate_up", ...SPEEDTEST_KEYS]);
+const cleanEntities = (entities) => {
+  if (!entities || typeof entities !== "object") return undefined;
+  const out = {};
+  for (const [k, v] of Object.entries(entities)) {
+    const value = v && typeof v === "object" ? cleanEntities(v) : v;
+    if (value !== "" && value !== undefined && value !== null) out[k] = value;
+  }
+  return Object.keys(out).length ? out : undefined;
+};
+// The box a card shows: the one found, with the sensors of the `entities` option.
+const boxFor = (hass, config) => withEntities(discover(hass, config?.box), config?.entities);
 
 const discover = (hass, boxId) => {
   const found = registry(hass);
@@ -3354,7 +3525,7 @@ class InternetBoxBase extends HTMLElement {
   // Turns the box's Wi-Fi switch on, or opens a confirmation popup before turning it off (wireless devices lose
   // their connection). Nothing while the switch is unavailable, nor for an entity that is not a switch.
   _toggleWifi() {
-    const wifi = this._s(discover(this._hass, this._config.box).scalars.wifi);
+    const wifi = this._s(boxFor(this._hass, this._config).scalars.wifi);
     if (!wifi?.entity_id?.startsWith("switch.") || noValue(wifi)) return;
     const id = wifi.entity_id;
     if (wifi.state !== "on") return this._call("switch", "turn_on", id);
@@ -3380,7 +3551,7 @@ class InternetBoxBase extends HTMLElement {
 
   // Opens the restart confirmation popup; on confirmation, presses the box's reboot button.
   _confirmRestart() {
-    const box = discover(this._hass, this._config.box);
+    const box = boxFor(this._hass, this._config);
     const reboot = box.scalars.reboot;
     if (!reboot || this._s(reboot)?.state === "unavailable") return;
     this._openDialog({
@@ -3529,7 +3700,7 @@ class InternetBoxBase extends HTMLElement {
   _signature() {
     const h = this._hass;
     const sig = [h.entities, h.devices, h.language, h.locale?.language, h.config?.time_zone];
-    const box = discover(h, this._config.box);
+    const box = boxFor(h, this._config);
     if (!box.id) return sig;
     const ids = [
       ...Object.values(box.scalars),
@@ -3540,7 +3711,7 @@ class InternetBoxBase extends HTMLElement {
       ...box.trackers,
     ];
     for (const id of ids) sig.push(h.states[id]);
-    for (const id of Object.values(discoverSpeedtest(h) || {})) sig.push(h.states[id]);
+    for (const id of Object.values(discoverSpeedtest(h, this._config) || {})) sig.push(h.states[id]);
     if (this._s(box.scalars.router)?.attributes?.uptime || box.scalars.boot) sig.push(Math.floor(Date.now() / 60e3));
     return sig;
   }
@@ -3830,7 +4001,7 @@ class InternetBoxCard extends InternetBoxBase {
   }
 
   _render() {
-    const box = discover(this._hass, this._config.box);
+    const box = boxFor(this._hass, this._config);
     if (!box.id) return this._noBox();
     const c = this._config;
     const parts = [];
@@ -3871,7 +4042,7 @@ class InternetBoxCard extends InternetBoxBase {
           this._config
         )}</span>`
       );
-    const sp = this._config.show_speedtest !== false ? discoverSpeedtest(this._hass) : null;
+    const sp = this._config.show_speedtest !== false ? discoverSpeedtest(this._hass, this._config) : null;
     if (sp) {
       const dl = this._s(sp.download);
       const ul = this._s(sp.upload);
@@ -4089,7 +4260,7 @@ class InternetBoxMiniCard extends InternetBoxCard {
   }
 
   _renderMini() {
-    const box = discover(this._hass, this._config.box);
+    const box = boxFor(this._hass, this._config);
     if (!box.id) return this._noBox();
     const c = this._config;
     const sc = box.scalars;
@@ -4217,6 +4388,22 @@ class InternetBoxEditorBase extends HTMLElement {
           selector: { number: { min: 0, max: name.startsWith("temp") ? 150 : 100, step: 1, mode: "box", unit_of_measurement: name.startsWith("temp") ? "°C" : "%" } },
         })),
       },
+      // Sensors of the user's choice: the box's rates, and another speed test than Speedtest.net (LibreSpeed…). Saved under
+      // `entities`, as the YAML option (which takes the other box values too).
+      {
+        type: "expandable",
+        name: "entities",
+        title: tr("entities"),
+        schema: [
+          ...["rate_down", "rate_up"].map((name) => ({ name, selector: { entity: { domain: "sensor" } } })),
+          {
+            type: "expandable",
+            name: "speedtest",
+            title: tr("speedtest"),
+            schema: SPEEDTEST_KEYS.map((name) => ({ name, selector: { entity: { domain: "sensor" } } })),
+          },
+        ],
+      },
       {
         name: "rate_unit",
         selector: {
@@ -4269,11 +4456,12 @@ class InternetBoxEditorBase extends HTMLElement {
     if (!this._hass || !this._config) return;
     if (!this._form) {
       this._form = document.createElement("ha-form");
-      this._form.computeLabel = (s) => t(this._hass, this._config, s.name);
+      // The pickers of `entities` share their names with no other field: their own labels.
+      this._form.computeLabel = (s) => t(this._hass, this._config, EDITOR_ENTITIES.has(s.name) ? `ent_${s.name}` : s.name);
       this._form.computeHelper = (s) => (STRINGS.en[`${s.name}_helper`] ? t(this._hass, this._config, `${s.name}_helper`) : undefined);
       this._form.addEventListener("value-changed", (ev) => {
         ev.stopPropagation();
-        const config = { ...ev.detail.value };
+        const config = { ...ev.detail.value, entities: cleanEntities(ev.detail.value.entities) };
         // Another box of another operator: a model picked for the former one is not among the new operator's
         // models (and would be silently ignored), so it is cleared.
         if (config.box !== this._config.box && config.model) {

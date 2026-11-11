@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.3.0 - 2026-11-11
+
+### Features
+- **Sensors of your choice** ([#100](https://github.com/juju35/ha-internet-box-card/issues/100)): `entities` sets the sensors of another speed test than Speedtest.net (`speedtest`: `download`, `upload`, `ping`, from LibreSpeed, Speedtest Tracker or a sensor of your own) and of the box's values (`rate_down`, `rate_up`, `sync_down`, `sync_up`, `ip`, `boot`, `wifi`, `missed`). The box rates and the speed test can be picked in the visual editor, under **Sensors of your choice**.
+- **Fast.com**: its last test (download) shows when Speedtest.net is not set up.
+
 ## 3.2.1 - 2026-11-11
 
 ### Fixes
