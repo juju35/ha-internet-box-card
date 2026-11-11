@@ -223,6 +223,46 @@ test("Livebox on fibre: discovered and rated from the WAN GPON interface statist
   assert.equal(boxModel(box, {}).id, "livebox_5");
 });
 
+test("Livebox 3.0.0 on fibre: the WAN interface rate under the shared interface_rate key, Sagemcom Livebox 5 (#98)", () => {
+  // Since Livebox 3.0.0 every interface rate has the translation key interface_rate_rx / _tx: the WAN interface is
+  // told by its name in the entity id, generated in the language of Home Assistant.
+  const devs = { lb: { id: "lb", name: "Livebox Fibre", model: "SagemcomFast5656_OFR", manufacturer: "Sagemcom", config_entries: ["e"] } };
+  const ent = (entity_id, translation_key) => ({ entity_id, platform: "livebox", translation_key, device_id: "lb" });
+  const mk = (ids) => {
+    const entities = {};
+    const states = {};
+    for (const [id, k] of ids) {
+      entities[id] = ent(id, k);
+      states[id] = st("12.5", { unit_of_measurement: "Mbit/s" });
+    }
+    return { states, entities, devices: devs };
+  };
+  // French entity ids, the Wi-Fi, Ethernet, a sub-interface and the DS-Lite tunnel listed first.
+  const fr = mk([
+    ["sensor.livebox_fibre_debit_recu_2_4ghz_private_ssid", "interface_rate_rx"],
+    ["sensor.livebox_fibre_debit_recu_eth1", "interface_rate_rx"],
+    ["sensor.livebox_fibre_debit_recu_wan_sfp_internet", "interface_rate_rx"],
+    ["sensor.livebox_fibre_debit_recu_wan_ds_lite_tunnel", "interface_rate_rx"],
+    ["sensor.livebox_fibre_debit_recu_wan_sfp", "interface_rate_rx"],
+    ["sensor.livebox_fibre_debit_emis_eth1", "interface_rate_tx"],
+    ["sensor.livebox_fibre_debit_emis_wan_sfp", "interface_rate_tx"],
+  ]);
+  assert.equal(JSON.stringify(listBoxes(fr)), JSON.stringify([{ value: "lb", label: "Livebox Fibre" }]));
+  const box = discover(fr, "lb");
+  assert.equal(box.scalars.rate_down, "sensor.livebox_fibre_debit_recu_wan_sfp");
+  assert.equal(box.scalars.rate_up, "sensor.livebox_fibre_debit_emis_wan_sfp");
+  // English entity ids, GPON and the veip0 interface of the boxes with a built-in ONT.
+  const en = discover(mk([["sensor.livebox_wan_gpon_rate_rx", "interface_rate_rx"], ["sensor.livebox_wan_gpon_rate_tx", "interface_rate_tx"]]), "lb");
+  assert.equal(en.scalars.rate_down, "sensor.livebox_wan_gpon_rate_rx");
+  const veip = discover(mk([["sensor.livebox_veip0_rate_rx", "interface_rate_rx"], ["sensor.livebox_veip0_rate_tx", "interface_rate_tx"]]), "lb");
+  assert.equal(veip.scalars.rate_up, "sensor.livebox_veip0_rate_tx");
+  // Without a WAN interface, no box.
+  assert.equal(listBoxes(mk([["sensor.livebox_fibre_debit_recu_eth1", "interface_rate_rx"]])).length, 0);
+  // The Sagemcom Livebox Fibre is drawn as a Livebox 5.
+  const { boxModel } = load("internet-box-card.js", ["boxModel"]);
+  assert.equal(boxModel(box, {}).id, "livebox_5");
+});
+
 test("Livebox: the missed calls are counted from the call-missed sensor, never from the total of calls (#61)", () => {
   const { missedCount } = load("internet-box-card.js", ["missedCount"]);
   const s = (entity_id, state, attributes = {}) => ({ entity_id, state, attributes });

@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.2.1 - 2026-11-11
+
+### Fixes
+- **Livebox** on fibre not found with the Livebox integration 3.0.0 ([#98](https://github.com/juju35/ha-internet-box-card/issues/98)): since that release every interface rate shares the translation key `interface_rate_rx` / `interface_rate_tx` instead of one built from the interface name, so the `WAN_GPON` / `WAN_SFP` rates were no longer recognised. The WAN interface (`WAN_GPON`, `WAN_SFP`, or `veip0` on the boxes with a built-in ONT) is now also told by its name in the entity id, in any language; never a sub-interface nor the DS-Lite tunnel. The keys of the earlier releases still work.
+- **Livebox 5** by Sagemcom (`SagemcomFast5656_OFR`, "Livebox Fibre") detected and drawn as a Livebox 5, like the Arcadyan one.
+
 ## 3.2.0 - 2026-11-11
 
 ### Features
