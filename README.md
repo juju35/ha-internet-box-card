@@ -52,7 +52,8 @@ Entities are **discovered automatically**, you don't have to pick them one by on
 - Header icon of the kind of connection (fibre, xDSL, 4G / 5G, satellite, else a box) coloured with the state of the internet link like the status pill (green online, orange while the DSL line syncs, red offline or on a line fault, grey unavailable; the operator colour when the box reports no link state), with the operator logo as a badge; accent colour, website and admin links follow the detected operator, and the internet provider of the box model when it is not the integration's (a Bell Home Hub on the Sagemcom F@st integration, a KPN Box 12 on the Livebox one)
 - Picture and commercial name of the box model, detected automatically or set with the `model` option, and firmware version
 - Connection status and type (FTTH, xDSL, LTE, satellite…), public IPv4 (IPv6 on hover) and uptime, from the box tracker or the integration's own external IP and uptime sensors. The status is the real link state when the integration exposes it (Livebox WAN status, SFR Box WAN / DSL / FTTH status, with "Syncing" while the DSL line trains and "Line fault" on a line defect), else the box's own tracker
-- The last speed test of the [Speedtest.net](https://www.home-assistant.io/integrations/speedtestdotnet/) integration (download, upload, ping) next to the uptime, found automatically
+- The last speed test of the [Speedtest.net](https://www.home-assistant.io/integrations/speedtestdotnet/) or [Fast.com](https://www.home-assistant.io/integrations/fastdotcom/) integration (download, upload, ping) next to the uptime, found automatically, or of another speed test (LibreSpeed…) set in `entities`
+- Sensors of your choice for the box's values and the speed test, in YAML or in the visual editor
 - Download / upload rates, in bytes (kB/s, MB/s) or bits (kb/s, Mb/s), with their last 24 hours drawn behind each tile, on the full card and the mini card (recorder statistics)
 - Temperature gauges and fans speed
 - Storage: free space of the disk partitions and RAID status
@@ -206,6 +207,11 @@ disk_warning: 80
 disk_critical: 95
 rate_unit: bits
 language: fr
+entities:
+  speedtest:
+    download: sensor.librespeed_download
+    upload: sensor.librespeed_upload
+    ping: sensor.librespeed_ping
 ```
 
 ```yaml
@@ -237,7 +243,8 @@ language: fr
 | `show_history` | both | `true` | 24 h curve behind the download / upload tiles, from the recorder's 5-minute statistics (rate sensors with a `state_class`), on a time axis: the curve breaks where the recorder has no data |
 | `show_system` | both | `true` | Temperatures and fans (hottest temperature on the mini card) |
 | `show_storage` | full | `true` | Disk partitions and RAID status |
-| `show_speedtest` | full | `true` | The last Speedtest.net test in the network section (download, upload and ping, in the rate unit chosen; its time on hover), when that integration is set up |
+| `show_speedtest` | full | `true` | The last speed test in the network section (download, upload and ping, in the rate unit chosen; its time on hover): the [Speedtest.net](https://www.home-assistant.io/integrations/speedtestdotnet/) integration's, else [Fast.com](https://www.home-assistant.io/integrations/fastdotcom/)'s (download only), or the sensors of `entities.speedtest` |
+| `entities` | both | — | Sensors of your choice (see below) |
 | `show_services` | full | `true` | Wi-Fi, missed calls and connected devices |
 | `temp_warning` | both | `75` | Temperature (in °C, whatever the sensor's unit) from which a temperature turns orange |
 | `temp_critical` | both | `90` | Temperature (in °C) from which a temperature turns red |
@@ -246,6 +253,17 @@ language: fr
 | `zoom` | mini | `true` | Detail button at the top right: shows the full card (every section) in place of the mini card, and back |
 | `rate_unit` | both | `bytes` | Rates unit: `bytes` (kB/s, MB/s) or `bits` (kb/s, Mb/s) |
 | `language` | both | Auto | Force language: `en`, `fr`, `de`, `es`, `sr`, `sr-Latn`, `it`, `nl`, `pt`, `pl`, `ro`, `da`, `sv`, `bg`, `ru`, `uk`, `hu`, `sk`, `cs`, `sl`, `lv` or `el` (auto-detects from HA settings) |
+
+### Sensors of your choice
+
+The cards find the box's sensors and the speed test by themselves. `entities` sets others: a speed test of another integration (LibreSpeed, Speedtest Tracker, a sensor of your own) or a box value read from another sensor. The box rates and the speed test can be picked in the visual editor too, under **Sensors of your choice**.
+
+| Key | Value |
+|---|---|
+| `speedtest` | `download`, `upload` and `ping` sensors of a speed test (in Mbit/s and ms, or any unit Home Assistant gives them); set, they replace Speedtest.net's |
+| `rate_down`, `rate_up` | The box's download and upload rates |
+| `sync_down`, `sync_up` | The line's sync rates |
+| `ip`, `boot`, `wifi`, `missed` | The public IP address, the last boot, the Wi-Fi switch, the missed calls |
 
 ## Supported models
 
