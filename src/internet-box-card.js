@@ -2243,8 +2243,9 @@ const OPERATORS = {
     models: [
       { id: "livebox_7", name: "Livebox 7", re: /livebox\s*7|lb7/i },
       { id: "livebox_6", name: "Livebox 6", re: /livebox\s*6|lb6/i },
-      // The Arcadyan "Livebox Fibre" (ModelName ArcadyanLBFIBRE_OFR, ProductClass "Livebox Fibre") is a Livebox 5.
-      { id: "livebox_5", name: "Livebox 5", re: /livebox\s*5|lb5|arcadyanlbfibre/i },
+      // The "Livebox Fibre" (ProductClass) is a Livebox 5, by Arcadyan (ModelName ArcadyanLBFIBRE_OFR) or Sagemcom
+      // (SagemcomFast5656_OFR).
+      { id: "livebox_5", name: "Livebox 5", re: /livebox\s*5|lb5|arcadyanlbfibre|fast\s*5656/i },
       { id: "livebox_4", name: "Livebox 4", re: /livebox\s*4|lb4/i },
       { id: "livebox_s", name: "Livebox S", re: /livebox\s*s\b|lbs\b/i },
       // KPN (Netherlands) runs Livebox OS on its Box 12 (firmware V12.C…), supported by the same integration.
@@ -2262,6 +2263,14 @@ const OPERATORS = {
     // `alt` holds patterns on the translation key, used when the canonical key is missing (never Wi-Fi or Ethernet
     // interfaces, nor the DS-Lite tunnel).
     alt: { rate_down: /^wan_(gpon|sfp)_rate_rx$/i, rate_up: /^wan_(gpon|sfp)_rate_tx$/i },
+    // Since Livebox 3.0.0 every interface shares one translation key (interface_rate_rx / _tx, the interface only a
+    // placeholder of the name): the WAN interface is then told by its name in the entity id, generated from the name in
+    // any language (sensor.livebox_wan_sfp_rate_rx, sensor.livebox_debit_recu_wan_sfp), never a sub-interface
+    // (wan_gpon_internet…) nor the DS-Lite tunnel. `veip0` is the GPON interface of the boxes with a built-in ONT.
+    altIface: {
+      keys: { rate_down: "interface_rate_rx", rate_up: "interface_rate_tx" },
+      re: /(^|_)(wan_(gpon|sfp)|veip0)(_rate_[rt]x)?(_\d+)?$/i,
+    },
   },
   sfr_box: {
     platform: "sfr_box", name: "SFR Box", color: "#e2001a", logo: IMG_SFR,
@@ -2758,7 +2767,12 @@ const registry = (hass) => {
  *  fibre, a sensor) or the Wi-Fi (the FRITZ!Box main Wi-Fi switches, one per band). */
 const isAlt = (op, e, slot) =>
   !!(op.alt?.[slot] && (!/^rate_/.test(slot) || e.entity_id.startsWith("sensor.")) && op.alt[slot].test(e.translation_key || ""));
-const isAltRate = isAlt;
+/** True when the entity is the WAN interface's rate for a slot under a translation key shared by every interface
+ *  (Livebox 3.0.0 `interface_rate_rx`): the interface is read from the entity id (see `altIface`). */
+const isIfaceRate = (op, e, slot) =>
+  !!(op.altIface?.keys[slot] && e.translation_key === op.altIface.keys[slot] && e.entity_id.startsWith("sensor.") &&
+    op.altIface.re.test(e.entity_id.slice(e.entity_id.indexOf(".") + 1)));
+const isAltRate = (op, e, slot) => isAlt(op, e, slot) || isIfaceRate(op, e, slot);
 
 // Integrations whose keys the card does not know (`guess`): rate sensors told apart by their translation key or id.
 const GUESS_DOWN = /down|rx\b|_rx|receiv/i;
