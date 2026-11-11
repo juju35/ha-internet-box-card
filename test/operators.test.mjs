@@ -203,12 +203,59 @@ test("Bbox (core or custom_bbox fork): the uptime sensor, a boot date, is read w
   assert.ok(bootSec(states["sensor.bbox_uptime"]) > 0);
 });
 
+// juju35/ha-internet-box-card#93: the "Bouygues Bbox" integration (hass-bbox2, custom) shares the `bbox` domain but
+// registers a device; its sensors have hardcoded English names and no translation key.
+const bbox2 = () =>
+  hassOf("bbox", { name: "Bbox", manufacturer: "Bouygues", model: "F@st5696b", sw_version: "26.2.10" }, [
+    ["sensor.bbox_download_speed", null, "312.6", { unit_of_measurement: "kbit/s", device_class: "data_rate" }],
+    ["sensor.bbox_upload_speed", null, "48.2", { unit_of_measurement: "kbit/s", device_class: "data_rate" }],
+    ["sensor.bbox_speedtest_download", null, "900000", { unit_of_measurement: "kbit/s", device_class: "data_rate" }],
+    ["sensor.bbox_download_bandwidth_occupation", null, "12", { unit_of_measurement: "%" }],
+    ["sensor.bbox_uptime", null, "93600", { unit_of_measurement: "s" }],
+    ["sensor.bbox_ip_address", null, "89.80.1.2"],
+    ["sensor.bbox_ipv6_address", null, "2001:861::1"],
+    ["binary_sensor.bbox_ethernet_port_1", null, "on", { device_class: "connectivity" }],
+    ["binary_sensor.bbox_link_status", null, "on", { device_class: "connectivity" }],
+    ["button.bbox_refresh", null, "unknown"],
+    ["button.bbox_restart", null, "unknown"],
+    ["switch.bbox_wifi_all", "wifi", "on"],
+    ["switch.bbox_wifi_2_4ghz", "wifi_24", "on"],
+  ], ["phone"]);
+
+test("Bbox (hass-bbox2 integration): found by its device, slots by entity-id suffix, Wi-Fi 7 model", () => {
+  const hass = bbox2();
+  assert.equal(JSON.stringify(listBoxes(hass)), JSON.stringify([{ value: "box", label: "Bbox" }]));
+  const box = discover(hass);
+  assert.equal(box.operator.name, "Bbox");
+  assert.equal(box.scalars.rate_down, "sensor.bbox_download_speed");
+  assert.equal(box.scalars.rate_up, "sensor.bbox_upload_speed");
+  assert.equal(box.scalars.boot, "sensor.bbox_uptime");
+  assert.equal(box.scalars.ip, "sensor.bbox_ip_address");
+  assert.equal(box.scalars.ip6, "sensor.bbox_ipv6_address");
+  assert.equal(box.scalars.wan, "binary_sensor.bbox_link_status");
+  assert.equal(box.scalars.reboot, "button.bbox_restart");
+  assert.equal(box.scalars.wifi, "switch.bbox_wifi_all");
+  assert.equal(JSON.stringify(box.trackers), JSON.stringify(["device_tracker.phone"]));
+  assert.equal(boxModel(box).id, "bbox_wifi7");
+  assert.equal(bootSec(hass.states["sensor.bbox_uptime"]), 93600);
+});
+
 const renderWith = (Card, hass, config = {}) => {
   const el = new Card();
   el._config = config;
   el._hass = { ...hass, language: "en" };
   return el._render();
 };
+
+test("the full and mini cards render a hass-bbox2 Bbox: rates, IP, uptime, Bbox colour", () => {
+  const hass = bbox2();
+  const html = renderWith(InternetBoxCard, hass);
+  assert.match(html, /--ibc-red:#1246a0/);
+  assert.match(html, /data-entity="sensor\.bbox_download_speed"/);
+  assert.match(html, /89\.80\.1\.2/);
+  assert.match(html, /data-entity="sensor\.bbox_uptime"/);
+  assert.match(renderWith(InternetBoxMiniCard, hass), /data-entity="sensor\.bbox_download_speed"/);
+});
 
 test("the full and mini cards render the new boxes: external IP, uptime sensor, provider colour and links", () => {
   const hass = hassOf("huawei_lte", { name: "B535-232", model: "B535-232" }, [

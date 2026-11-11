@@ -2285,6 +2285,7 @@ const OPERATORS = {
     platform: "bbox", name: "Bbox", color: "#1246a0", logo: IMG_BBOX,
     website: "https://www.bouyguestelecom.fr", admin: "https://mabbox.bytel.fr",
     models: [
+      { id: "bbox_wifi7", name: "Bbox Wi-Fi 7", re: /wi-?fi\s*7|5696/i, pic: "generic_router" },
       { id: "bbox_fibre", name: "Bbox Fibre", re: /fibre|fiber/i },
       { id: "bbox_ultym", name: "Bbox Ultym", re: /ultym/i },
       { id: "bbox_miami", name: "Bbox Miami", re: /miami/i },
@@ -2292,8 +2293,16 @@ const OPERATORS = {
     // Legacy integration: hardcoded English names, no translation keys, so it is discovered by entity-id suffix.
     // The core `bbox` platform and its `custom_bbox` fork (hass_custom_bbox, for the firmwares that the core one can no
     // longer reach since Home Assistant 2022.7) create the same sensors, uptime included (a boot date).
-    keys: {},
     legacy: { rate_down: /_currently_used_download_bandwidth$/, rate_up: /_currently_used_upload_bandwidth$/, boot: /_uptime$/ },
+    // The "Bouygues Bbox" integration (hass-bbox2, custom, config flow) shares the `bbox` domain but registers a
+    // device and its entities. Its sensors have hardcoded English names and no translation key: they are matched by
+    // entity-id suffix (`ids`, only for the box's own entities without a key); its Wi-Fi switches have keys.
+    keys: { wifi: "wifi" },
+    ids: {
+      rate_down: /^sensor\..+_download_speed$/, rate_up: /^sensor\..+_upload_speed$/, boot: /^sensor\..+_uptime$/,
+      ip: /^sensor\..+_ip_address$/, ip6: /^sensor\..+_ipv6_address$/, wan: /^binary_sensor\..+_link_status$/,
+      reboot: /^button\..+_restart$/,
+    },
   },
   // FRITZ!Box (fritz, built in): AVM / FRITZ! routers, sold by 1&1, O2, Telekom and many providers in Germany,
   // Austria, Switzerland and the Netherlands. Traffic rates in kB/s, the DSL line sync rates (kept as sync rates,
@@ -2765,9 +2774,13 @@ const guessRate = (hass, e) => {
  *  entity id for a legacy one), or its downstream line sync rate for an operator without throughput sensors (SFR Box). */
 const isRateDown = (op, e) =>
   (op.keys.rate_down && e.translation_key === op.keys.rate_down) ||
+  (!e.translation_key && !!op.ids?.rate_down?.test(e.entity_id)) ||
   (op.keys.sync_down && e.translation_key === op.keys.sync_down) ||
   isAltRate(op, e, "rate_down") ||
   (op.legacy?.rate_down?.test(e.entity_id));
+
+/** Slot of a box entity without translation key matched by the operator's entity-id suffixes (hass-bbox2), or undefined. */
+const idSlot = (op, id) => op.ids && Object.keys(op.ids).find((slot) => op.ids[slot].test(id));
 
 /** True when an entity marks the box device: its download rate (see isRateDown), else, for an integration whose box
  *  has no rate sensor, its restart button (Sagemcom F@st), or a guessed download rate (ZTE Hyperbox). */
@@ -2955,6 +2968,12 @@ const discover = (hass, boxId) => {
         if (!own && !child) continue;
         const k = e.translation_key;
         const a = hass.states[id].attributes;
+        // Box sensors without translation key known by their entity-id suffix (hass-bbox2): the first one wins.
+        const slot = own && !k ? idSlot(op, id) : undefined;
+        if (slot) {
+          box.scalars[slot] ??= id;
+          continue;
+        }
         // Each data slot is matched by the operator's translation key, or by an entity-id pattern for a legacy one.
         // The canonical rate key wins over an alternate one (the alternate only fills an empty slot), and the
         // missed-calls sensor over the total of calls.
