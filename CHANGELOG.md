@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.2.0 - 2026-11-11
+
+### Features
+- **Bbox**: the "Bouygues Bbox" integration ([hass-bbox2](https://github.com/cyr-ius/hass-bbox2), custom, config flow) is supported. It shares the `bbox` domain with the legacy platform but registers a device whose sensors have no translation key, so the box was not found ([#93](https://github.com/juju35/ha-internet-box-card/issues/93)). Its download / upload rates, link status, public IPv4 / IPv6, uptime, Wi-Fi switch, connected devices and restart button are recognised by their entity-id suffix.
+- **Bbox Wi-Fi 7** model (`bbox_wifi7`, Sagemcom F@st 5696b), detected from the hass-bbox2 device model, drawn with the generic router silhouette.
+
 ## 3.1.0 - 2026-11-10
 
 ### Features
