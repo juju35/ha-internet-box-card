@@ -993,7 +993,7 @@ test("speed test button (#107): refreshes Speedtest.net, presses the entity of e
   await new Promise((r) => setTimeout(r));
   assert.deepEqual(JSON.parse(JSON.stringify(calls)), [["homeassistant", "update_entity", { entity_id: "sensor.speedtest_download" }]]);
   html = net();
-  assert.match(html, /class="run" data-action="speedtest" title="Speed test running…" aria-label="Speed test running…" aria-busy="true" disabled><svg class="icon spin"/);
+  assert.match(html, /class="run" data-action="speedtest" title="Speed test running…" aria-label="Speed test running…" aria-busy="true" aria-disabled="true"><svg class="icon spin"/);
   el._runSpeedtest();
   await new Promise((r) => setTimeout(r));
   assert.equal(calls.length, 1, "no second test while one runs");
@@ -1007,6 +1007,16 @@ test("speed test button (#107): refreshes Speedtest.net, presses the entity of e
   clearTimeout(el._speedtestTimer);
   await new Promise((r) => setTimeout(r));
   assert.equal(calls.length, 2);
+
+  // A failed call: stopped at once
+  el._hass.callService = () => Promise.reject(new Error("forbidden"));
+  el._runSpeedtest();
+  assert.match(net(), /aria-busy/);
+  await new Promise((r) => setTimeout(r));
+  assert.equal(el._speedtestRun, null);
+  assert.doesNotMatch(net(), /aria-busy/);
+  clearTimeout(el._speedtestTimer);
+  el._hass.callService = (...c) => calls.push(c);
 
   // Sensors of another speed test: a button only with entities.speedtest.run, pressed (a script is run)
   add("sensor.librespeed_download", null, null, "800");

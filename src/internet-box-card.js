@@ -3642,11 +3642,15 @@ class InternetBoxBase extends HTMLElement {
     clearTimeout(this._speedtestTimer);
   }
 
-  // Calls a Home Assistant service on an entity. A failed call is logged (Home Assistant already shows a toast).
-  _call(domain, service, entityId) {
+  // Calls a Home Assistant service on an entity. A failed call is logged (Home Assistant already shows a toast) and
+  // `onError` run.
+  _call(domain, service, entityId, onError) {
     Promise.resolve()
       .then(() => this._hass?.callService(domain, service, { entity_id: entityId }))
-      .catch((err) => console.error(`internet-box-card: ${domain}.${service} failed`, err));
+      .catch((err) => {
+        console.error(`internet-box-card: ${domain}.${service} failed`, err);
+        onError?.();
+      });
   }
 
   // Presses a Home Assistant button entity.
@@ -3674,7 +3678,13 @@ class InternetBoxBase extends HTMLElement {
     if (!sp?.run || this._speedtestRunning(sp)) return;
     this._speedtestRun = { at: Date.now(), mark: this._speedtestMark(sp) };
     const [domain, service] = runService(sp.run);
-    this._call(domain, service, sp.run);
+    const run = this._speedtestRun;
+    // A failed call: shown as stopped at once.
+    this._call(domain, service, sp.run, () => {
+      if (this._speedtestRun !== run) return;
+      this._speedtestRun = null;
+      this._update();
+    });
     // Shown as stopped at the latest when the time is up, even without any state change.
     clearTimeout(this._speedtestTimer);
     this._speedtestTimer = setTimeout(() => this._update(), SPEEDTEST_RUN_MS + 50);
@@ -4078,8 +4088,8 @@ const FULL_STYLE = `
   .facts .speedtest-fact > span { display: inline-flex; align-items: center; gap: 4px; }
   .facts .run { display: grid; place-items: center; width: 20px; height: 20px; padding: 0; margin-left: 2px; border: none;
     border-radius: 50%; cursor: pointer; background: transparent; color: inherit; }
-  .facts .run:hover:not(:disabled) { background: color-mix(in srgb, var(--primary-color) 15%, transparent); }
-  .facts .run:disabled { cursor: progress; }
+  .facts .run:hover:not([aria-disabled]) { background: color-mix(in srgb, var(--primary-color) 15%, transparent); }
+  .facts .run[aria-disabled] { cursor: progress; }
   .gauges { display: grid; grid-template-columns: repeat(auto-fit, minmax(68px, 1fr)); gap: 6px; }
   .gauge { display: flex; flex-direction: column; align-items: center; position: relative; }
   .gauge .val .icon { width: 12px; height: 12px; }
@@ -4238,13 +4248,14 @@ class InternetBoxCard extends InternetBoxBase {
     </div>`;
   }
 
-  // The button that starts a speed test, its icon turning while the test runs.
+  // The button that starts a speed test, its icon turning while the test runs. aria-disabled, not disabled, while it
+  // runs: the button keeps the keyboard focus.
   _speedtestButton(sp) {
     if (!sp.run || this._s(sp.run)?.state === "unavailable") return "";
     const running = this._speedtestRunning(sp);
     const label = esc(this._t(running ? "speedtest_running" : "run_speedtest"));
     return `<button type="button" class="run" data-action="speedtest" title="${label}" aria-label="${label}"${
-      running ? ' aria-busy="true" disabled' : ""
+      running ? ' aria-busy="true" aria-disabled="true"' : ""
     }>${svgIcon(ICONS.refresh, running ? "spin" : "")}</button>`;
   }
 
