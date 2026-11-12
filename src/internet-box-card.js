@@ -4544,7 +4544,7 @@ class InternetBoxEditorBase extends HTMLElement {
       }
     }
     const data = { rate_unit: "bytes", model: "", ...THRESHOLDS, ...this._config };
-    for (const name of ["show_image", "show_logo", ...this.constructor.toggles]) if (data[name] === undefined) data[name] = true;
+    for (const name of ["show_title", "show_subtitle", "show_image", "show_logo", ...this.constructor.toggles]) if (data[name] === undefined) data[name] = true;
     this._form.hass = this._hass;
     this._form.data = data;
     // The schema is rebuilt on every hass update (every state change) but only handed to the form when its
