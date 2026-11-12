@@ -3559,6 +3559,9 @@ function spark(points, end) {
 const statTime = (p) => (typeof p.start === "number" ? p.start : Date.parse(p.start));
 
 class InternetBoxBase extends HTMLElement {
+  // The speed tests started from the cards, by the entity that starts them: { at, mark }.
+  static speedtestRuns = new Map();
+
   constructor() {
     super();
     this.attachShadow({ mode: "open" });
@@ -3658,31 +3661,35 @@ class InternetBoxBase extends HTMLElement {
     this._call("button", "press", entityId);
   }
 
-  // When the speed test sensors were last written (last_reported: also when the values stay the same).
+  // When the speed test's results last came. Speedtest.net and Fast.com: when their sensor was last written
+  // (last_reported: also with the same values), the refresh that runs the test writing it once done. Another speed
+  // test: when its values last changed (last_updated), its integration may write them again on every poll.
   _speedtestMark(sp) {
     const st = this._s(sp.download) || this._s(sp.upload);
-    return `${st?.last_reported ?? ""}|${st?.last_updated ?? ""}`;
+    const refreshed = sp.run === sp.download || sp.run === sp.upload;
+    return `${refreshed ? (st?.last_reported ?? "") : ""}|${st?.last_updated ?? ""}`;
   }
 
-  // A speed test started from the card runs until its sensors are written again, or SPEEDTEST_RUN_MS at most.
+  // A speed test started from a card runs until its results come, or SPEEDTEST_RUN_MS at most. Shared by the cards of
+  // the page (keyed by the entity that starts it): each shows it running.
   _speedtestRunning(sp) {
-    const run = this._speedtestRun;
-    if (!run || !sp) return false;
+    const run = sp?.run && InternetBoxBase.speedtestRuns.get(sp.run);
+    if (!run) return false;
     if (Date.now() - run.at < SPEEDTEST_RUN_MS && this._speedtestMark(sp) === run.mark) return true;
-    this._speedtestRun = null;
+    InternetBoxBase.speedtestRuns.delete(sp.run);
     return false;
   }
 
   _runSpeedtest() {
     const sp = discoverSpeedtest(this._hass, this._config);
     if (!sp?.run || this._speedtestRunning(sp)) return;
-    this._speedtestRun = { at: Date.now(), mark: this._speedtestMark(sp) };
+    const run = { at: Date.now(), mark: this._speedtestMark(sp) };
+    InternetBoxBase.speedtestRuns.set(sp.run, run);
     const [domain, service] = runService(sp.run);
-    const run = this._speedtestRun;
     // A failed call: shown as stopped at once.
     this._call(domain, service, sp.run, () => {
-      if (this._speedtestRun !== run) return;
-      this._speedtestRun = null;
+      if (InternetBoxBase.speedtestRuns.get(sp.run) !== run) return;
+      InternetBoxBase.speedtestRuns.delete(sp.run);
       this._update();
     });
     // Shown as stopped at the latest when the time is up, even without any state change.

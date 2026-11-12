@@ -1002,7 +1002,7 @@ test("speed test button (#107): refreshes Speedtest.net, presses the entity of e
   assert.doesNotMatch(net(), /aria-busy/);
   // Time is up without results: stopped too
   el._runSpeedtest();
-  el._speedtestRun.at -= 181e3;
+  [...el.constructor.speedtestRuns.values()][0].at -= 181e3;
   assert.doesNotMatch(net(), /aria-busy/);
   clearTimeout(el._speedtestTimer);
   await new Promise((r) => setTimeout(r));
@@ -1013,7 +1013,7 @@ test("speed test button (#107): refreshes Speedtest.net, presses the entity of e
   el._runSpeedtest();
   assert.match(net(), /aria-busy/);
   await new Promise((r) => setTimeout(r));
-  assert.equal(el._speedtestRun, null);
+  assert.equal(el.constructor.speedtestRuns.size, 0);
   assert.doesNotMatch(net(), /aria-busy/);
   clearTimeout(el._speedtestTimer);
   el._hass.callService = (...c) => calls.push(c);
@@ -1030,7 +1030,7 @@ test("speed test button (#107): refreshes Speedtest.net, presses the entity of e
   ]) {
     el._hass.states[run] = { entity_id: run, state: "unknown", attributes: {} };
     el._config = { ...el._config, entities: { speedtest: { download: "sensor.librespeed_download", run } } };
-    el._speedtestRun = null;
+    el.constructor.speedtestRuns.clear();
     calls.length = 0;
     assert.match(net(), /data-action="speedtest"/);
     el._runSpeedtest();
@@ -1041,6 +1041,27 @@ test("speed test button (#107): refreshes Speedtest.net, presses the entity of e
   el._hass.states["script.speedtest"].state = "unavailable";
   el._config = { ...el._config, entities: { speedtest: { download: "sensor.librespeed_download", run: "script.speedtest" } } };
   assert.doesNotMatch(net(), /data-action="speedtest"/);
+});
+
+test("speed test button: another speed test runs until its values change, not on a poll writing the same ones; shared by the cards", async () => {
+  const el = await mockCard({});
+  el._hass.callService = async () => {};
+  el._update = () => {};
+  const id = "sensor.librespeed_download";
+  el._hass.states[id] = { entity_id: id, state: "800", attributes: { unit_of_measurement: "Mbit/s" }, last_updated: "2026-11-09T06:00:00Z", last_reported: "2026-11-09T06:00:00Z" };
+  el._hass.states["button.librespeed_run"] = { entity_id: "button.librespeed_run", state: "unknown", attributes: {} };
+  el._config = { ...el._config, entities: { speedtest: { download: id, run: "button.librespeed_run" } } };
+  const running = () => /aria-busy/.test(el._network({ scalars: { router: ROUTER_ID } }));
+  el._runSpeedtest();
+  el._hass.states[id] = { ...el._hass.states[id], last_reported: "2026-11-12T22:00:00Z" };
+  assert.ok(running(), "a poll with the same values");
+  // Another card of the page (same entity starting the test) shows it running too
+  const other = Object.create(Object.getPrototypeOf(el));
+  Object.assign(other, { _hass: el._hass, _config: el._config });
+  assert.ok(/aria-busy/.test(other._network({ scalars: { router: ROUTER_ID } })));
+  el._hass.states[id] = { ...el._hass.states[id], state: "812", last_updated: "2026-11-12T22:01:00Z" };
+  assert.ok(!running(), "new results");
+  clearTimeout(el._speedtestTimer);
 });
 
 test("speed test button: in every language, and in the editor's speed test fold", () => {
