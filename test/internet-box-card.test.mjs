@@ -974,6 +974,77 @@ test("another speed test (LibreSpeed…) through entities.speedtest: its sensors
   assert.doesNotMatch(html, /↑/);
 });
 
+test("speed test button (#107): refreshes Speedtest.net, presses the entity of entities.speedtest.run, turns until new results", async () => {
+  const el = await mockCard({});
+  const calls = [];
+  el._hass.callService = (...c) => calls.push(c);
+  el._update = () => {};
+  const add = (id, platform, key, state) => {
+    if (platform) el._hass.entities[id] = { entity_id: id, platform, translation_key: key };
+    el._hass.states[id] = { entity_id: id, state, attributes: { unit_of_measurement: "Mbit/s" }, last_updated: "2026-11-09T06:00:00Z", last_reported: "2026-11-09T06:00:00Z" };
+  };
+  add("sensor.speedtest_download", "speedtestdotnet", "download", "845");
+  const net = () => el._network({ scalars: { router: ROUTER_ID } });
+  let html = net();
+  assert.match(html, /<button type="button" class="run" data-action="speedtest" title="Run a speed test" aria-label="Run a speed test">/);
+  // Not inside the fact opening the more-info dialog
+  assert.doesNotMatch(html, /role="button"[^>]*>(?:(?!<\/span>).)*<button/);
+  el._runSpeedtest();
+  await new Promise((r) => setTimeout(r));
+  assert.deepEqual(JSON.parse(JSON.stringify(calls)), [["homeassistant", "update_entity", { entity_id: "sensor.speedtest_download" }]]);
+  html = net();
+  assert.match(html, /class="run" data-action="speedtest" title="Speed test running…" aria-label="Speed test running…" aria-busy="true" disabled><svg class="icon spin"/);
+  el._runSpeedtest();
+  await new Promise((r) => setTimeout(r));
+  assert.equal(calls.length, 1, "no second test while one runs");
+  // New results: stopped
+  el._hass.states["sensor.speedtest_download"] = { ...el._hass.states["sensor.speedtest_download"], last_reported: "2026-11-12T22:00:00Z" };
+  assert.doesNotMatch(net(), /aria-busy/);
+  // Time is up without results: stopped too
+  el._runSpeedtest();
+  el._speedtestRun.at -= 181e3;
+  assert.doesNotMatch(net(), /aria-busy/);
+  clearTimeout(el._speedtestTimer);
+  await new Promise((r) => setTimeout(r));
+  assert.equal(calls.length, 2);
+
+  // Sensors of another speed test: a button only with entities.speedtest.run, pressed (a script is run)
+  add("sensor.librespeed_download", null, null, "800");
+  el._config = { ...el._config, entities: { speedtest: { download: "sensor.librespeed_download" } } };
+  assert.doesNotMatch(net(), /data-action="speedtest"/);
+  for (const [run, svc] of [
+    ["button.librespeed_run", ["button", "press"]],
+    ["input_button.speedtest", ["input_button", "press"]],
+    ["script.speedtest", ["script", "turn_on"]],
+    ["automation.speedtest", ["automation", "trigger"]],
+  ]) {
+    el._hass.states[run] = { entity_id: run, state: "unknown", attributes: {} };
+    el._config = { ...el._config, entities: { speedtest: { download: "sensor.librespeed_download", run } } };
+    el._speedtestRun = null;
+    calls.length = 0;
+    assert.match(net(), /data-action="speedtest"/);
+    el._runSpeedtest();
+    await new Promise((r) => setTimeout(r));
+    assert.deepEqual(JSON.parse(JSON.stringify(calls)), [[...svc, { entity_id: run }]], run);
+    clearTimeout(el._speedtestTimer);
+  }
+  el._hass.states["script.speedtest"].state = "unavailable";
+  el._config = { ...el._config, entities: { speedtest: { download: "sensor.librespeed_download", run: "script.speedtest" } } };
+  assert.doesNotMatch(net(), /data-action="speedtest"/);
+});
+
+test("speed test button: in every language, and in the editor's speed test fold", () => {
+  const { STRINGS, InternetBoxCardEditor } = load("internet-box-card.js", ["STRINGS", "InternetBoxCardEditor"]);
+  for (const [code, s] of Object.entries(STRINGS)) for (const k of ["ent_run", "run_speedtest", "speedtest_running"]) assert.ok(s[k], `${code} ${k}`);
+  const ed = new InternetBoxCardEditor();
+  ed.appendChild = () => {};
+  ed.setConfig({ box: "router" });
+  ed.hass = { states: baseStates(), entities, devices, language: "en" };
+  const fold = ed._form.schema.find((f) => f.name === "entities").schema.find((f) => f.name === "speedtest");
+  assert.ok(fold.schema.some((f) => f.name === "run"));
+  assert.equal(ed._form.computeLabel({ name: "run" }), "Speed test: button to run it");
+});
+
 test("entities: the box's sensors of the user's choice replace the ones found, the same object while nothing changes", () => {
   const lib = load("internet-box-card.js", ["boxFor", "discover"]);
   const hass = { states: { ...baseStates(), "sensor.wan_in": { entity_id: "sensor.wan_in", ...st("2000", { unit_of_measurement: "kB/s" }) } }, entities, devices, language: "en" };

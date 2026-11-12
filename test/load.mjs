@@ -38,6 +38,8 @@ export const load = (file, names) => {
     },
     Intl,
     Date,
+    setTimeout,
+    clearTimeout,
   };
   vm.createContext(context);
   return vm.runInContext(`${src}\n;({ ${names.join(", ")} })`, context);

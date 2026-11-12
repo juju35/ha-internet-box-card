@@ -1,5 +1,10 @@
 # Changelog
 
+## 3.5.0 - 2026-11-12
+
+### Features
+- **Speed test button** ([#107](https://github.com/juju35/ha-internet-box-card/issues/107)): a button next to the last speed test runs a new one. With Speedtest.net or Fast.com, it refreshes their sensors (the integration runs a test); with another speed test, it uses the entity set in `entities.speedtest.run` (a button or an `input_button` pressed, a script run, an automation triggered), also in the visual editor. Its icon turns, and it can't be pressed again, until the new results come (3 minutes at most).
+
 ## 3.4.0 - 2026-11-12
 
 ### Features
