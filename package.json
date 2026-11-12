@@ -1,6 +1,6 @@
 {
   "name": "ha-internet-box-card",
-  "version": "3.3.0",
+  "version": "3.4.0",
   "description": "Lovelace cards for Home Assistant to monitor an internet box: Freebox, Livebox, SFR Box, Bbox, FRITZ!Box, Vodafone Station, Swisscom Internet-Box, Sagemcom F@st, Huawei LTE, ZTE Hyperbox and Starlink.",
   "private": true,
   "type": "module",
