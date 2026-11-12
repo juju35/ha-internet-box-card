@@ -235,6 +235,8 @@ language: fr
 |---|---|---|---|
 | `box` | both | First box found | Box to display: its device id, for the Bbox its entity-id prefix, for the Swisscom Internet-Box `platform:swisscom` (only needed with several boxes, pick it in the visual editor) |
 | `title` | both | Box model | Card title |
+| `show_title` | both | `true` | Show the title in the header (e.g. `false` under a section heading of your own) |
+| `show_subtitle` | both | `true` | Show the subtitle under the title |
 | `model` | both | Detected | Box model, for its picture and the default title (see [Supported models](#supported-models)). Needed for the Bbox, whose integration exposes no model |
 | `admin_url` | both | Operator default | Admin interface opened when clicking the box picture (Freebox: `https://mafreebox.freebox.fr`, Livebox: `http://livebox.home`, SFR: `http://192.168.1.1`, Bbox: `https://mabbox.bytel.fr`, FRITZ!Box: `http://fritz.box`, Swisscom: `http://internetbox.home`, Huawei LTE: `http://192.168.8.1`, Starlink: `http://192.168.100.1`…; else the box's own configuration URL when the integration gives one, as Sagemcom F@st does) |
 | `show_image` | both | `true` | Show the box picture |
