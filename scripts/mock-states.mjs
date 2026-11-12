@@ -76,3 +76,16 @@ for (const [name, state] of CLIENTS) {
   states[id] = { entity_id: id, state, attributes: { source_type: "router", friendly_name: name } };
   entities[id] = { entity_id: id, platform: "freebox", device_id };
 }
+
+// The last Speedtest.net test (its own integration, no device of the box): shown in the network section, with the
+// button that runs a new one.
+for (const [key, state, unit] of [
+  ["download", "845.2", "Mbit/s"],
+  ["upload", "512.6", "Mbit/s"],
+  ["ping", "9.4", "ms"],
+]) {
+  const id = `sensor.speedtest_${key}`;
+  const at = "2026-10-20T06:00:00Z";
+  states[id] = { entity_id: id, state, attributes: { unit_of_measurement: unit, friendly_name: `Speedtest ${key}` }, last_changed: at, last_updated: at, last_reported: at };
+  entities[id] = { entity_id: id, platform: "speedtestdotnet", translation_key: key };
+}

@@ -544,6 +544,7 @@ const ICONS = {
   wifi: "M12,21L15.6,16.2C14.6,15.45 13.35,15 12,15C10.65,15 9.4,15.45 8.4,16.2L12,21M12,3C7.95,3 4.21,4.34 1.2,6.6L3,9C5.5,7.12 8.62,6 12,6C15.38,6 18.5,7.12 21,9L22.8,6.6C19.79,4.34 16.05,3 12,3M12,9C9.3,9 6.81,9.89 4.8,11.4L6.6,13.8C8.1,12.67 9.97,12 12,12C14.03,12 15.9,12.67 17.4,13.8L19.2,11.4C17.19,9.89 14.7,9 12,9Z",
   wifi_off: "M2.28,3L1,4.27L2.47,5.74C2.04,6 1.61,6.29 1.2,6.6L3,9C3.39,8.7 3.82,8.42 4.26,8.16L6.5,10.4C5.9,10.68 5.33,11 4.8,11.4L6.6,13.8C7.14,13.4 7.73,13.06 8.35,12.79L10.88,15.32C10,15.5 9.13,15.79 8.4,16.2L12,21L14.88,17.17L19.73,22L21,20.72L3.28,3H2.28M12,3C10.08,3 8.24,3.3 6.5,3.85L8.97,6.32C9.95,6.11 10.96,6 12,6C15.38,6 18.5,7.12 21,9L22.8,6.6C19.79,4.34 16.05,3 12,3M12,9C11.62,9 11.25,9 10.88,9.05L14.15,12.32C15.32,12.6 16.43,13.09 17.4,13.8L19.2,11.4C17.19,9.89 14.7,9 12,9Z",
   check: "M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.58L21,7Z",
+  refresh: "M17.65,6.35C16.2,4.9 14.21,4 12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20C15.73,20 18.84,17.45 19.73,14H17.65C16.83,16.33 14.61,18 12,18A6,6 0 0,1 6,12A6,6 0 0,1 12,6C13.66,6 15.14,6.69 16.22,7.78L13,11H20V4L17.65,6.35Z",
   restart: "M12,4C14.1,4 16.1,4.8 17.6,6.3C20.7,9.4 20.7,14.5 17.6,17.6C15.8,19.5 13.3,20.2 10.9,19.9L11.4,17.9C13.1,18.1 14.9,17.5 16.2,16.2C18.5,13.9 18.5,10.1 16.2,7.7C15.1,6.6 13.5,6 12,6V10.6L7,5.6L12,0.6V4M6.3,17.6C3.7,15 3.3,11 5.1,7.9L6.6,9.4C5.5,11.6 5.9,14.4 7.8,16.2C8.3,16.7 8.9,17.1 9.6,17.4L9,19.4C8,19 7.1,18.4 6.3,17.6Z",
   phone: "M6.62,10.79C8.06,13.62 10.38,15.94 13.21,17.38L15.41,15.18C15.69,14.9 16.08,14.82 16.43,14.93C17.55,15.3 18.75,15.5 20,15.5A1,1 0 0,1 21,16.5V20A1,1 0 0,1 20,21A17,17 0 0,1 3,4A1,1 0 0,1 4,3H7.5A1,1 0 0,1 8.5,4C8.5,5.25 8.7,6.45 9.07,7.57C9.18,7.92 9.1,8.31 8.82,8.59L6.62,10.79Z",
   phone_missed: "M23.71,16.67C20.66,13.77 16.54,12 12,12C7.46,12 3.34,13.77 0.29,16.67C0.11,16.85 0,17.1 0,17.38C0,17.66 0.11,17.9 0.29,18.08L2.77,20.56C2.95,20.74 3.2,20.85 3.5,20.85C3.75,20.85 4,20.75 4.18,20.57C4.97,19.83 5.86,19.21 6.84,18.71C7.17,18.55 7.4,18.21 7.4,17.81V14.71C8.85,14.24 10.39,14 12,14C13.6,14 15.15,14.24 16.6,14.72V17.82C16.6,18.22 16.83,18.56 17.16,18.72C18.14,19.21 19.04,19.84 19.82,20.58C20,20.76 20.25,20.86 20.5,20.86C20.8,20.86 21.05,20.75 21.23,20.57L23.71,18.09C23.89,17.91 24,17.66 24,17.38C24,17.1 23.89,16.85 23.71,16.67M6.5,5.5L12,11L19,4L18,3L12,9L7.5,4.5H11V3H5V9H6.5V5.5Z",
@@ -625,6 +626,9 @@ const STRINGS = {
     ent_download: "Speed test: download",
     ent_upload: "Speed test: upload",
     ent_ping: "Speed test: ping",
+    ent_run: "Speed test: button to run it",
+    run_speedtest: "Run a speed test",
+    speedtest_running: "Speed test running…",
     zoom: "Detail button",
     zoom_helper: "Button at the top right that shows the full card in place of the mini card, and back",
     rate_unit: "Rate unit",
@@ -707,6 +711,9 @@ const STRINGS = {
     ent_download: "Test de débit : descendant",
     ent_upload: "Test de débit : montant",
     ent_ping: "Test de débit : ping",
+    ent_run: "Test de débit : bouton pour le lancer",
+    run_speedtest: "Lancer un test de débit",
+    speedtest_running: "Test de débit en cours…",
     zoom: "Bouton détail",
     zoom_helper: "Bouton en haut à droite qui affiche la carte complète à la place de la mini carte, et inversement",
     rate_unit: "Unité des débits",
@@ -788,6 +795,9 @@ const STRINGS = {
     ent_download: "Geschwindigkeitstest: Download",
     ent_upload: "Geschwindigkeitstest: Upload",
     ent_ping: "Geschwindigkeitstest: Ping",
+    ent_run: "Geschwindigkeitstest: Taste zum Starten",
+    run_speedtest: "Geschwindigkeitstest starten",
+    speedtest_running: "Geschwindigkeitstest läuft…",
     zoom: "Detail-Schaltfläche",
     zoom_helper: "Schaltfläche oben rechts, die anstelle der Mini-Karte die vollständige Karte anzeigt und umgekehrt",
     rate_unit: "Einheit der Datenrate",
@@ -870,6 +880,9 @@ const STRINGS = {
     ent_download: "Test de velocidad: descarga",
     ent_upload: "Test de velocidad: subida",
     ent_ping: "Test de velocidad: ping",
+    ent_run: "Test de velocidad: botón para lanzarlo",
+    run_speedtest: "Lanzar un test de velocidad",
+    speedtest_running: "Test de velocidad en curso…",
     zoom: "Botón de detalle",
     zoom_helper: "Botón arriba a la derecha que muestra la tarjeta completa en lugar de la minitarjeta, y viceversa",
     rate_unit: "Unidad de velocidad",
@@ -953,6 +966,9 @@ const STRINGS = {
     ent_download: "Тест брзине: преузимање",
     ent_upload: "Тест брзине: слање",
     ent_ping: "Тест брзине: пинг",
+    ent_run: "Тест брзине: дугме за покретање",
+    run_speedtest: "Покрени тест брзине",
+    speedtest_running: "Тест брзине у току…",
     zoom: "Дугме за детаље",
     zoom_helper: "Дугме у горњем десном углу које пребацује мини картицу на пун приказ и назад",
     rate_unit: "Јединица брзине преноса",
@@ -1036,6 +1052,9 @@ const STRINGS = {
     ent_download: "Test brzine: preuzimanje",
     ent_upload: "Test brzine: slanje",
     ent_ping: "Test brzine: ping",
+    ent_run: "Test brzine: dugme za pokretanje",
+    run_speedtest: "Pokreni test brzine",
+    speedtest_running: "Test brzine u toku…",
     zoom: "Dugme za detalje",
     zoom_helper: "Dugme u gornjem desnom uglu koje prebacuje mini karticu na pun prikaz i nazad",
     rate_unit: "Jedinica brzine prenosa",
@@ -1118,6 +1137,9 @@ const STRINGS = {
     ent_download: "Test di velocità: download",
     ent_upload: "Test di velocità: upload",
     ent_ping: "Test di velocità: ping",
+    ent_run: "Test di velocità: pulsante per avviarlo",
+    run_speedtest: "Avvia un test di velocità",
+    speedtest_running: "Test di velocità in corso…",
     zoom: "Pulsante dettagli",
     zoom_helper: "Pulsante in alto a destra che mostra la scheda completa al posto della mini scheda, e viceversa",
     rate_unit: "Unità di velocità",
@@ -1199,6 +1221,9 @@ const STRINGS = {
     ent_download: "Snelheidstest: download",
     ent_upload: "Snelheidstest: upload",
     ent_ping: "Snelheidstest: ping",
+    ent_run: "Snelheidstest: knop om hem te starten",
+    run_speedtest: "Snelheidstest starten",
+    speedtest_running: "Snelheidstest bezig…",
     zoom: "Detailknop",
     zoom_helper: "Knop rechtsboven die de volledige kaart toont in plaats van de minikaart, en terug",
     rate_unit: "Eenheid van snelheid",
@@ -1281,6 +1306,9 @@ const STRINGS = {
     ent_download: "Teste de velocidade: download",
     ent_upload: "Teste de velocidade: upload",
     ent_ping: "Teste de velocidade: ping",
+    ent_run: "Teste de velocidade: botão para o iniciar",
+    run_speedtest: "Iniciar um teste de velocidade",
+    speedtest_running: "Teste de velocidade em curso…",
     zoom: "Botão de detalhe",
     zoom_helper: "Botão no canto superior direito que mostra o cartão completo em vez do minicartão, e vice-versa",
     rate_unit: "Unidade de velocidade",
@@ -1365,6 +1393,9 @@ const STRINGS = {
     ent_download: "Test prędkości: pobieranie",
     ent_upload: "Test prędkości: wysyłanie",
     ent_ping: "Test prędkości: ping",
+    ent_run: "Test prędkości: przycisk do uruchomienia",
+    run_speedtest: "Uruchom test prędkości",
+    speedtest_running: "Trwa test prędkości…",
     zoom: "Przycisk szczegółów",
     zoom_helper: "Przycisk w prawym górnym rogu, który pokazuje pełną kartę zamiast minikarty, i z powrotem",
     rate_unit: "Jednostka prędkości",
@@ -1447,6 +1478,9 @@ const STRINGS = {
     ent_download: "Test de viteză: descărcare",
     ent_upload: "Test de viteză: încărcare",
     ent_ping: "Test de viteză: ping",
+    ent_run: "Test de viteză: buton pentru pornire",
+    run_speedtest: "Pornește un test de viteză",
+    speedtest_running: "Test de viteză în curs…",
     zoom: "Buton de detalii",
     zoom_helper: "Buton din dreapta sus care afișează cardul complet în locul minicardului, și invers",
     rate_unit: "Unitatea vitezei de transfer",
@@ -1529,6 +1563,9 @@ const STRINGS = {
     ent_download: "Hastighedstest: download",
     ent_upload: "Hastighedstest: upload",
     ent_ping: "Hastighedstest: ping",
+    ent_run: "Hastighedstest: knap til at starte den",
+    run_speedtest: "Start en hastighedstest",
+    speedtest_running: "Hastighedstest kører…",
     zoom: "Detaljeknap",
     zoom_helper: "Knap øverst til højre, der viser hele kortet i stedet for minikortet og tilbage igen",
     rate_unit: "Enhed for hastighed",
@@ -1611,6 +1648,9 @@ const STRINGS = {
     ent_download: "Hastighetstest: nedladdning",
     ent_upload: "Hastighetstest: uppladdning",
     ent_ping: "Hastighetstest: ping",
+    ent_run: "Hastighetstest: knapp för att starta det",
+    run_speedtest: "Starta ett hastighetstest",
+    speedtest_running: "Hastighetstest pågår…",
     zoom: "Detaljknapp",
     zoom_helper: "Knapp uppe till höger som visar hela kortet i stället för minikortet, och tillbaka",
     rate_unit: "Enhet för hastighet",
@@ -1693,6 +1733,9 @@ const STRINGS = {
     ent_download: "Тест на скоростта: изтегляне",
     ent_upload: "Тест на скоростта: качване",
     ent_ping: "Тест на скоростта: пинг",
+    ent_run: "Тест на скоростта: бутон за стартиране",
+    run_speedtest: "Стартиране на тест на скоростта",
+    speedtest_running: "Тестът на скоростта тече…",
     zoom: "Бутон за подробности",
     zoom_helper: "Бутон горе вдясно, който показва пълната карта вместо мини картата и обратно",
     rate_unit: "Мерна единица за скорост",
@@ -1775,6 +1818,9 @@ const STRINGS = {
     ent_download: "Тест скорости: загрузка",
     ent_upload: "Тест скорости: отдача",
     ent_ping: "Тест скорости: пинг",
+    ent_run: "Тест скорости: кнопка запуска",
+    run_speedtest: "Запустить тест скорости",
+    speedtest_running: "Идёт тест скорости…",
     zoom: "Кнопка подробностей",
     zoom_helper: "Кнопка в правом верхнем углу, которая показывает полную карточку вместо мини-карточки и обратно",
     rate_unit: "Единица скорости",
@@ -1858,6 +1904,9 @@ const STRINGS = {
     ent_download: "Тест швидкості: завантаження",
     ent_upload: "Тест швидкості: віддача",
     ent_ping: "Тест швидкості: пінг",
+    ent_run: "Тест швидкості: кнопка запуску",
+    run_speedtest: "Запустити тест швидкості",
+    speedtest_running: "Триває тест швидкості…",
     zoom: "Кнопка подробиць",
     zoom_helper: "Кнопка у правому верхньому куті, яка показує повну картку замість мінікартки, і навпаки",
     rate_unit: "Одиниця швидкості",
@@ -1939,6 +1988,9 @@ const STRINGS = {
     ent_download: "Sebességteszt: letöltés",
     ent_upload: "Sebességteszt: feltöltés",
     ent_ping: "Sebességteszt: ping",
+    ent_run: "Sebességteszt: indító gomb",
+    run_speedtest: "Sebességteszt indítása",
+    speedtest_running: "Sebességteszt folyamatban…",
     zoom: "Részletek gomb",
     zoom_helper: "Gomb a jobb felső sarokban, amely a minikártya helyett a teljes kártyát jeleníti meg, és vissza",
     rate_unit: "Sebesség mértékegysége",
@@ -2022,6 +2074,9 @@ const STRINGS = {
     ent_download: "Test rýchlosti: sťahovanie",
     ent_upload: "Test rýchlosti: odosielanie",
     ent_ping: "Test rýchlosti: ping",
+    ent_run: "Test rýchlosti: tlačidlo na spustenie",
+    run_speedtest: "Spustiť test rýchlosti",
+    speedtest_running: "Prebieha test rýchlosti…",
     zoom: "Tlačidlo podrobností",
     zoom_helper: "Tlačidlo vpravo hore, ktoré namiesto minikarty zobrazí celú kartu, a naopak",
     rate_unit: "Jednotka rýchlosti",
@@ -2105,6 +2160,9 @@ const STRINGS = {
     ent_download: "Test rychlosti: stahování",
     ent_upload: "Test rychlosti: odesílání",
     ent_ping: "Test rychlosti: ping",
+    ent_run: "Test rychlosti: tlačítko pro spuštění",
+    run_speedtest: "Spustit test rychlosti",
+    speedtest_running: "Probíhá test rychlosti…",
     zoom: "Tlačítko podrobností",
     zoom_helper: "Tlačítko vpravo nahoře, které místo minikarty zobrazí celou kartu, a zpět",
     rate_unit: "Jednotka rychlosti",
@@ -2189,6 +2247,9 @@ const STRINGS = {
     ent_download: "Preizkus hitrosti: prenos",
     ent_upload: "Preizkus hitrosti: nalaganje",
     ent_ping: "Preizkus hitrosti: ping",
+    ent_run: "Test hitrosti: gumb za zagon",
+    run_speedtest: "Zaženi test hitrosti",
+    speedtest_running: "Test hitrosti poteka…",
     zoom: "Gumb za podrobnosti",
     zoom_helper: "Gumb zgoraj desno, ki namesto mini kartice prikaže celotno kartico, in nazaj",
     rate_unit: "Enota hitrosti",
@@ -2271,6 +2332,9 @@ const STRINGS = {
     ent_download: "Ātruma tests: lejupielāde",
     ent_upload: "Ātruma tests: augšupielāde",
     ent_ping: "Ātruma tests: ping",
+    ent_run: "Ātruma tests: poga tā palaišanai",
+    run_speedtest: "Palaist ātruma testu",
+    speedtest_running: "Notiek ātruma tests…",
     zoom: "Detaļu poga",
     zoom_helper: "Poga augšējā labajā stūrī, kas minikartītes vietā parāda pilno kartīti, un atpakaļ",
     rate_unit: "Ātruma mērvienība",
@@ -2353,6 +2417,9 @@ const STRINGS = {
     ent_download: "Τεστ ταχύτητας: λήψη",
     ent_upload: "Τεστ ταχύτητας: αποστολή",
     ent_ping: "Τεστ ταχύτητας: ping",
+    ent_run: "Τεστ ταχύτητας: κουμπί εκκίνησης",
+    run_speedtest: "Εκκίνηση τεστ ταχύτητας",
+    speedtest_running: "Τεστ ταχύτητας σε εξέλιξη…",
     zoom: "Κουμπί λεπτομερειών",
     zoom_helper: "Κουμπί πάνω δεξιά που εμφανίζει την πλήρη κάρτα στη θέση της μίνι κάρτας, και αντίστροφα",
     rate_unit: "Μονάδα ταχύτητας",
@@ -3093,7 +3160,8 @@ const emptyBox = () => ({ id: null, device: null, operator: null, lineType: null
  */
 // The last speed test: download, upload (Mbit/s) and ping (ms) sensors, by translation key, of the Speedtest.net
 // integration (else of Fast.com, download only). Not part of the box: the same for every box card. The `entities`
-// option's `speedtest` sets the sensors of another speed test (LibreSpeed, Speedtest Tracker…).
+// option's `speedtest` sets the sensors of another speed test (LibreSpeed, Speedtest Tracker…), and `run` the entity
+// that starts one (a button, a script…).
 const SPEEDTEST_KEYS = ["download", "upload", "ping"];
 const SPEEDTEST_PLATFORMS = ["speedtestdotnet", "fastdotcom"];
 const isEntityId = (v) => typeof v === "string" && /^[a-z_]+\.[a-z0-9_]+$/.test(v);
@@ -3111,7 +3179,12 @@ const discoverSpeedtest = (hass, config) => {
     if (chosen.length) for (const k of SPEEDTEST_KEYS) found[k] = isEntityId(own[k]) ? own[k] : undefined;
   }
   for (const k of SPEEDTEST_KEYS) if (!found[k]) delete found[k];
-  return found.download || found.upload ? found : null;
+  if (!found.download && !found.upload) return null;
+  // How to start a test: the entity set in `run`, else a refresh of the Speedtest.net / Fast.com sensors (their
+  // integration runs a test on it); none for sensors of another speed test without `run`.
+  if (isEntityId(own?.run)) found.run = own.run;
+  else if (SPEEDTEST_PLATFORMS.includes(hass.entities?.[found.download || found.upload]?.platform)) found.run = found.download || found.upload;
+  return found;
 };
 
 // The `entities` option's box values: sensors of the user's choice, replacing those found on the box.
@@ -3129,7 +3202,18 @@ const withEntities = (box, entities) => {
   return result;
 };
 // The editor's pickers of `entities`, and the option without the ones left empty (none: no option).
-const EDITOR_ENTITIES = new Set(["rate_down", "rate_up", ...SPEEDTEST_KEYS]);
+const EDITOR_ENTITIES = new Set(["rate_down", "rate_up", ...SPEEDTEST_KEYS, "run"]);
+// A speed test started from the card is shown running until its sensors are written again, at most this long.
+const SPEEDTEST_RUN_MS = 180e3;
+// The service that starts a speed test with the `run` entity: a button is pressed, a script or an automation run,
+// any other entity refreshed (homeassistant.update_entity).
+const runService = (id) => {
+  const domain = id.split(".")[0];
+  if (domain === "button" || domain === "input_button") return [domain, "press"];
+  if (domain === "script") return ["script", "turn_on"];
+  if (domain === "automation") return ["automation", "trigger"];
+  return ["homeassistant", "update_entity"];
+};
 const cleanEntities = (entities) => {
   if (!entities || typeof entities !== "object") return undefined;
   const out = {};
@@ -3475,6 +3559,9 @@ function spark(points, end) {
 const statTime = (p) => (typeof p.start === "number" ? p.start : Date.parse(p.start));
 
 class InternetBoxBase extends HTMLElement {
+  // The speed tests started from the cards, by the entity that starts them: { at, mark }.
+  static speedtestRuns = new Map();
+
   constructor() {
     super();
     this.attachShadow({ mode: "open" });
@@ -3503,6 +3590,8 @@ class InternetBoxBase extends HTMLElement {
       if (action?.dataset.action === "restart") return this._confirmRestart();
       // The Wi-Fi switch turns the Wi-Fi on at once, and off after a confirmation popup.
       if (action?.dataset.action === "wifi") return this._toggleWifi();
+      // The speed test button starts a test (nothing while one runs).
+      if (action?.dataset.action === "speedtest") return this._runSpeedtest();
       const press = path.find((n) => n.dataset?.press);
       if (press) {
         this._press(press.dataset.press);
@@ -3553,18 +3642,60 @@ class InternetBoxBase extends HTMLElement {
   disconnectedCallback() {
     document.removeEventListener("click", this._onDialogOutside, true);
     window.removeEventListener("keydown", this._onKey);
+    clearTimeout(this._speedtestTimer);
   }
 
-  // Calls a Home Assistant service on an entity. A failed call is logged (Home Assistant already shows a toast).
-  _call(domain, service, entityId) {
+  // Calls a Home Assistant service on an entity. A failed call is logged (Home Assistant already shows a toast) and
+  // `onError` run.
+  _call(domain, service, entityId, onError) {
     Promise.resolve()
       .then(() => this._hass?.callService(domain, service, { entity_id: entityId }))
-      .catch((err) => console.error(`internet-box-card: ${domain}.${service} failed`, err));
+      .catch((err) => {
+        console.error(`internet-box-card: ${domain}.${service} failed`, err);
+        onError?.();
+      });
   }
 
   // Presses a Home Assistant button entity.
   _press(entityId) {
     this._call("button", "press", entityId);
+  }
+
+  // When the speed test's results last came. Speedtest.net and Fast.com: when their sensor was last written
+  // (last_reported: also with the same values), the refresh that runs the test writing it once done. Another speed
+  // test: when its values last changed (last_updated), its integration may write them again on every poll.
+  _speedtestMark(sp) {
+    const st = this._s(sp.download) || this._s(sp.upload);
+    const refreshed = sp.run === sp.download || sp.run === sp.upload;
+    return `${refreshed ? (st?.last_reported ?? "") : ""}|${st?.last_updated ?? ""}`;
+  }
+
+  // A speed test started from a card runs until its results come, or SPEEDTEST_RUN_MS at most. Shared by the cards of
+  // the page (keyed by the entity that starts it): each shows it running.
+  _speedtestRunning(sp) {
+    const run = sp?.run && InternetBoxBase.speedtestRuns.get(sp.run);
+    if (!run) return false;
+    if (Date.now() - run.at < SPEEDTEST_RUN_MS && this._speedtestMark(sp) === run.mark) return true;
+    InternetBoxBase.speedtestRuns.delete(sp.run);
+    return false;
+  }
+
+  _runSpeedtest() {
+    const sp = discoverSpeedtest(this._hass, this._config);
+    if (!sp?.run || this._speedtestRunning(sp)) return;
+    const run = { at: Date.now(), mark: this._speedtestMark(sp) };
+    InternetBoxBase.speedtestRuns.set(sp.run, run);
+    const [domain, service] = runService(sp.run);
+    // A failed call: shown as stopped at once.
+    this._call(domain, service, sp.run, () => {
+      if (InternetBoxBase.speedtestRuns.get(sp.run) !== run) return;
+      InternetBoxBase.speedtestRuns.delete(sp.run);
+      this._update();
+    });
+    // Shown as stopped at the latest when the time is up, even without any state change.
+    clearTimeout(this._speedtestTimer);
+    this._speedtestTimer = setTimeout(() => this._update(), SPEEDTEST_RUN_MS + 50);
+    this._update();
   }
 
   // Turns the box's Wi-Fi switch on, or opens a confirmation popup before turning it off (wireless devices lose
@@ -3759,7 +3890,9 @@ class InternetBoxBase extends HTMLElement {
       ...box.trackers,
     ];
     for (const id of ids) sig.push(h.states[id]);
-    for (const id of Object.values(discoverSpeedtest(h, this._config) || {})) sig.push(h.states[id]);
+    const sp = discoverSpeedtest(h, this._config);
+    for (const id of Object.values(sp || {})) sig.push(h.states[id]);
+    sig.push(this._speedtestRunning(sp));
     if (this._s(box.scalars.router)?.attributes?.uptime || box.scalars.boot) sig.push(Math.floor(Date.now() / 60e3));
     return sig;
   }
@@ -3959,6 +4092,11 @@ const FULL_STYLE = `
   .facts { display: flex; flex-wrap: wrap; gap: 4px 12px; font-size: 12px; margin-top: 6px; }
   .facts > span { display: inline-flex; align-items: center; gap: 4px; min-width: 0; }
   .facts .icon { width: 14px; height: 14px; color: var(--secondary-text-color); }
+  .facts .speedtest-fact > span { display: inline-flex; align-items: center; gap: 4px; }
+  .facts .run { display: grid; place-items: center; width: 20px; height: 20px; padding: 0; margin-left: 2px; border: none;
+    border-radius: 50%; cursor: pointer; background: transparent; color: inherit; }
+  .facts .run:hover:not([aria-disabled]) { background: color-mix(in srgb, var(--primary-color) 15%, transparent); }
+  .facts .run[aria-disabled] { cursor: progress; }
   .gauges { display: grid; grid-template-columns: repeat(auto-fit, minmax(68px, 1fr)); gap: 6px; }
   .gauge { display: flex; flex-direction: column; align-items: center; position: relative; }
   .gauge .val .icon { width: 12px; height: 12px; }
@@ -4102,9 +4240,9 @@ class InternetBoxCard extends InternetBoxBase {
       ].filter(Boolean);
       const when = (dl || ul)?.last_changed;
       facts.push(
-        `<span class="clickable speedtest" role="button" tabindex="0" data-entity="${sp.download || sp.upload}" title="${esc(
+        `<span class="speedtest-fact"><span class="clickable speedtest" role="button" tabindex="0" data-entity="${sp.download || sp.upload}" title="${esc(
           `${this._t("speedtest")}${when ? ` · ${new Date(when).toLocaleString(numLang(this._hass, this._config))}` : ""}`
-        )}">${svgIcon(ICONS.speedtest)}${esc(parts.join(" · "))}</span>`
+        )}">${svgIcon(ICONS.speedtest)}${esc(parts.join(" · "))}</span>${this._speedtestButton(sp)}</span>`
       );
     }
     // Without any rate or sync sensor, the IP address and the uptime are still shown.
@@ -4115,6 +4253,17 @@ class InternetBoxCard extends InternetBoxBase {
       ${rates ? `<div class="grid2">${this._rateTiles(sc, hist)}</div>` : ""}
       ${facts.length ? `<div class="facts">${facts.join("")}</div>` : ""}
     </div>`;
+  }
+
+  // The button that starts a speed test, its icon turning while the test runs. aria-disabled, not disabled, while it
+  // runs: the button keeps the keyboard focus.
+  _speedtestButton(sp) {
+    if (!sp.run || this._s(sp.run)?.state === "unavailable") return "";
+    const running = this._speedtestRunning(sp);
+    const label = esc(this._t(running ? "speedtest_running" : "run_speedtest"));
+    return `<button type="button" class="run" data-action="speedtest" title="${label}" aria-label="${label}"${
+      running ? ' aria-busy="true" aria-disabled="true"' : ""
+    }>${svgIcon(ICONS.refresh, running ? "spin" : "")}</button>`;
   }
 
   _system(box) {
@@ -4450,7 +4599,10 @@ class InternetBoxEditorBase extends HTMLElement {
             type: "expandable",
             name: "speedtest",
             title: tr("speedtest"),
-            schema: SPEEDTEST_KEYS.map((name) => ({ name, selector: { entity: { domain: "sensor" } } })),
+            schema: [
+              ...SPEEDTEST_KEYS.map((name) => ({ name, selector: { entity: { domain: "sensor" } } })),
+              { name: "run", selector: { entity: { domain: ["button", "input_button", "script", "automation"] } } },
+            ],
           },
         ],
       },
