@@ -465,10 +465,13 @@ const mockCard = async (overrides, config = {}, Kind = "InternetBoxCard") => {
   const mock = await import("../scripts/mock-states.mjs");
   const { [Kind]: Card } = load("internet-box-card.js", [Kind]);
   const states = structuredClone(mock.states);
+  // Copied: tests add entities to it. Without the screenshots' Speedtest.net sensors: the tests of the speed test add theirs.
+  const entities = structuredClone(mock.entities);
+  for (const id of Object.keys(states)) if (id.startsWith("sensor.speedtest_")) delete states[id], delete entities[id];
   for (const [id, state] of Object.entries(overrides)) states[id] = { ...states[id], state, attributes: state === "unavailable" ? {} : states[id].attributes };
   const el = new Card();
   el._config = { zoom: false, ...config };
-  el._hass = { states, entities: mock.entities, devices: mock.devices, language: "en", config: { time_zone: "UTC" } };
+  el._hass = { states, entities, devices: mock.devices, language: "en", config: { time_zone: "UTC" } };
   return el;
 };
 const WIFI = "switch.freebox_wifi";
