@@ -8,6 +8,8 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/juju35/ha-internet-box-card/blob/main/LICENSE)
 [![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-FFDD00?logo=buymeacoffee&logoColor=black)](https://buymeacoffee.com/julienstep9)
 
+<p align="center"><img src="https://raw.githubusercontent.com/juju35/ha-internet-box-card/main/images/icon.svg" alt="Internet Box Card" width="120"></p>
+
 <p align="center">
   <img src="https://raw.githubusercontent.com/juju35/ha-internet-box-card/main/images/free.svg" alt="Free" height="40">&nbsp;&nbsp;&nbsp;
   <img src="https://raw.githubusercontent.com/juju35/ha-internet-box-card/main/images/orange.svg" alt="Orange" height="40">&nbsp;&nbsp;&nbsp;
