@@ -36,8 +36,19 @@ const open = async (config = {}) => {
       el.hass = { states, entities, devices, language: "en", config: { time_zone: "UTC" } };
       document.getElementById("root").appendChild(el);
       window.card = el;
-      window.click = (node, detail = 1) =>
+      // A mouse click is a press, a release and the click (detail 1); a keyboard click is the click alone (detail 0).
+      window.click = (node, detail = 1) => {
+        if (detail) {
+          node.dispatchEvent(new PointerEvent("pointerdown", { bubbles: true, composed: true }));
+          node.dispatchEvent(new PointerEvent("pointerup", { bubbles: true, composed: true }));
+        }
         node.dispatchEvent(new MouseEvent("click", { bubbles: true, composed: true, detail }));
+      };
+      // A tap that sends no click (iOS, on something that is not clickable): the press and the release only.
+      window.tap = (down, up = down) => {
+        down.dispatchEvent(new PointerEvent("pointerdown", { bubbles: true, composed: true }));
+        up.dispatchEvent(new PointerEvent("pointerup", { bubbles: true, composed: true }));
+      };
       window.view = () => {
         const root = el.shadowRoot;
         const zoom = root.querySelector(".zoom");
@@ -118,15 +129,21 @@ test("a click outside folds the card back, a click inside it or in a dialog does
     const inside = window.view().full;
     window.click(document.querySelector("dialog b"));
     const dialog = window.view().full;
-    window.click(document.getElementById("outside"));
+    // Pressed in the card (a slider) and released outside: it stays.
+    window.tap(root.querySelector(".section-title"), document.getElementById("outside"));
+    const dragged = window.view().full;
+    // A tap that sends no click (iOS): the press and the release fold it.
+    window.tap(document.getElementById("outside"));
     const outside = window.view().full;
-    // Removed from the page: no more listener.
+    // Removed from the page (another view, a hidden conditional card): back to the compact view, no more listener.
     window.click(root.querySelector(".zoom"));
     window.card.remove();
-    window.click(document.getElementById("outside"));
-    return { inside, dialog, outside, detached: window.card._zoomed };
+    const detached = window.card._zoomed;
+    window.card._zoomed = true;
+    window.tap(document.getElementById("outside"));
+    return { inside, dialog, dragged, outside, detached, listening: !window.card._zoomed };
   });
-  assert.deepEqual(res, { inside: true, dialog: true, outside: false, detached: true });
+  assert.deepEqual(res, { inside: true, dialog: true, dragged: true, outside: false, detached: false, listening: false });
   assert.deepEqual(errors, []);
   await page.close();
 });

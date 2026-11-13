@@ -3558,6 +3558,42 @@ function spark(points, end) {
 /** Time of a recorder statistics row in ms: a number (Home Assistant 2023.3 and later) or an ISO date string. */
 const statTime = (p) => (typeof p.start === "number" ? p.start : Date.parse(p.start));
 
+// "A click elsewhere" is caught on the pointer, not only on the click event: on iOS (Safari and the companion app)
+// a tap on something that is not clickable (the background, an empty spot, a card with no action) sends no click to
+// the page. The handler runs when the press and the release are both outside the card (a slider dragged out of the
+// card does not count, and a scroll cancels the pointer); keyboard clicks (no click count) still go through the click
+// event. The handler keeps its own checks (dialogs opened from the card…). `tap(ev)` is for the tests.
+const watchOutside = (card, handler) => {
+  let downOutside = false;
+  const outside = (ev) => !ev.composedPath().includes(card);
+  const onDown = (ev) => {
+    downOutside = outside(ev);
+  };
+  const onUp = (ev) => {
+    if (downOutside && outside(ev)) handler(ev);
+    downOutside = false;
+  };
+  const onClick = (ev) => {
+    if (ev.detail === 0) handler(ev);
+  };
+  return {
+    on() {
+      document.addEventListener("pointerdown", onDown, true);
+      document.addEventListener("pointerup", onUp, true);
+      document.addEventListener("click", onClick, true);
+    },
+    off() {
+      document.removeEventListener("pointerdown", onDown, true);
+      document.removeEventListener("pointerup", onUp, true);
+      document.removeEventListener("click", onClick, true);
+    },
+    tap(ev) {
+      onDown(ev);
+      onUp(ev);
+    },
+  };
+};
+
 class InternetBoxBase extends HTMLElement {
   // The speed tests started from the cards, by the entity that starts them: { at, mark }.
   static speedtestRuns = new Map();
@@ -3634,13 +3670,18 @@ class InternetBoxBase extends HTMLElement {
         this._closeDialog(false);
       }
     };
-    document.addEventListener("click", this._onDialogOutside, true);
+    (this._onDialogOutsideWatch ??= watchOutside(this, (ev) => this._onDialogOutside(ev))).on();
+    // Back on the page after leaving it: rendered again in its default state.
+    this._update?.();
     // Reattached with the popup still open (view switch, editor): Escape keeps closing it.
     if (this._dialog) window.addEventListener("keydown", this._onKey);
   }
 
   disconnectedCallback() {
-    document.removeEventListener("click", this._onDialogOutside, true);
+    this._onDialogOutsideWatch?.off();
+    // Left (another dashboard view, a conditional card hidden): back to the default state, so that the card does
+    // not come back unfolded or with its popup open.
+    this._dialog = null;
     window.removeEventListener("keydown", this._onKey);
     clearTimeout(this._speedtestTimer);
   }
@@ -4424,12 +4465,17 @@ class InternetBoxMiniCard extends InternetBoxCard {
 
   connectedCallback() {
     super.connectedCallback?.();
-    document.addEventListener("click", this._onOutside, true);
+    (this._onOutsideWatch ??= watchOutside(this, (ev) => this._onOutside(ev))).on();
+    // Back on the page after leaving it: rendered again in its default state.
+    this._update?.();
   }
 
   disconnectedCallback() {
     super.disconnectedCallback?.();
-    document.removeEventListener("click", this._onOutside, true);
+    this._onOutsideWatch?.off();
+    // Left (another dashboard view, a conditional card hidden): back to the default state, so that the card does
+    // not come back unfolded or with its popup open.
+    this._zoomed = false;
   }
 
   getCardSize() {
