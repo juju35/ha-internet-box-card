@@ -263,6 +263,53 @@ test("Livebox 3.0.0 on fibre: the WAN interface rate under the shared interface_
   assert.equal(boxModel(box, {}).id, "livebox_5");
 });
 
+test("Livebox 4 on fibre: found by its WAN status and restart button, rated from the Optical ONT interface (#114)", () => {
+  // A Livebox 4 behind an external ONT: no xDSL rate on its GPON line, no WAN_GPON / WAN_SFP / veip0 interface. The
+  // reporter's entities are named sensor.livebox_4_* (fiber_tx and fiber_rx are byte counters, not rates).
+  const devs = { lb: { id: "lb", name: "Livebox 4", model: "SercommVD836_Livebox4", manufacturer: "Sercomm", config_entries: ["e"] } };
+  const ent = (entity_id, translation_key) => ({ entity_id, platform: "livebox", translation_key, device_id: "lb" });
+  const mk = (ids) => {
+    const entities = {};
+    const states = {};
+    for (const [id, k] of ids) {
+      entities[id] = ent(id, k);
+      states[id] = st("on", { unit_of_measurement: "Mbit/s" });
+    }
+    return { states, entities, devices: devs };
+  };
+  const base = [
+    ["sensor.livebox_4_fiber_tx", "fiber_tx"],
+    ["sensor.livebox_4_fiber_rx", "fiber_rx"],
+    ["sensor.livebox_4_eth1_rate_rx", "interface_rate_rx"],
+    ["binary_sensor.livebox_4_wan_status", "connectivity"],
+    ["button.livebox_4_livebox_restart", "restart_btn"],
+    ["switch.livebox_4_wifi", "wifi_switch"],
+  ];
+  const hass = mk(base);
+  assert.equal(JSON.stringify(listBoxes(hass)), JSON.stringify([{ value: "lb", label: "Livebox 4" }]));
+  const box = discover(hass);
+  assert.equal(box.id, "lb");
+  assert.equal(box.operator.name, "Livebox");
+  assert.equal(box.scalars.wan, "binary_sensor.livebox_4_wan_status");
+  assert.equal(box.scalars.reboot, "button.livebox_4_livebox_restart");
+  assert.equal(box.scalars.wifi, "switch.livebox_4_wifi");
+  // Neither the byte counters nor a LAN port are taken for the rates.
+  assert.equal(box.scalars.rate_down, undefined);
+  assert.equal(box.scalars.rate_up, undefined);
+  const { boxModel } = load("internet-box-card.js", ["boxModel"]);
+  assert.equal(boxModel(box, {}).id, "livebox_4");
+  // The WAN status alone is enough to find it.
+  assert.equal(listBoxes(mk([["binary_sensor.livebox_4_wan_status", "connectivity"]])).length, 1);
+
+  // The external ONT interface ("Optical ONT"), in English and French entity ids, gives the rates.
+  const en = discover(mk([...base, ["sensor.livebox_4_optical_ont_rate_rx", "interface_rate_rx"], ["sensor.livebox_4_optical_ont_rate_tx", "interface_rate_tx"]]));
+  assert.equal(en.scalars.rate_down, "sensor.livebox_4_optical_ont_rate_rx");
+  assert.equal(en.scalars.rate_up, "sensor.livebox_4_optical_ont_rate_tx");
+  const fr = discover(mk([...base, ["sensor.livebox_4_debit_recu_optical_ont", "interface_rate_rx"], ["sensor.livebox_4_debit_emis_optical_ont", "interface_rate_tx"]]));
+  assert.equal(fr.scalars.rate_down, "sensor.livebox_4_debit_recu_optical_ont");
+  assert.equal(fr.scalars.rate_up, "sensor.livebox_4_debit_emis_optical_ont");
+});
+
 test("Livebox: the missed calls are counted from the call-missed sensor, never from the total of calls (#61)", () => {
   const { missedCount } = load("internet-box-card.js", ["missedCount"]);
   const s = (entity_id, state, attributes = {}) => ({ entity_id, state, attributes });

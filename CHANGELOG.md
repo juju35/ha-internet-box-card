@@ -1,5 +1,10 @@
 # Changelog
 
+## 3.5.3 - 2026-11-14
+
+### Fixes
+- Livebox 4 on fibre ([#114](https://github.com/juju35/ha-internet-box-card/issues/114)): the box is found again, instead of "No internet box found". On a GPON line the Livebox integration creates no xDSL rate sensor, and the Livebox 4, behind an external ONT, has no `WAN_GPON` / `WAN_SFP` / `veip0` interface, so the card had nothing to find it by. A Livebox is now also found by its WAN status binary sensor or its restart button, and the rates of its `Optical ONT` interface are taken as the download / upload rates.
+
 ## 3.5.2 - 2026-11-14
 
 ### Fixes

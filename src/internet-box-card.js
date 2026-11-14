@@ -2517,10 +2517,15 @@ const OPERATORS = {
     // placeholder of the name): the WAN interface is then told by its name in the entity id, generated from the name in
     // any language (sensor.livebox_wan_sfp_rate_rx, sensor.livebox_debit_recu_wan_sfp), never a sub-interface
     // (wan_gpon_internet…) nor the DS-Lite tunnel. `veip0` is the GPON interface of the boxes with a built-in ONT.
+    // `optical_ont` is the WAN interface of the boxes behind an external ONT (Livebox 3 / 4: "Optical ONT").
     altIface: {
       keys: { rate_down: "interface_rate_rx", rate_up: "interface_rate_tx" },
-      re: /(^|_)(wan_(gpon|sfp)|veip0)(_rate_[rt]x)?(_\d+)?$/i,
+      re: /(^|_)(wan_(gpon|sfp)|veip0|optical_ont)(_rate_[rt]x)?(_\d+)?$/i,
     },
+    // A box without a rate sensor the card knows (a Livebox 4 on fibre, juju35/ha-internet-box-card#114: no xDSL rate on
+    // a GPON line, and its WAN interface is not WAN_GPON / WAN_SFP / veip0) is still found by its WAN status binary
+    // sensor or its restart button, entities of the box device only.
+    anchorKeys: ["connectivity", "restart_btn"],
   },
   sfr_box: {
     platform: "sfr_box", name: "SFR Box", color: "#e2001a", logo: IMG_SFR,
@@ -3046,10 +3051,12 @@ const isRateDown = (op, e) =>
 /** Slot of a box entity without translation key matched by the operator's entity-id suffixes (hass-bbox2), or undefined. */
 const idSlot = (op, id) => op.ids && Object.keys(op.ids).find((slot) => op.ids[slot].test(id));
 
-/** True when an entity marks the box device: its download rate (see isRateDown), else, for an integration whose box
- *  has no rate sensor, its restart button (Sagemcom F@st), or a guessed download rate (ZTE Hyperbox). */
+/** True when an entity marks the box device: its download rate (see isRateDown), else one of the operator's own box
+ *  entities (`anchorKeys`: the Livebox WAN status and restart button), else, for an integration whose box has no rate
+ *  sensor, its restart button (Sagemcom F@st), or a guessed download rate (ZTE Hyperbox). */
 const isAnchor = (hass, op, e) =>
   isRateDown(op, e) ||
+  (!!e.translation_key && !!op.anchorKeys?.includes(e.translation_key)) ||
   (op.anchorRestart && e.entity_id.startsWith("button.") && !e.translation_key && hass.states[e.entity_id]?.attributes?.device_class === "restart") ||
   (op.guess && guessRate(hass, e) === "down");
 
