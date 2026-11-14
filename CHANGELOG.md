@@ -1,5 +1,10 @@
 # Changelog
 
+## 3.5.2 - 2026-11-14
+
+### Fixes
+- Freebox: a box whose integration gives its entities no translation key (hardcoded English names, as in the core Freebox integration) is found again, instead of "No internet box found". Its download and upload rates, missed calls, Wi-Fi switch, call and reboot buttons, disk partitions and RAID arrays are matched by their entity-id suffix, only when the entity has no translation key.
+
 ## 3.5.1 - 2026-11-13
 
 ### Fixes

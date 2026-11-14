@@ -2479,6 +2479,13 @@ const OPERATORS = {
     platform: "freebox", name: "Freebox", color: "#cd1e25", logo: IMG_LOGO,
     website: FREE_URL, admin: ADMIN_URL, models: MODELS,
     keys: { rate_down: "rate_down", rate_up: "rate_up", missed: "missed", wifi: "wifi", mark_read: "mark_calls_as_read", reboot: "reboot", partition: "partition_free_space", raid: "raid_degraded" },
+    // Core versions whose Freebox entities have hardcoded English names and no translation key (juju35/ha-internet-box-card#112):
+    // matched by entity-id suffix, only for entities without a key. Partitions and RAID arrays are on the disk devices.
+    ids: {
+      rate_down: /^sensor\..+_download_speed$/, rate_up: /^sensor\..+_upload_speed$/, missed: /^sensor\..+_missed_calls$/,
+      wifi: /^switch\..+_wifi$/, mark_read: /^button\.(.+_)?mark_calls_as_read$/,
+    },
+    childIds: { partition: /^sensor\..+_free_space$/, raid: /^binary_sensor\..+_degraded$/ },
   },
   livebox: {
     platform: "livebox", name: "Livebox", color: "#ff7900", logo: IMG_ORANGE,
@@ -3321,8 +3328,8 @@ const discover = (hass, boxId) => {
         // A restart button with a translation key of its own is a reconnect button (FRITZ!Box `reconnect`, Vodafone
         // `dsl_reconnect`…), never the reboot.
         else if (own && domain === "button" && ((keys.reboot && k === keys.reboot) || (!k && a.device_class === "restart"))) box.scalars.reboot = id;
-        else if (keys.partition && k === keys.partition) box.partitions.push({ id, device: d });
-        else if (keys.raid && k === keys.raid) box.raids.push(id);
+        else if ((keys.partition && k === keys.partition) || (!k && op.childIds?.partition?.test(id))) box.partitions.push({ id, device: d });
+        else if ((keys.raid && k === keys.raid) || (!k && op.childIds?.raid?.test(id))) box.raids.push(id);
         // Temperatures: the box's temperature sensors, with a key (FRITZ!Box cpu_temperature) or not (Freebox).
         else if (own && domain === "sensor" && a.device_class === "temperature") box.temps.push({ id, name: shortName(hass, id, dev) });
         else if (own && domain === "sensor" && !k && /^(rpm|tr\/min)$/i.test(a.unit_of_measurement || ""))
