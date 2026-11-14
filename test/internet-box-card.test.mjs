@@ -1126,3 +1126,42 @@ test("a device of another config entry linked to the router is not a child of th
   assert.ok(box.partitions.length >= 1, "the box disk partition is still found");
   assert.ok(!box.partitions.some((p) => p.id === id));
 });
+
+test("a Freebox whose entities have no translation key is found by entity-id suffix (#112)", () => {
+  const devs = {
+    fbx: { id: "fbx", name: "Freebox v7 (r1)", model: "Freebox v7 (r1)", model_id: "fbxgw7-r1/full", config_entries: ["e"] },
+    disk: { id: "disk", name: "Disk 1", via_device_id: "fbx", config_entries: ["e"] },
+  };
+  const ids = {
+    "sensor.freebox_download_speed": ["fbx", { device_class: "data_rate" }],
+    "sensor.freebox_upload_speed": ["fbx", { device_class: "data_rate" }],
+    "sensor.freebox_missed_calls": ["fbx", {}],
+    "sensor.freebox_temperature_cpu_ap": ["fbx", { device_class: "temperature" }],
+    "sensor.freebox_disque_dur_1": ["disk", {}],
+    "sensor.disque_dur_free_space": ["disk", {}],
+    "binary_sensor.raid_array_0_degraded": ["disk", {}],
+    "device_tracker.freebox_v7_r1": ["fbx", {}],
+    "switch.freebox_wifi": ["fbx", {}],
+    "button.mark_calls_as_read": ["fbx", {}],
+    "button.reboot_freebox": ["fbx", { device_class: "restart" }],
+  };
+  const ents = {};
+  const states = {};
+  for (const [id, [device_id, attributes]] of Object.entries(ids)) {
+    ents[id] = { entity_id: id, platform: "freebox", device_id };
+    states[id] = { entity_id: id, state: "1", attributes };
+  }
+  const hass = { states, entities: ents, devices: devs };
+  assert.deepEqual([...listBoxes(hass)].map((b) => b.value), ["fbx"]);
+  const box = discover(hass, undefined);
+  assert.equal(box.scalars.rate_down, "sensor.freebox_download_speed");
+  assert.equal(box.scalars.rate_up, "sensor.freebox_upload_speed");
+  assert.equal(box.scalars.missed, "sensor.freebox_missed_calls");
+  assert.equal(box.scalars.wifi, "switch.freebox_wifi");
+  assert.equal(box.scalars.mark_read, "button.mark_calls_as_read");
+  assert.equal(box.scalars.reboot, "button.reboot_freebox");
+  assert.equal(box.scalars.router, "device_tracker.freebox_v7_r1");
+  assert.deepEqual([...box.partitions].map((p) => p.id), ["sensor.disque_dur_free_space"]);
+  assert.deepEqual([...box.raids], ["binary_sensor.raid_array_0_degraded"]);
+  assert.deepEqual([...box.temps].map((t) => t.id), ["sensor.freebox_temperature_cpu_ap"]);
+});
