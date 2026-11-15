@@ -1,5 +1,10 @@
 # Changelog
 
+## 3.5.4 - 2026-11-15
+
+### Fixes
+- Livebox 4 on fibre, follow-up to [#114](https://github.com/juju35/ha-internet-box-card/issues/114): on the boxes whose fibre WAN interface is named `fiber` (entities `sensor.livebox_4_fiber_*`), the line is now detected as fibre from the presence of the fibre sensors (`fiber_rx` / `fiber_tx` byte counters, `fiber_power_*`), even when the WAN status reports no usable `link_type`, and the `fiber_rate_rx` / `fiber_rate_tx` interface rates are taken as the download / upload rates. A WAN status whose link type is `ONT` or `SFP` is also recognised as fibre.
+
 ## 3.5.3 - 2026-11-14
 
 ### Fixes

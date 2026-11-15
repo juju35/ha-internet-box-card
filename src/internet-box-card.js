@@ -2508,11 +2508,16 @@ const OPERATORS = {
       rate_down: "down_rate", rate_up: "up_rate", missed: "callmissed", missed_total: "callers", wifi: "wifi_switch",
       mark_read: "cmissed_clear_btn", reboot: "restart_btn", wan: "connectivity",
     },
-    // On a fibre line (GPON or SFP) the integration creates no down_rate / up_rate sensor: the throughput comes from
-    // the WAN interface statistics, whose translation keys are built from the interface name (WAN_GPON_rate_rx).
+    // On a fibre line (GPON or SFP) the integration creates no xDSL down_rate / up_rate sensor: the throughput comes
+    // from the WAN interface statistics, whose translation keys are built from the interface name (WAN_GPON_rate_rx,
+    // or just fiber_rate_rx on the boxes that name the interface "fiber", juju35/ha-internet-box-card#114).
     // `alt` holds patterns on the translation key, used when the canonical key is missing (never Wi-Fi or Ethernet
     // interfaces, nor the DS-Lite tunnel).
-    alt: { rate_down: /^wan_(gpon|sfp)_rate_rx$/i, rate_up: /^wan_(gpon|sfp)_rate_tx$/i },
+    alt: { rate_down: /^(wan_(gpon|sfp)|fiber)_rate_rx$/i, rate_up: /^(wan_(gpon|sfp)|fiber)_rate_tx$/i },
+    // The box exposes fibre sensors (fiber_rx / fiber_tx byte counters, fiber_power_rx / fiber_power_tx): their mere
+    // presence means the line is fibre, used when the WAN status has no (or an unrecognised) link_type attribute
+    // (juju35/ha-internet-box-card#114).
+    fiberKey: /^fiber(_power)?_[rt]x$/i,
     // Since Livebox 3.0.0 every interface shares one translation key (interface_rate_rx / _tx, the interface only a
     // placeholder of the name): the WAN interface is then told by its name in the entity id, generated from the name in
     // any language (sensor.livebox_wan_sfp_rate_rx, sensor.livebox_debit_recu_wan_sfp), never a sub-interface
@@ -2520,7 +2525,7 @@ const OPERATORS = {
     // `optical_ont` is the WAN interface of the boxes behind an external ONT (Livebox 3 / 4: "Optical ONT").
     altIface: {
       keys: { rate_down: "interface_rate_rx", rate_up: "interface_rate_tx" },
-      re: /(^|_)(wan_(gpon|sfp)|veip0|optical_ont)(_rate_[rt]x)?(_\d+)?$/i,
+      re: /(^|_)(wan_(gpon|sfp)|veip0|optical_ont|fiber)(_rate_[rt]x)?(_\d+)?$/i,
     },
     // A box without a rate sensor the card knows (a Livebox 4 on fibre, juju35/ha-internet-box-card#114: no xDSL rate on
     // a GPON line, and its WAN interface is not WAN_GPON / WAN_SFP / veip0) is still found by its WAN status binary
@@ -2891,7 +2896,7 @@ const LINE_ICONS = {
 };
 const lineOf = (type, model) => {
   const t = `${type || ""} ${model || ""}`.toLowerCase();
-  return /ftth|fib|pon\b/.test(t)
+  return /ftth|fib|pon\b|ont\b|sfp\b/.test(t)
     ? "fibre"
     : /dsl/.test(t)
       ? "dsl"
@@ -3341,6 +3346,9 @@ const discover = (hass, boxId) => {
         else if (own && domain === "sensor" && a.device_class === "temperature") box.temps.push({ id, name: shortName(hass, id, dev) });
         else if (own && domain === "sensor" && !k && /^(rpm|tr\/min)$/i.test(a.unit_of_measurement || ""))
           box.fans.push({ id, name: shortName(hass, id, dev) });
+        // A fibre sensor (fiber_rx / fiber_tx / fiber_power_*) is proof the line is fibre, for a box whose WAN
+        // status gives no usable link_type (juju35/ha-internet-box-card#114).
+        else if (own && op.fiberKey && k && op.fiberKey.test(k)) box.lineType ??= "fibre";
       }
       // The DSL line sync rates of a box that has them tell its kind of line (FRITZ!Box on DSL).
       if (op.syncLine && box.scalars.sync_down) box.lineType ??= op.syncLine;

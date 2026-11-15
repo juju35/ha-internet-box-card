@@ -296,10 +296,18 @@ test("Livebox 4 on fibre: found by its WAN status and restart button, rated from
   // Neither the byte counters nor a LAN port are taken for the rates.
   assert.equal(box.scalars.rate_down, undefined);
   assert.equal(box.scalars.rate_up, undefined);
+  // The fibre sensors (fiber_tx / fiber_rx byte counters) mark the line as fibre, even with no usable link_type.
+  assert.equal(box.lineType, "fibre");
   const { boxModel } = load("internet-box-card.js", ["boxModel"]);
   assert.equal(boxModel(box, {}).id, "livebox_4");
   // The WAN status alone is enough to find it.
   assert.equal(listBoxes(mk([["binary_sensor.livebox_4_wan_status", "connectivity"]])).length, 1);
+
+  // When the box names its fibre WAN interface "fiber", its rate sensors (fiber_rate_rx / _tx) give the throughput.
+  const rated = discover(mk([...base, ["sensor.livebox_4_fiber_rate_rx", "fiber_rate_rx"], ["sensor.livebox_4_fiber_rate_tx", "fiber_rate_tx"]]));
+  assert.equal(rated.scalars.rate_down, "sensor.livebox_4_fiber_rate_rx");
+  assert.equal(rated.scalars.rate_up, "sensor.livebox_4_fiber_rate_tx");
+  assert.equal(rated.lineType, "fibre");
 
   // The external ONT interface ("Optical ONT"), in English and French entity ids, gives the rates.
   const en = discover(mk([...base, ["sensor.livebox_4_optical_ont_rate_rx", "interface_rate_rx"], ["sensor.livebox_4_optical_ont_rate_tx", "interface_rate_tx"]]));
@@ -627,6 +635,9 @@ test("lineOf: the header icon follows the connection type, else the model", () =
   assert.equal(lineOf(undefined, "Livebox 7"), "box");
   assert.equal(lineOf("GPON"), "fibre");
   assert.equal(lineOf("XGS-PON"), "fibre");
+  // A WAN status that names the fibre line "ONT" or "SFP" (#114).
+  assert.equal(lineOf("ONT"), "fibre");
+  assert.equal(lineOf("SFP"), "fibre");
 });
 
 test("rate tiles: 24 h sparkline from the recorder statistics, refreshed every 5 minutes, off with show_history: false", async () => {
