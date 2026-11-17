@@ -847,6 +847,55 @@ test("thresholds in the editor: shown at their defaults, kept in the YAML only w
   for (const k of ["temp_critical", "disk_warning", "disk_critical"]) assert.equal(k in out, false, k);
 });
 
+test("illustrated header: both editors offer it and its day / night theme, left out of the YAML at their defaults", () => {
+  const { InternetBoxCardEditor, InternetBoxMiniCardEditor } = load("internet-box-card.js", ["InternetBoxCardEditor", "InternetBoxMiniCardEditor"]);
+  for (const Editor of [InternetBoxCardEditor, InternetBoxMiniCardEditor]) {
+    const ed = new Editor();
+    ed.appendChild = () => {};
+    const emitted = [];
+    ed.dispatchEvent = (ev) => emitted.push(ev.detail.config);
+    ed.setConfig({ box: "router" });
+    ed.hass = { states: baseStates(), entities, devices, language: "en" };
+    assert.equal(ed._form.data.illustration, true);
+    assert.equal(ed._form.data.illustration_theme, "auto");
+    const theme = ed._form.schema.find((f) => f.name === "illustration_theme");
+    assert.equal(theme.selector.select.options.map((o) => o.label).join(" / "), "Automatic (sun, dark mode) / Day / Night");
+    assert.equal(ed._form.computeLabel({ name: "illustration" }), "Illustrated header (internet scene)");
+    ed._form.listeners["value-changed"]({ stopPropagation() {}, detail: { value: { ...ed._form.data } } });
+    assert.equal("illustration" in emitted.at(-1), false);
+    assert.equal("illustration_theme" in emitted.at(-1), false);
+    ed._form.listeners["value-changed"]({ stopPropagation() {}, detail: { value: { ...ed._form.data, illustration: false, illustration_theme: "night" } } });
+    assert.equal(emitted.at(-1).illustration, false);
+    assert.equal(emitted.at(-1).illustration_theme, "night");
+  }
+});
+
+test("illustrated header: the scene follows the link and the Wi-Fi, night from illustration_theme, the sun or the dark mode", () => {
+  const { sceneSvg, isNight, IMG_BOX, PIC_FIT } = load("internet-box-card.js", ["sceneSvg", "isNight", "IMG_BOX", "PIC_FIT"]);
+  // Every drawn model has its drawn part, inside its picture.
+  for (const k of Object.keys(IMG_BOX)) assert.ok(PIC_FIT[k], k);
+  const ok = sceneSvg({ state: "ok", wifi: true, pic: IMG_BOX.ultra, fit: PIC_FIT.ultra, href: "http://box", label: "Admin" });
+  assert.match(ok, /sc-fibre flow/);
+  assert.match(ok, /sc-waves on/);
+  assert.match(ok, /<a class="sc-box" href="http:\/\/box"/);
+  assert.doesNotMatch(ok, /sc-cut/);
+  // No id in the scene: several cards on a page never clash.
+  assert.doesNotMatch(ok.replace(/data:image[^"]*/g, ""), /\sid="/);
+  const down = sceneSvg({ state: "down", wifi: true, pic: null });
+  assert.match(down, /sc-cut/);
+  assert.doesNotMatch(down, /sc-waves on|sc-pk|sc-box/);
+  // Online with the Wi-Fi off: the fibre flows, the waves are off.
+  const noWifi = sceneSvg({ state: "ok", wifi: false });
+  assert.match(noWifi, /sc-fibre flow/);
+  assert.doesNotMatch(noWifi, /sc-waves on/);
+  const sun = (state) => ({ states: { "sun.sun": { state, attributes: {} } } });
+  assert.equal(isNight(sun("below_horizon"), {}), true);
+  assert.equal(isNight(sun("above_horizon"), { illustration_theme: "night" }), true);
+  assert.equal(isNight(sun("below_horizon"), { illustration_theme: "day" }), false);
+  assert.equal(isNight({ states: {}, themes: { darkMode: true } }, {}), true);
+  assert.equal(isNight({ states: {} }, {}), false);
+});
+
 test("sparkline: real time axis over the 24 h window, broken where the recorder has no data", () => {
   const { spark, statTime } = load("internet-box-card.js", ["spark", "statTime"]);
   const end = Date.UTC(2026, 10, 7, 12);

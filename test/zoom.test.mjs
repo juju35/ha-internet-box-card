@@ -57,7 +57,8 @@ const open = async (config = {}) => {
           mini: !!root.querySelector(".foot"),
           icon: zoom?.querySelector("path")?.getAttribute("d").slice(0, 12) ?? null,
           title: zoom?.title ?? null,
-          last: zoom ? zoom === root.querySelector(".header").lastElementChild : null,
+          // The last header button (top right): in the banner's button group, or in the classic header's row.
+          last: zoom ? root.querySelector(".header").contains(zoom) && !zoom.nextElementSibling : null,
           size: el.getCardSize(),
           columns: el.getGridOptions().columns,
           focused: !!zoom && root.activeElement === zoom,
@@ -181,9 +182,9 @@ test("zoom: false removes the detail button", async (t) => {
   await page.close();
 });
 
-test("the status pill sits right of the title, centred on its line, and the Wi-Fi state is not duplicated under it (the Services section shows it)", async (t) => {
+test("classic header: the status pill sits right of the title, centred on its line, and the Wi-Fi state is not duplicated under it (the Services section shows it)", async (t) => {
   if (skip) return t.skip(skip);
-  const { page, errors } = await open();
+  const { page, errors } = await open({ illustration: false });
   const res = await page.evaluate(() => {
     const root = window.card.shadowRoot;
     window.click(root.querySelector(".zoom"));
@@ -199,6 +200,56 @@ test("the status pill sits right of the title, centred on its line, and the Wi-F
     };
   });
   assert.deepEqual(res, { row: ["logo-link", "titles", "box-link", "action", "zoom"], status: "Online · FTTH", dy: true, right: true, under: [] });
+  assert.deepEqual(errors, []);
+  await page.close();
+});
+
+test("illustrated header: a 90 px banner with its scene, the box on a 10 px network strip, the status under the title", async (t) => {
+  if (skip) return t.skip(skip);
+  const { page, errors } = await open();
+  const measureBanner = () =>
+    page.evaluate(() => {
+      const root = window.card.shadowRoot;
+      const r = (sel) => root.querySelector(sel)?.getBoundingClientRect();
+      const card = r("ha-card");
+      const banner = r(".banner");
+      const ground = r(".banner .ground");
+      const box = r(".scene .sc-box");
+      return {
+        height: banner.height,
+        ground: [ground.height, ground.left === card.left, ground.right === card.right, ground.bottom === banner.bottom],
+        // The box stands on the strip, inside the banner.
+        onGround: Math.abs(box.bottom - ground.top) <= 2 && box.top >= banner.top,
+        statusUnder: r(".titles > .chip.status").top >= r(".name").bottom - 1,
+        night: root.querySelector(".banner").classList.contains("night"),
+        strip: root.querySelector(".banner .ground").className,
+        zoomClear: r(".zoom").left >= r(".name").right,
+      };
+    });
+  const day = await measureBanner();
+  assert.deepEqual(day, { height: 90, ground: [10, true, true, true], onGround: true, statusUnder: true, night: false, strip: "ground g-net", zoomClear: true });
+  // Night: the sun below the horizon, or `illustration_theme` forcing it; the mini card's full view keeps the banner.
+  const night = await page.evaluate(() => {
+    const el = window.card;
+    el.hass = { ...el.hass, states: { ...el.hass.states, "sun.sun": { entity_id: "sun.sun", state: "below_horizon", attributes: {} } } };
+    const sun = el.shadowRoot.querySelector(".banner").classList.contains("night");
+    el.setConfig({ type: "custom:internet-box-mini-card", illustration_theme: "day" });
+    const forced = el.shadowRoot.querySelector(".banner").classList.contains("night");
+    window.click(el.shadowRoot.querySelector(".zoom"));
+    return { sun, forced, zoomed: el.shadowRoot.querySelectorAll(".banner").length };
+  });
+  assert.deepEqual(night, { sun: true, forced: false, zoomed: 1 });
+  // Offline: the broken fibre and the red network strip; `illustration: false` brings the classic header back.
+  const offline = await page.evaluate(() => {
+    const el = window.card;
+    const id = "device_tracker.freebox_v9_r1";
+    el.hass = { ...el.hass, states: { ...el.hass.states, [id]: { ...el.hass.states[id], state: "not_home" } } };
+    const root = el.shadowRoot;
+    const res = { strip: root.querySelector(".banner .ground").className, cut: !!root.querySelector(".sc-cut"), icon: root.querySelector(".logo-link").classList.contains("crit") };
+    el.setConfig({ type: "custom:internet-box-mini-card", illustration: false });
+    return { ...res, classic: !root.querySelector(".banner") && !!root.querySelector(".header .box") };
+  });
+  assert.deepEqual(offline, { strip: "ground g-netdown", cut: true, icon: true, classic: true });
   assert.deepEqual(errors, []);
   await page.close();
 });

@@ -523,6 +523,109 @@ const modelPic = (m, accent) => {
   if (!_tinted.has(key)) _tinted.set(key, svgUri(GENERIC[pic]({ accent })));
   return _tinted.get(key);
 };
+
+// ---------------------------------------------------------------------------
+// Illustrated header: an internet scene at the right of the banner, in a 200 × 80 picture drawn from its bottom
+// right corner (fibre arriving into the box, world dots, Wi-Fi waves to the connected devices). The left of the
+// picture (x < 80) is open sky, under the title. The box is the model's own drawing, drawn big on the ground strip.
+// ---------------------------------------------------------------------------
+
+// Drawn part of each model picture (x, y, width, height in its viewBox), so the box fills its place in the scene
+// whatever the margins of its drawing. The generic form factors keep their geometry when tinted.
+const PIC_FIT = {
+  ultra: [10, 6, 280, 130],
+  pop: [10, 10, 280, 122],
+  delta: [6, 8, 288, 146],
+  revolution: [10, 26, 290, 107],
+  mini_4k: [6, 12, 266, 106],
+  livebox_4: [24, 86, 252, 76],
+  livebox_5: [0, 74, 300, 96],
+  livebox_6: [103, 56, 94, 125],
+  livebox_7: [99, 44, 102, 137],
+  livebox_s: [82, 26, 136, 164],
+  sfr_box_8: [86, 50, 128, 126],
+  sfr_box_7: [104, 22, 92, 158],
+  sfr_nb6vac: [24, 80, 244, 86],
+  bbox_miami: [30, 78, 234, 92],
+  bbox_ultym: [98, 22, 104, 158],
+  bbox_fibre: [107, 24, 86, 158],
+  generic_router: [58, 26, 184, 132],
+  generic_hub: [75, 82, 150, 62],
+  generic_tower: [106, 18, 88, 153],
+  generic_mobile: [92, 30, 116, 136],
+  generic_dish: [84, 6, 131, 164],
+};
+
+// Dots of the world map behind the scene, on a fixed pseudo-random pattern.
+const SCENE_DOTS = (() => {
+  const dots = [];
+  for (let y = 6; y < 60; y += 6) for (let x = 86; x < 200; x += 6) if ((x * 7 + y * 13) % 11 < 6) dots.push(`<circle cx="${x}" cy="${y}" r=".9"/>`);
+  return dots.join("");
+})();
+
+// Connected devices around the box (laptop, phone, TV): position and outline.
+const SCENE_DEVICES = [
+  [110, 22, "M-5 -3 h10 v6 h-10z M-7 3 h14"],
+  [132, 12, "M-3 -5 h6 v10 h-6z"],
+  [184, 16, "M-6 -4 h12 v7 h-12z M-2 5 h4"],
+];
+
+// Size of a model picture's viewBox (every drawing starts at 0 0), read once per picture.
+const _picSize = new Map();
+const picSize = (pic) => {
+  if (!_picSize.has(pic)) {
+    const m = decodeURIComponent(pic).match(/viewBox="0 0 ([\d.]+) ([\d.]+)"/);
+    _picSize.set(pic, m ? [Number(m[1]), Number(m[2])] : [300, 160]);
+  }
+  return _picSize.get(pic);
+};
+
+// Colour of the link by scene state: online, syncing, offline, unavailable.
+const SCENE_LINK = { ok: "#2fd0ff", wait: "#ffa600", down: "#e5484d", off: "#9aa3ae" };
+
+/** The banner picture. `state`: ok | wait | down | off (the internet link); `wifi`: the Wi-Fi is on; `pic` / `fit`:
+ *  the box picture (data: URI) and its drawn part; `href`: the box admin page opened by a click on the box. */
+const sceneSvg = ({ state, wifi, pic, fit, href, label }) => {
+  const c = SCENE_LINK[state] || SCENE_LINK.ok;
+  const up = state === "ok" || state === "wait";
+  const radio = up && wifi;
+  const slow = state === "wait";
+  const fibre = "M80 70 H150";
+  const links = SCENE_DEVICES.map(([x, y, d], i) => {
+    const p = `M160 52 Q${(160 + x) / 2} ${y + 10} ${x} ${y + 6}`;
+    return `<path class="sc-wire${radio ? " on" : ""}" d="${p}"/>${
+      radio ? `<circle class="sc-pk" r="1.4" style="offset-path:path('${p}');animation-duration:${(slow ? 2.6 : 1.4) + i * 0.4}s"/>` : ""
+    }<g transform="translate(${x} ${y})"><circle class="sc-dev" r="8"/><path class="sc-dev-i" d="${d}"/></g>`;
+  }).join("");
+  let box = "";
+  if (pic && fit) {
+    const [fx, fy, fw, fh] = fit;
+    const [vw, vh] = picSize(pic);
+    // Wide boxes lie low (28 high at most), standing ones rise to 44; at most 66 wide, centred at x 160, on the ground.
+    const maxH = fw / fh > 1.4 ? 28 : 44;
+    let h = maxH;
+    let w = (h * fw) / fh;
+    if (w > 66) {
+      w = 66;
+      h = (w * fh) / fw;
+    }
+    const img = `<svg x="${(160 - w / 2).toFixed(1)}" y="${(80 - h).toFixed(1)}" width="${w.toFixed(1)}" height="${h.toFixed(1)}" viewBox="${fx} ${fy} ${fw} ${fh}" preserveAspectRatio="xMidYMax meet" overflow="visible"><image href="${pic}" width="${vw}" height="${vh}"/></svg>`;
+    box = href
+      ? `<a class="sc-box" href="${esc(href)}" target="_blank" rel="noopener noreferrer" aria-label="${esc(label)}"><title>${esc(label)}</title>${img}</a>`
+      : `<g class="sc-box">${img}</g>`;
+  }
+  return `<svg class="scene sc-${state}" viewBox="0 0 200 80" preserveAspectRatio="xMaxYMax meet" focusable="false" style="--sc-link:${c}">
+    <g aria-hidden="true">
+      <g class="sc-dots">${SCENE_DOTS}</g>
+      <path class="sc-fibre-bed" d="${fibre}"/>
+      <path class="sc-fibre${up ? " flow" : ""}" d="${fibre}"/>
+      ${links}
+      <g class="sc-waves${radio ? " on" : ""}" transform="translate(160 40)"><path class="w1" d="M-6 -4 a8 8 0 0 1 12 0"/><path class="w2" d="M-11 -9 a15 15 0 0 1 22 0"/><path class="w3" d="M-16 -14 a22 22 0 0 1 32 0"/></g>
+      ${state === "down" ? '<g class="sc-cut" transform="translate(116 70)"><circle r="6"/><path d="M-2.6 -2.6 l5.2 5.2 M2.6 -2.6 l-5.2 5.2"/></g>' : ""}
+    </g>
+    ${box}
+  </svg>`;
+};
 const IMG_LOGO = "__IMG_LOGO__";
 const IMG_ORANGE = "__IMG_ORANGE__";
 const IMG_SFR = "__IMG_SFR__";
@@ -613,6 +716,11 @@ const STRINGS = {
     admin: "Open the box admin interface",
     admin_url: "Box admin address (optional, opened when clicking the picture)",
     show_logo: "Show the operator logo",
+    illustration: "Illustrated header (internet scene)",
+    illustration_theme: "Illustration theme",
+    theme_auto: "Automatic (sun, dark mode)",
+    theme_day: "Day",
+    theme_night: "Night",
     show_network: "Show network",
     show_history: "Show 24 h rate history",
     show_system: "Show system (temperatures, fans)",
@@ -698,6 +806,11 @@ const STRINGS = {
     admin: "Ouvrir l'interface d'administration de la box",
     admin_url: "Adresse d'administration de la box (facultatif, ouverte au clic sur l'illustration)",
     show_logo: "Afficher le logo de l'opérateur",
+    illustration: "En-tête illustré (scène internet)",
+    illustration_theme: "Thème de l'illustration",
+    theme_auto: "Automatique (soleil, mode sombre)",
+    theme_day: "Jour",
+    theme_night: "Nuit",
     show_network: "Afficher le réseau",
     show_history: "Afficher l’historique 24 h des débits",
     show_system: "Afficher le système (températures, ventilateurs)",
@@ -782,6 +895,11 @@ const STRINGS = {
     admin: "Verwaltungsoberfläche der Box öffnen",
     admin_url: "Verwaltungsadresse der Box (optional, wird beim Klick auf das Bild geöffnet)",
     show_logo: "Logo des Anbieters anzeigen",
+    illustration: "Illustrierte Kopfzeile (Internet-Szene)",
+    illustration_theme: "Thema der Illustration",
+    theme_auto: "Automatisch (Sonne, dunkler Modus)",
+    theme_day: "Tag",
+    theme_night: "Nacht",
     show_network: "Netzwerk anzeigen",
     show_history: "24-h-Verlauf der Raten anzeigen",
     show_system: "System anzeigen (Temperaturen, Lüfter)",
@@ -867,6 +985,11 @@ const STRINGS = {
     admin: "Abrir la interfaz de administración del router",
     admin_url: "Dirección de administración del router (opcional, se abre al hacer clic en la imagen)",
     show_logo: "Mostrar el logotipo del operador",
+    illustration: "Encabezado ilustrado (escena de internet)",
+    illustration_theme: "Tema de la ilustración",
+    theme_auto: "Automático (sol, modo oscuro)",
+    theme_day: "Día",
+    theme_night: "Noche",
     show_network: "Mostrar la red",
     show_history: "Mostrar el historial de 24 h de las velocidades",
     show_system: "Mostrar el sistema (temperaturas, ventiladores)",
@@ -953,6 +1076,11 @@ const STRINGS = {
     admin: "Отвори администраторски интерфејс рутера",
     admin_url: "Администраторска адреса рутера (опционо, отвара се кликом на слику)",
     show_logo: "Прикажи лого оператера",
+    illustration: "Илустровано заглавље (интернет сцена)",
+    illustration_theme: "Тема илустрације",
+    theme_auto: "Аутоматски (сунце, тамни режим)",
+    theme_day: "Дан",
+    theme_night: "Ноћ",
     show_network: "Прикажи мрежу",
     show_history: "Прикажи историју протока за 24 ч",
     show_system: "Прикажи систем (температуре, вентилатори)",
@@ -1039,6 +1167,11 @@ const STRINGS = {
     admin: "Otvori administratorski interfejs rutera",
     admin_url: "Administratorska adresa rutera (opciono, otvara se klikom na sliku)",
     show_logo: "Prikaži logo operatera",
+    illustration: "Ilustrovano zaglavlje (internet scena)",
+    illustration_theme: "Tema ilustracije",
+    theme_auto: "Automatski (sunce, tamni režim)",
+    theme_day: "Dan",
+    theme_night: "Noć",
     show_network: "Prikaži mrežu",
     show_history: "Prikaži istoriju protoka za 24 č",
     show_system: "Prikaži sistem (temperature, ventilatori)",
@@ -1124,6 +1257,11 @@ const STRINGS = {
     admin: "Apri l'interfaccia di amministrazione del modem",
     admin_url: "Indirizzo di amministrazione del modem (facoltativo, aperto al clic sull'immagine)",
     show_logo: "Mostra il logo dell'operatore",
+    illustration: "Intestazione illustrata (scena internet)",
+    illustration_theme: "Tema dell'illustrazione",
+    theme_auto: "Automatico (sole, modalità scura)",
+    theme_day: "Giorno",
+    theme_night: "Notte",
     show_network: "Mostra la rete",
     show_history: "Mostra lo storico 24 h delle velocità",
     show_system: "Mostra il sistema (temperature, ventole)",
@@ -1208,6 +1346,11 @@ const STRINGS = {
     admin: "Beheerinterface van de modem openen",
     admin_url: "Beheeradres van de modem (optioneel, geopend bij klikken op de afbeelding)",
     show_logo: "Logo van de provider tonen",
+    illustration: "Geïllustreerde koptekst (internetscène)",
+    illustration_theme: "Thema van de illustratie",
+    theme_auto: "Automatisch (zon, donkere modus)",
+    theme_day: "Dag",
+    theme_night: "Nacht",
     show_network: "Netwerk tonen",
     show_history: "24-uursgeschiedenis van de snelheden weergeven",
     show_system: "Systeem tonen (temperaturen, ventilatoren)",
@@ -1293,6 +1436,11 @@ const STRINGS = {
     admin: "Abrir a interface de administração do router",
     admin_url: "Endereço de administração do router (opcional, aberto ao clicar na imagem)",
     show_logo: "Mostrar o logótipo do operador",
+    illustration: "Cabeçalho ilustrado (cena de internet)",
+    illustration_theme: "Tema da ilustração",
+    theme_auto: "Automático (sol, modo escuro)",
+    theme_day: "Dia",
+    theme_night: "Noite",
     show_network: "Mostrar a rede",
     show_history: "Mostrar o histórico de 24 h dos débitos",
     show_system: "Mostrar o sistema (temperaturas, ventoinhas)",
@@ -1380,6 +1528,11 @@ const STRINGS = {
     admin: "Otwórz interfejs administracyjny routera",
     admin_url: "Adres panelu administracyjnego routera (opcjonalny, otwierany po kliknięciu obrazu)",
     show_logo: "Pokaż logo operatora",
+    illustration: "Ilustrowany nagłówek (scena internetu)",
+    illustration_theme: "Motyw ilustracji",
+    theme_auto: "Automatyczny (słońce, tryb ciemny)",
+    theme_day: "Dzień",
+    theme_night: "Noc",
     show_network: "Pokaż sieć",
     show_history: "Pokaż historię przepustowości z 24 h",
     show_system: "Pokaż system (temperatury, wentylatory)",
@@ -1465,6 +1618,11 @@ const STRINGS = {
     admin: "Deschide interfața de administrare a routerului",
     admin_url: "Adresa de administrare a routerului (opțional, se deschide la clic pe imagine)",
     show_logo: "Afișează sigla operatorului",
+    illustration: "Antet ilustrat (scenă internet)",
+    illustration_theme: "Tema ilustrației",
+    theme_auto: "Automat (soare, mod întunecat)",
+    theme_day: "Zi",
+    theme_night: "Noapte",
     show_network: "Afișează rețeaua",
     show_history: "Afișează istoricul vitezelor pe 24 h",
     show_system: "Afișează sistemul (temperaturi, ventilatoare)",
@@ -1550,6 +1708,11 @@ const STRINGS = {
     admin: "Åbn routerens administrationsside",
     admin_url: "Routerens administrationsadresse (valgfri, åbnes ved klik på billedet)",
     show_logo: "Vis operatørens logo",
+    illustration: "Illustreret overskrift (internetscene)",
+    illustration_theme: "Illustrationens tema",
+    theme_auto: "Automatisk (sol, mørk tilstand)",
+    theme_day: "Dag",
+    theme_night: "Nat",
     show_network: "Vis netværk",
     show_history: "Vis 24-timers historik for hastigheder",
     show_system: "Vis system (temperaturer, blæsere)",
@@ -1635,6 +1798,11 @@ const STRINGS = {
     admin: "Öppna routerns administrationsgränssnitt",
     admin_url: "Routerns administrationsadress (valfri, öppnas vid klick på bilden)",
     show_logo: "Visa operatörens logotyp",
+    illustration: "Illustrerad rubrik (internetscen)",
+    illustration_theme: "Illustrationens tema",
+    theme_auto: "Automatiskt (sol, mörkt läge)",
+    theme_day: "Dag",
+    theme_night: "Natt",
     show_network: "Visa nätverk",
     show_history: "Visa 24 h-historik för hastigheter",
     show_system: "Visa system (temperaturer, fläktar)",
@@ -1720,6 +1888,11 @@ const STRINGS = {
     admin: "Отваряне на администраторския интерфейс на рутера",
     admin_url: "Администраторски адрес на рутера (по избор, отваря се при щракване върху изображението)",
     show_logo: "Показване на логото на оператора",
+    illustration: "Илюстрирана заглавна част (интернет сцена)",
+    illustration_theme: "Тема на илюстрацията",
+    theme_auto: "Автоматично (слънце, тъмен режим)",
+    theme_day: "Ден",
+    theme_night: "Нощ",
     show_network: "Показване на мрежата",
     show_history: "Показване на 24-часовата история на скоростите",
     show_system: "Показване на системата (температури, вентилатори)",
@@ -1805,6 +1978,11 @@ const STRINGS = {
     admin: "Открыть веб-интерфейс роутера",
     admin_url: "Адрес веб-интерфейса роутера (необязательно, открывается по нажатию на изображение)",
     show_logo: "Показывать логотип оператора",
+    illustration: "Иллюстрированный заголовок (интернет-сцена)",
+    illustration_theme: "Тема иллюстрации",
+    theme_auto: "Автоматически (солнце, тёмный режим)",
+    theme_day: "День",
+    theme_night: "Ночь",
     show_network: "Показывать сеть",
     show_history: "Показать историю скоростей за 24 ч",
     show_system: "Показывать систему (температуры, вентиляторы)",
@@ -1891,6 +2069,11 @@ const STRINGS = {
     admin: "Відкрити вебінтерфейс роутера",
     admin_url: "Адреса вебінтерфейсу роутера (необов’язково, відкривається натисканням на зображення)",
     show_logo: "Показувати логотип оператора",
+    illustration: "Ілюстрований заголовок (інтернет-сцена)",
+    illustration_theme: "Тема ілюстрації",
+    theme_auto: "Автоматично (сонце, темний режим)",
+    theme_day: "День",
+    theme_night: "Ніч",
     show_network: "Показувати мережу",
     show_history: "Показати історію швидкостей за 24 год",
     show_system: "Показувати систему (температури, вентилятори)",
@@ -1975,6 +2158,11 @@ const STRINGS = {
     admin: "A router felügyeleti felületének megnyitása",
     admin_url: "A router felügyeleti címe (nem kötelező, a képre kattintva nyílik meg)",
     show_logo: "A szolgáltató logójának megjelenítése",
+    illustration: "Illusztrált fejléc (internetes jelenet)",
+    illustration_theme: "Az illusztráció témája",
+    theme_auto: "Automatikus (nap, sötét mód)",
+    theme_day: "Nappal",
+    theme_night: "Éjszaka",
     show_network: "Hálózat megjelenítése",
     show_history: "Sebességek 24 órás előzményeinek megjelenítése",
     show_system: "Rendszer megjelenítése (hőmérsékletek, ventilátorok)",
@@ -2061,6 +2249,11 @@ const STRINGS = {
     admin: "Otvoriť administračné rozhranie routera",
     admin_url: "Administračná adresa routera (voliteľná, otvorí sa po kliknutí na obrázok)",
     show_logo: "Zobraziť logo operátora",
+    illustration: "Ilustrovaná hlavička (internetová scéna)",
+    illustration_theme: "Téma ilustrácie",
+    theme_auto: "Automaticky (slnko, tmavý režim)",
+    theme_day: "Deň",
+    theme_night: "Noc",
     show_network: "Zobraziť sieť",
     show_history: "Zobraziť 24 h históriu rýchlostí",
     show_system: "Zobraziť systém (teploty, ventilátory)",
@@ -2147,6 +2340,11 @@ const STRINGS = {
     admin: "Otevřít administrační rozhraní routeru",
     admin_url: "Administrační adresa routeru (volitelná, otevře se kliknutím na obrázek)",
     show_logo: "Zobrazit logo operátora",
+    illustration: "Ilustrované záhlaví (internetová scéna)",
+    illustration_theme: "Motiv ilustrace",
+    theme_auto: "Automaticky (slunce, tmavý režim)",
+    theme_day: "Den",
+    theme_night: "Noc",
     show_network: "Zobrazit síť",
     show_history: "Zobrazit 24h historii rychlostí",
     show_system: "Zobrazit systém (teploty, ventilátory)",
@@ -2234,6 +2432,11 @@ const STRINGS = {
     admin: "Odpri skrbniški vmesnik usmerjevalnika",
     admin_url: "Skrbniški naslov usmerjevalnika (neobvezno, odpre se ob kliku na sliko)",
     show_logo: "Prikaži logotip operaterja",
+    illustration: "Ilustrirana glava (internetni prizor)",
+    illustration_theme: "Tema ilustracije",
+    theme_auto: "Samodejno (sonce, temni način)",
+    theme_day: "Dan",
+    theme_night: "Noč",
     show_network: "Prikaži omrežje",
     show_history: "Prikaži 24-urno zgodovino hitrosti",
     show_system: "Prikaži sistem (temperature, ventilatorji)",
@@ -2319,6 +2522,11 @@ const STRINGS = {
     admin: "Atvērt maršrutētāja administrēšanas saskarni",
     admin_url: "Maršrutētāja administrēšanas adrese (neobligāta, tiek atvērta, noklikšķinot uz attēla)",
     show_logo: "Rādīt operatora logotipu",
+    illustration: "Ilustrēta galvene (interneta aina)",
+    illustration_theme: "Ilustrācijas tēma",
+    theme_auto: "Automātiski (saule, tumšais režīms)",
+    theme_day: "Diena",
+    theme_night: "Nakts",
     show_network: "Rādīt tīklu",
     show_history: "Rādīt ātrumu 24 h vēsturi",
     show_system: "Rādīt sistēmu (temperatūras, ventilatori)",
@@ -2404,6 +2612,11 @@ const STRINGS = {
     admin: "Άνοιγμα της διεπαφής διαχείρισης του δρομολογητή",
     admin_url: "Διεύθυνση διαχείρισης του δρομολογητή (προαιρετική, ανοίγει με κλικ στην εικόνα)",
     show_logo: "Εμφάνιση λογότυπου παρόχου",
+    illustration: "Εικονογραφημένη κεφαλίδα (σκηνή διαδικτύου)",
+    illustration_theme: "Θέμα εικονογράφησης",
+    theme_auto: "Αυτόματο (ήλιος, σκοτεινή λειτουργία)",
+    theme_day: "Ημέρα",
+    theme_night: "Νύχτα",
     show_network: "Εμφάνιση δικτύου",
     show_history: "Εμφάνιση ιστορικού ταχυτήτων 24 ωρών",
     show_system: "Εμφάνιση συστήματος (θερμοκρασίες, ανεμιστήρες)",
@@ -3527,6 +3740,106 @@ const BASE_STYLE = `
   .action:disabled:hover { background: none; color: var(--secondary-text-color); }
 `;
 
+// Illustrated header (the default; `illustration: false` keeps the classic one): a 90 px banner, the icon, title,
+// status and subtitle on the sky at its left, the internet scene at its right (at most 200 px wide, 62 % of the
+// card), and a 10 px network strip under the whole banner, edge to edge. Day and night colours.
+const BANNER_STYLE = `
+  .banner { position: relative; overflow: hidden; height: 90px; padding: 0; gap: 0; display: block;
+            --g: 10px; --scene-w: min(200px, 62%); --sky-text: #0d2a45; --sky-muted: #3b5b78;
+            --sc-bg: #eaf2fb; --sc-dot: #c9dcf2; --sc-bed: #b9c9dc; --sc-dev: #fff; --sc-dev-line: #c9d2de; --sc-dev-icon: #5f6b7a;
+            --sc-wave: #2f80ed; --sc-pk: #43a047; --sc-dim: #9aa3ae;
+            background: var(--sc-bg); color: var(--sky-text); }
+  .banner.night { --sky-text: #fff; --sky-muted: rgba(255,255,255,.78);
+                  --sc-bg: #101827; --sc-dot: #22324d; --sc-bed: #2a3446; --sc-dev: #1d2a3d; --sc-dev-line: #33465f; --sc-dev-icon: #9fb3cf; }
+  .banner .scene { position: absolute; right: 0; bottom: var(--g); height: calc(100% - var(--g)); width: var(--scene-w); }
+  .banner .htext { position: absolute; left: 0; top: 0; bottom: var(--g); z-index: 1;
+                   display: flex; align-items: center; gap: 10px; padding: 0 8px 0 14px; min-width: 0; }
+  .banner .titles { display: flex; flex-direction: column; justify-content: center; min-width: 48px; }
+  .banner .name { color: var(--sky-text); }
+  /* One subtitle line: device and firmware side by side, or the device alone when both do not fit. */
+  .banner .sub { color: var(--sky-muted); flex: none; height: 15px; line-height: 15px; }
+  /* The status of the link is the subtitle: plain text after its coloured dot. */
+  .banner .titles > .chip.status { align-self: flex-start; margin: 1px 0 0; padding: 0; gap: 5px; background: none; font-size: 12px;
+                                   font-weight: 400; color: var(--sky-muted); max-width: 100%; }
+  .banner .titles > .chip.status .dot { width: 7px; height: 7px; }
+  /* A long status on a narrow card wraps to a second line rather than lose its end. */
+  .banner .chip.status .txt { display: block; white-space: normal; line-height: 15px; }
+  .banner + .content { padding-top: 12px; }
+  /* Round icon on the sky: translucent white, the icon in the state colour (online, syncing, offline, unavailable). */
+  .banner .logo-link { align-self: center; background: rgba(255,255,255,.62); box-shadow: inset 0 0 0 1px rgba(47,128,237,.18);
+                       --ibc-icon: color-mix(in srgb, var(--ibc-tint) 72%, #0d2a45); }
+  .banner.night .logo-link { background: rgba(255,255,255,.12); box-shadow: inset 0 0 0 1px rgba(255,255,255,.14);
+                             --ibc-icon: color-mix(in srgb, var(--ibc-tint) 62%, #fff); }
+  .banner .logo-link .icon.type .led { fill: #fff; }
+  .banner.night .logo-link .icon.type .led { fill: #1d2a3d; }
+  .banner .logo { box-shadow: 0 0 0 1px rgba(13,42,69,.16), 0 1px 3px rgba(13,42,69,.18); }
+  /* Restart and detail buttons, top right over the scene. */
+  .banner .hbtns { position: absolute; top: 6px; right: 6px; z-index: 2; display: flex; gap: 4px; }
+  .banner .hbtns .action, .banner .hbtns .zoom { margin: 0; color: var(--sky-text); background: rgba(255,255,255,.55); }
+  .banner.night .hbtns .action, .banner.night .hbtns .zoom { background: rgba(10,20,40,.45); }
+  .banner .hbtns .action:hover, .banner .hbtns .zoom:hover { background: rgba(255,255,255,.8); }
+  .banner.night .hbtns .action:hover, .banner.night .hbtns .zoom:hover { background: rgba(10,20,40,.7); }
+  .banner .hbtns .action:disabled { opacity: .5; }
+  /* The scene. */
+  .sc-dots { fill: var(--sc-dot); }
+  .sc-fibre-bed { stroke: var(--sc-bed); stroke-width: 4; stroke-linecap: round; fill: none; }
+  .sc-fibre { stroke: var(--sc-link); stroke-width: 2; stroke-linecap: round; fill: none; stroke-dasharray: 3 4; }
+  .sc-fibre.flow { stroke-dasharray: 4 26; animation: sc-flow 1.4s linear infinite; }
+  .sc-wait .sc-fibre.flow { animation-duration: 2.6s; }
+  .sc-wire { stroke: var(--sc-dim); stroke-width: 1; fill: none; stroke-dasharray: 2 3; }
+  .sc-wire.on { stroke: var(--sc-pk); }
+  .sc-pk { fill: var(--sc-pk); animation: sc-packet 1.4s linear infinite; }
+  .sc-dev { fill: var(--sc-dev); stroke: var(--sc-dev-line); }
+  .sc-dev-i { fill: none; stroke: var(--sc-dev-icon); stroke-width: 1.3; }
+  .sc-waves { fill: none; stroke: var(--sc-dim); stroke-width: 1.8; stroke-linecap: round; }
+  .sc-waves.on { stroke: var(--sc-wave); }
+  .sc-waves.on path { animation: sc-blink 1.5s infinite; }
+  .sc-waves.on .w2 { animation-delay: .25s; } .sc-waves.on .w3 { animation-delay: .5s; }
+  .sc-cut circle { fill: #e5484d; } .sc-cut path { stroke: #fff; stroke-width: 1.6; }
+  .sc-box { filter: drop-shadow(0 2px 2px rgba(0,0,0,.22)); }
+  /* At night a soft glow keeps the dark boxes (Livebox, Bbox) apart from the sky. */
+  .night .sc-box { filter: drop-shadow(0 0 3px rgba(150,185,230,.45)); }
+  a.sc-box { cursor: pointer; }
+  a.sc-box:focus-visible { outline: 2px solid var(--primary-color, #03a9f4); }
+  /* The network strip: a cable with its light pulses, red and grey when the link is down. */
+  .ground { position: absolute; left: 0; right: 0; bottom: 0; height: var(--g); }
+  .g-net { background: #1e3a5f; background-image: repeating-linear-gradient(90deg, #4fc3f7 0 14px, transparent 14px 22px);
+           background-size: 100% 2px; background-repeat: no-repeat; background-position: 0 50%; box-shadow: inset 0 2px 0 #2f5a8a; }
+  .night .g-net { background-color: #0f1d33; box-shadow: inset 0 2px 0 #1e3a5f; }
+  .g-netdown { background: #5a6370; background-image: repeating-linear-gradient(90deg, #e5484d 0 6px, transparent 6px 16px);
+               background-size: 100% 2px; background-repeat: no-repeat; background-position: 0 50%; box-shadow: inset 0 2px 0 #77808c; }
+  .night .g-netdown { background-color: #2c323b; box-shadow: inset 0 2px 0 #3a414c; }
+  @keyframes sc-flow { to { stroke-dashoffset: -30; } }
+  @keyframes sc-blink { 50% { opacity: .2; } }
+  @keyframes sc-packet { from { offset-distance: 0%; opacity: 0; } 15% { opacity: 1; } 85% { opacity: 1; } to { offset-distance: 100%; opacity: 0; } }
+  @media (prefers-reduced-motion: reduce) {
+    .sc-fibre.flow, .sc-waves.on path { animation: none; }
+    .sc-pk { display: none; }
+  }
+  /* Narrow card: a smaller scene, then the sky alone (the text keeps the room left of the buttons). */
+  /* The text stops where the scene starts (its open sky, x < 80, stays under the text), and before the buttons. */
+  .banner { --text-r: calc(var(--scene-w) * .6); --btns-w: 0px; }
+  .banner:has(.hbtns > *) { --btns-w: 36px; }
+  .banner:has(.hbtns > :nth-child(2)) { --btns-w: 64px; }
+  .banner .htext { right: var(--text-r); }
+  /* Only the title line is level with the buttons: it alone keeps clear of them, the lines under it pass below. */
+  .banner .titles { --clear: max(0px, calc(var(--btns-w) - var(--text-r) - 8px)); }
+  .banner .name { margin-right: var(--clear); }
+  .banner .titles > .chip.status { max-width: calc(100% - var(--clear)); }
+  @container (max-width: 300px) { .banner { --scene-w: 40%; --text-r: calc(var(--scene-w) * .5); } }
+  @container (max-width: 200px) { .banner .scene { display: none; } .banner { --text-r: var(--btns-w); } }
+`;
+
+// Night picture: forced by `illustration_theme`, else the sun below the horizon, else Home Assistant's dark mode.
+const isNight = (hass, config) => {
+  const theme = config?.illustration_theme;
+  if (theme === "night") return true;
+  if (theme === "day") return false;
+  const sun = hass?.states?.["sun.sun"];
+  if (sun && !noValue(sun)) return sun.state === "below_horizon";
+  return !!hass?.themes?.darkMode;
+};
+
 // In-card confirmation popup, at the top of the card so it stays in view when the card is long.
 const DIALOG_STYLE = `
   .backdrop { position: absolute; inset: 0; background: rgba(0,0,0,.45); display: flex; align-items: flex-start; justify-content: center;
@@ -3941,7 +4254,7 @@ class InternetBoxBase extends HTMLElement {
   // minute, for the uptime shown in days, hours and minutes.
   _signature() {
     const h = this._hass;
-    const sig = [h.entities, h.devices, h.language, h.locale?.language, h.config?.time_zone];
+    const sig = [h.entities, h.devices, h.language, h.locale?.language, h.config?.time_zone, h.states?.["sun.sun"]?.state, h.themes?.darkMode];
     const box = boxFor(h, this._config);
     if (!box.id) return sig;
     const ids = [
@@ -4097,6 +4410,36 @@ class InternetBoxBase extends HTMLElement {
     // The box picture only when the operator has a matching model drawing.
     // The generic form factors take the provider's colour; the French operators' drawings keep their own.
     const boxImg = modelPic(model, op.color) || null;
+    if (c.illustration !== false) {
+      // Illustrated banner: the status pill is always the subtitle line, the device / firmware under it; the
+      // header chips (Wi-Fi, when the Services section is hidden) move to the top of the content.
+      const link = this._link(box);
+      const wifi = this._s(box.scalars.wifi);
+      const scene = { ok: "ok", warn: "wait", crit: "down", off: "off" }[link?.cls] || "ok";
+      const svg = sceneSvg({
+        state: scene,
+        wifi: !wifi || wifi.state !== "off",
+        pic: c.show_image !== false ? boxImg : null,
+        fit: boxImg ? PIC_FIT[model.pic ?? model.id] : null,
+        href: adminUrl,
+        label: `${model?.name || op.name} · ${this._t("admin")}`,
+      });
+      const btns = `${withChips ? this._restartBtn(box) : ""}${this._headerEnd()}`;
+      return `
+      <div class="header banner${isNight(this._hass, c) ? " night" : ""}">
+        ${svg}
+        <div class="ground ${scene === "down" ? "g-netdown" : "g-net"}"></div>
+        <div class="htext">
+          ${c.show_logo !== false ? brand : ""}
+          <div class="titles">
+            <div class="name">${esc(name)}</div>
+            ${this._statusPill(box)}
+            ${sub.length ? `<div class="sub"><div class="parts">${sub.map((x) => `<span>${esc(x)}</span>`).join("")}</div></div>` : ""}
+          </div>
+        </div>
+        ${btns ? `<div class="hbtns">${btns}</div>` : ""}
+      </div>`;
+    }
     return `
       <div class="header">
         ${c.show_logo !== false ? brand : ""}
@@ -4258,7 +4601,9 @@ class InternetBoxCard extends InternetBoxBase {
     if (c.show_system !== false) parts.push(this._system(box));
     if (c.show_storage !== false) parts.push(this._storage(box));
     if (c.show_services !== false) parts.push(this._services(box));
-    return `<style>${BASE_STYLE}${FULL_STYLE}</style>
+    // With the illustrated banner, the header chips open the content.
+    if (c.illustration !== false) parts.unshift(this._chips(box));
+    return `<style>${BASE_STYLE}${FULL_STYLE}${c.illustration !== false ? BANNER_STYLE : ""}</style>
       <ha-card style="--ibc-red:${brandOf(box, this._config).color}">
         ${this._header(box, true)}
         <div class="content">${parts.filter(Boolean).join("")}</div>
@@ -4580,7 +4925,7 @@ class InternetBoxMiniCard extends InternetBoxCard {
     }
     const up = this._uptime(router, box);
     if (up !== null) foot.push(`<span data-key="uptime">${svgIcon(ICONS.timer)}${fmtUptime(up, this._hass, this._config)}</span>`);
-    return `<style>${BASE_STYLE}${MINI_STYLE}</style>
+    return `<style>${BASE_STYLE}${MINI_STYLE}${c.illustration !== false ? BANNER_STYLE : ""}</style>
       <ha-card style="--ibc-red:${brandOf(box, this._config).color}">
         ${this._header(box, false)}
         <div class="content">
@@ -4643,8 +4988,14 @@ class InternetBoxEditorBase extends HTMLElement {
           { name: "show_subtitle", selector: { boolean: {} } },
           { name: "show_image", selector: { boolean: {} } },
           { name: "show_logo", selector: { boolean: {} } },
+          { name: "illustration", selector: { boolean: {} } },
           ...this.constructor.toggles.map((name) => ({ name, selector: { boolean: {} } })),
         ],
+      },
+      // Day / night picture of the illustrated header: automatic (sun, dark mode) unless forced.
+      {
+        name: "illustration_theme",
+        selector: { select: { mode: "dropdown", options: ["auto", "day", "night"].map((v) => ({ value: v, label: tr(`theme_${v}`) })) } },
       },
       // Warning / critical thresholds, shown at their default values.
       {
@@ -4744,7 +5095,8 @@ class InternetBoxEditorBase extends HTMLElement {
             v === "" ||
             v === undefined ||
             v === null ||
-            ((k.startsWith("show_") || k === "zoom") && v === true) ||
+            ((k.startsWith("show_") || k === "zoom" || k === "illustration") && v === true) ||
+            (k === "illustration_theme" && v === "auto") ||
             (k === "rate_unit" && v === "bytes") ||
             THRESHOLDS[k] === v
           )
@@ -4763,8 +5115,8 @@ class InternetBoxEditorBase extends HTMLElement {
         this.dispatchEvent(new CustomEvent("config-changed", { detail: { config: this._config }, bubbles: true, composed: true }));
       }
     }
-    const data = { rate_unit: "bytes", model: "", ...THRESHOLDS, ...this._config };
-    for (const name of ["show_title", "show_subtitle", "show_image", "show_logo", ...this.constructor.toggles]) if (data[name] === undefined) data[name] = true;
+    const data = { rate_unit: "bytes", model: "", illustration_theme: "auto", ...THRESHOLDS, ...this._config };
+    for (const name of ["show_title", "show_subtitle", "show_image", "show_logo", "illustration", ...this.constructor.toggles]) if (data[name] === undefined) data[name] = true;
     this._form.hass = this._hass;
     this._form.data = data;
     // The schema is rebuilt on every hass update (every state change) but only handed to the form when its
