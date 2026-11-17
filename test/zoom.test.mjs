@@ -204,7 +204,7 @@ test("classic header: the status pill sits right of the title, centred on its li
   await page.close();
 });
 
-test("illustrated header: a 90 px banner with its scene, the box on a 10 px network strip, the status under the title", async (t) => {
+test("illustrated header: a 90 px banner with its scene, the box on a 10 px network strip, the status pill by the title", async (t) => {
   if (skip) return t.skip(skip);
   const { page, errors } = await open();
   const measureBanner = () =>
@@ -220,14 +220,21 @@ test("illustrated header: a 90 px banner with its scene, the box on a 10 px netw
         ground: [ground.height, ground.left === card.left, ground.right === card.right, ground.bottom === banner.bottom],
         // The box stands on the strip, inside the banner.
         onGround: Math.abs(box.bottom - ground.top) <= 2 && box.top >= banner.top,
-        statusUnder: r(".titles > .chip.status").top >= r(".name").bottom - 1,
+        // The pill on the title's row (centred on it, after it), or on a line of its own under the subtitle.
+        statusPlaced: (() => {
+          const pill = r(".banner .chip.status");
+          const name = r(".name");
+          const sub = r(".banner .sub") || name;
+          const onRow = Math.abs(pill.top + pill.height / 2 - (name.top + name.height / 2)) <= 2 && pill.left >= name.right;
+          return onRow || pill.top >= sub.bottom - 1;
+        })(),
         night: root.querySelector(".banner").classList.contains("night"),
         strip: root.querySelector(".banner .ground").className,
         zoomClear: r(".zoom").left >= r(".name").right,
       };
     });
   const day = await measureBanner();
-  assert.deepEqual(day, { height: 90, ground: [10, true, true, true], onGround: true, statusUnder: true, night: false, strip: "ground g-net", zoomClear: true });
+  assert.deepEqual(day, { height: 90, ground: [10, true, true, true], onGround: true, statusPlaced: true, night: false, strip: "ground g-net", zoomClear: true });
   // Night: the sun below the horizon, or `illustration_theme` forcing it; the mini card's full view keeps the banner.
   const night = await page.evaluate(() => {
     const el = window.card;

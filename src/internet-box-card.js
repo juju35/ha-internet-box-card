@@ -3650,7 +3650,7 @@ const BASE_STYLE = `
      and graphics mix 40 % of the theme text colour (3:1), text 50 % (4.5:1). Mixing with --primary-text-color darkens
      them in a light theme and lightens them in a dark one (e.g. the dark blue Bbox accent on a dark card). Declared on
      ha-card, which carries the operator's --ibc-red. */
-  ha-card { overflow: hidden; position: relative; container-type: inline-size;
+  ha-card { overflow: hidden; position: relative; container-type: inline-size; container-name: ibc-card;
             --ibc-accent: color-mix(in srgb, var(--ibc-red) 60%, var(--primary-text-color)); }
   .icon { width: 18px; height: 18px; fill: currentColor; flex: none; }
   .muted { color: var(--secondary-text-color); }
@@ -3754,16 +3754,28 @@ const BANNER_STYLE = `
   .banner .scene { position: absolute; right: 0; bottom: var(--g); height: calc(100% - var(--g)); width: var(--scene-w); }
   .banner .htext { position: absolute; left: 0; top: 0; bottom: var(--g); z-index: 1;
                    display: flex; align-items: center; gap: 10px; padding: 0 8px 0 14px; min-width: 0; }
-  .banner .titles { display: flex; flex-direction: column; justify-content: center; min-width: 48px; }
+  .banner .titles { flex: 1 1 0; display: grid; grid-template-columns: minmax(0, 1fr); align-content: center; min-width: 48px;
+                    container: ibc-titles / inline-size; }
   .banner .name { color: var(--sky-text); }
   /* One subtitle line: device and firmware side by side, or the device alone when both do not fit. */
   .banner .sub { color: var(--sky-muted); flex: none; height: 15px; line-height: 15px; }
-  /* The status of the link is the subtitle: plain text after its coloured dot. */
-  .banner .titles > .chip.status { align-self: flex-start; margin: 1px 0 0; padding: 0; gap: 5px; background: none; font-size: 12px;
-                                   font-weight: 400; color: var(--sky-muted); max-width: 100%; }
-  .banner .titles > .chip.status .dot { width: 7px; height: 7px; }
-  /* A long status on a narrow card wraps to a second line rather than lose its end. */
-  .banner .chip.status .txt { display: block; white-space: normal; line-height: 15px; }
+  /* The status pill on the title's row, in the state colour of the icon on frosted glass: the title ellipsises first
+     (4 characters kept); without room for both, the pill goes on a line of its own under the subtitle. */
+  .banner .trow { display: flex; align-items: center; gap: 8px; min-width: 0; }
+  .banner .trow > .name { flex: 0 1 auto; min-width: 4.6ch; }
+  .banner .trow > .chip.status { flex: none; max-width: calc(100% - 56px); margin: 0; padding: 1px 8px; font-size: 11px; font-weight: 500; line-height: 16px;
+                                 white-space: nowrap; box-sizing: border-box;
+                                 background: color-mix(in srgb, var(--c) 18%, rgba(255,255,255,.78)); color: color-mix(in srgb, var(--c) 45%, #0d2a45); }
+  .banner.night .trow > .chip.status { background: color-mix(in srgb, var(--c) 30%, rgba(8,18,38,.55)); color: color-mix(in srgb, var(--c) 35%, #ffffff); }
+  .banner .trow > .chip.status .dot { width: 7px; height: 7px; }
+  .banner .trow > .chip.status .txt { display: block; }
+  @container ibc-titles (max-width: 210px) {
+    .banner .trow { display: contents; }
+    .banner .trow > .chip.status { grid-row: 3; justify-self: start; max-width: 100%; margin-top: 3px; white-space: normal; line-height: 14px; }
+    /* A long status on a narrow card wraps to a second line rather than lose its end. */
+    .banner .trow > .chip.status .txt { white-space: normal; }
+  }
+  @container ibc-card (max-width: 200px) { .banner .trow > .chip.status { padding: 4px; } .banner .trow > .chip.status .txt { display: none; } }
   .banner + .content { padding-top: 12px; }
   /* Round icon on the sky: translucent white, the icon in the state colour (online, syncing, offline, unavailable). */
   .banner .logo-link { align-self: center; background: rgba(255,255,255,.62); box-shadow: inset 0 0 0 1px rgba(47,128,237,.18);
@@ -3774,11 +3786,14 @@ const BANNER_STYLE = `
   .banner.night .logo-link .icon.type .led { fill: #1d2a3d; }
   .banner .logo { box-shadow: 0 0 0 1px rgba(13,42,69,.16), 0 1px 3px rgba(13,42,69,.18); }
   /* Restart and detail buttons, top right over the scene. */
-  .banner .hbtns { position: absolute; top: 6px; right: 6px; z-index: 2; display: flex; gap: 4px; }
-  .banner .hbtns .action, .banner .hbtns .zoom { margin: 0; color: var(--sky-text); background: rgba(255,255,255,.55); }
-  .banner.night .hbtns .action, .banner.night .hbtns .zoom { background: rgba(10,20,40,.45); }
-  .banner .hbtns .action:hover, .banner .hbtns .zoom:hover { background: rgba(255,255,255,.8); }
-  .banner.night .hbtns .action:hover, .banner.night .hbtns .zoom:hover { background: rgba(10,20,40,.7); }
+  .banner .hbtns { position: absolute; top: 5px; right: 5px; z-index: 2; display: flex; gap: 4px; }
+  .banner .hbtns .action, .banner .hbtns .zoom { margin: 0; width: 24px; height: 24px; padding: 0; border-radius: 50%; box-sizing: border-box;
+                                                 display: grid; place-items: center; color: #33506b; background: rgba(255,255,255,.55);
+                                                 box-shadow: inset 0 0 0 1px rgba(255,255,255,.7); backdrop-filter: blur(4px); }
+  .banner .hbtns .icon { width: 16px; height: 16px; }
+  .banner.night .hbtns .action, .banner.night .hbtns .zoom { color: #fff; background: rgba(255,255,255,.12); box-shadow: inset 0 0 0 1px rgba(255,255,255,.2); }
+  .banner .hbtns .action:hover, .banner .hbtns .zoom:hover { background: rgba(255,255,255,.75); }
+  .banner.night .hbtns .action:hover, .banner.night .hbtns .zoom:hover { background: rgba(255,255,255,.22); }
   .banner .hbtns .action:disabled { opacity: .5; }
   /* The scene. */
   .sc-dots { fill: var(--sc-dot); }
@@ -3821,12 +3836,13 @@ const BANNER_STYLE = `
   .banner { --text-r: calc(var(--scene-w) * .6); --btns-w: 0px; }
   .banner:has(.hbtns > *) { --btns-w: 36px; }
   .banner:has(.hbtns > :nth-child(2)) { --btns-w: 64px; }
-  .banner .htext { right: var(--text-r); }
-  /* Only the title line is level with the buttons: it alone keeps clear of them, the lines under it pass below. */
-  .banner .titles { --clear: max(0px, calc(var(--btns-w) - var(--text-r) - 8px)); }
-  .banner .name { margin-right: var(--clear); }
-  .banner .titles > .chip.status { max-width: calc(100% - var(--clear)); }
-  @container (max-width: 300px) { .banner { --scene-w: 40%; --text-r: calc(var(--scene-w) * .5); } }
+  /* The scene moves left of the buttons: its devices and Wi-Fi waves stay clear of them. */
+  .banner .scene { right: var(--btns-w); }
+  .banner .htext { right: calc(var(--text-r) + var(--btns-w)); }
+  /* Narrower, a lower scene: its top stays under the buttons, it keeps to the right edge. */
+  @container (max-width: 400px) { .banner { --scene-w: 40%; --text-r: calc(var(--scene-w) * .5); } .banner .scene { right: 0; }
+                                  .banner .htext { right: max(var(--text-r), var(--btns-w)); }
+                                  .banner:has(.hbtns > *) .scene { height: calc(100% - var(--g) - 28px); } }
   @container (max-width: 200px) { .banner .scene { display: none; } .banner { --text-r: var(--btns-w); } }
 `;
 
@@ -4411,7 +4427,7 @@ class InternetBoxBase extends HTMLElement {
     // The generic form factors take the provider's colour; the French operators' drawings keep their own.
     const boxImg = modelPic(model, op.color) || null;
     if (c.illustration !== false) {
-      // Illustrated banner: the status pill is always the subtitle line, the device / firmware under it; the
+      // Illustrated banner: the status pill on the title's row (under the device / firmware when there is no room); the
       // header chips (Wi-Fi, when the Services section is hidden) move to the top of the content.
       const link = this._link(box);
       const wifi = this._s(box.scalars.wifi);
@@ -4432,8 +4448,7 @@ class InternetBoxBase extends HTMLElement {
         <div class="htext">
           ${c.show_logo !== false ? brand : ""}
           <div class="titles">
-            <div class="name">${esc(name)}</div>
-            ${this._statusPill(box)}
+            <div class="trow"><div class="name">${esc(name)}</div>${this._statusPill(box)}</div>
             ${sub.length ? `<div class="sub"><div class="parts">${sub.map((x) => `<span>${esc(x)}</span>`).join("")}</div></div>` : ""}
           </div>
         </div>
