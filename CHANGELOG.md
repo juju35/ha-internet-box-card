@@ -8,6 +8,9 @@
 - The restart and expand / collapse buttons sit in the banner's top-right corner as 24 px frosted round buttons, the scene keeping clear of them.
 - Night picture with the dark theme even while the sun is up.
 
+### Fixes
+- The 24 h sparklines of the download / upload tiles no longer run under the rate: they sit in a 24 px band of their own under the icon and the text.
+
 ## 3.5.4 - 2026-11-15
 
 ### Fixes
