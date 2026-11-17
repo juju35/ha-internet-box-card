@@ -859,7 +859,7 @@ test("illustrated header: both editors offer it and its day / night theme, left 
     assert.equal(ed._form.data.illustration, true);
     assert.equal(ed._form.data.illustration_theme, "auto");
     const theme = ed._form.schema.find((f) => f.name === "illustration_theme");
-    assert.equal(theme.selector.select.options.map((o) => o.label).join(" / "), "Automatic (sun or dark theme) / Day / Night");
+    assert.equal(theme.selector.select.options.map((o) => o.label).join(" / "), "Automatic (follows the theme) / Day / Night");
     assert.equal(ed._form.computeLabel({ name: "illustration" }), "Illustrated header (internet scene)");
     ed._form.listeners["value-changed"]({ stopPropagation() {}, detail: { value: { ...ed._form.data } } });
     assert.equal("illustration" in emitted.at(-1), false);
@@ -870,7 +870,7 @@ test("illustrated header: both editors offer it and its day / night theme, left 
   }
 });
 
-test("illustrated header: the scene follows the link and the Wi-Fi, night from illustration_theme, the sun or the dark mode", () => {
+test("illustrated header: the scene follows the link and the Wi-Fi, night from illustration_theme or the dark mode", () => {
   const { sceneSvg, isNight, IMG_BOX, PIC_FIT } = load("internet-box-card.js", ["sceneSvg", "isNight", "IMG_BOX", "PIC_FIT"]);
   // Every drawn model has its drawn part, inside its picture.
   for (const k of Object.keys(IMG_BOX)) assert.ok(PIC_FIT[k], k);
@@ -889,7 +889,9 @@ test("illustrated header: the scene follows the link and the Wi-Fi, night from i
   assert.match(noWifi, /sc-fibre flow/);
   assert.doesNotMatch(noWifi, /sc-waves on/);
   const sun = (state) => ({ states: { "sun.sun": { state, attributes: {} } } });
-  assert.equal(isNight(sun("below_horizon"), {}), true);
+  // The theme decides: a light theme keeps the day picture after sunset.
+  assert.equal(isNight(sun("below_horizon"), {}), false);
+  assert.equal(isNight({ ...sun("below_horizon"), themes: { darkMode: true } }, {}), true);
   assert.equal(isNight(sun("above_horizon"), { illustration_theme: "night" }), true);
   assert.equal(isNight(sun("below_horizon"), { illustration_theme: "day" }), false);
   assert.equal(isNight({ states: {}, themes: { darkMode: true } }, {}), true);

@@ -49,7 +49,7 @@ Entities are **discovered automatically**, you don't have to pick them one by on
 ## Features
 
 - Two cards: a full **Internet Box Card** and a compact **Internet Box Mini Card**
-- Animated illustrated header (90 px, on both cards): the fibre arriving into the box, Wi-Fi waves to the connected devices and a network strip under the banner; the box model drawn big; offline, the fibre is cut, the Wi-Fi off and the strip turns red. Night picture after sunset (`sun.sun`) or in dark mode, forced with `illustration_theme`; `illustration: false` keeps the classic header; animations stop with the system's reduced motion setting
+- Animated illustrated header (90 px, on both cards): the fibre arriving into the box, Wi-Fi waves to the connected devices and a network strip under the banner; the box model drawn big; offline, the fibre is cut, the Wi-Fi off and the strip turns red. Night picture with a dark Home Assistant theme (day with a light one), forced with `illustration_theme`; `illustration: false` keeps the classic header; animations stop with the system's reduced motion setting
 - Detail button at the top right of the mini card: it shows the full card in its place (same box and options), and the collapse button, or a click anywhere outside the card, brings the compact view back (`zoom: false` removes it)
 - Automatic discovery of the box entities, whatever the language of the entity ids (several boxes supported)
 - Header icon of the kind of connection (fibre, xDSL, 4G / 5G, satellite, else a box) coloured with the state of the internet link like the status pill (green online, orange while the DSL line syncs, red offline or on a line fault, grey unavailable; the operator colour when the box reports no link state), with the operator logo as a badge; accent colour, website and admin links follow the detected operator, and the internet provider of the box model when it is not the integration's (a Bell Home Hub on the Sagemcom F@st integration, a KPN Box 12 on the Livebox one)
@@ -250,7 +250,7 @@ language: fr
 | `show_image` | both | `true` | Show the box picture |
 | `show_logo` | both | `true` | Show the header icon of the connection, coloured with the link state, with the operator logo (opens the operator website when clicked) |
 | `illustration` | both | `true` | Illustrated header: the internet scene (fibre, Wi-Fi waves, connected devices, the box drawn big, the link state) on a 90 px banner; `false` keeps the classic header |
-| `illustration_theme` | both | `auto` | Picture of the illustrated header: `auto` (night when `sun.sun` is below the horizon or Home Assistant's theme is dark), `day` or `night` |
+| `illustration_theme` | both | `auto` | Picture of the illustrated header: `auto` (follows the Home Assistant theme: night with a dark theme, day with a light theme), `day` or `night` |
 | `show_network` | both | `true` | Download / upload rates (and IPv4, uptime on the full card) |
 | `show_history` | both | `true` | 24 h curve behind the download / upload tiles, from the recorder's 5-minute statistics (rate sensors with a `state_class`), on a time axis: the curve breaks where the recorder has no data |
 | `show_system` | both | `true` | Temperatures and fans (hottest temperature on the mini card) |

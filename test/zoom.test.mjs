@@ -239,17 +239,17 @@ test("illustrated header: a 90 px banner with its scene, the box on a 10 px netw
     });
   const day = await measureBanner();
   assert.deepEqual(day, { height: 90, ground: [10, true, true, true], onGround: true, statusPlaced: true, night: false, strip: "ground g-net", zoomClear: true });
-  // Night: the sun below the horizon, or `illustration_theme` forcing it; the mini card's full view keeps the banner.
+  // Night: a dark theme, or `illustration_theme` forcing it; the mini card's full view keeps the banner.
   const night = await page.evaluate(() => {
     const el = window.card;
-    el.hass = { ...el.hass, states: { ...el.hass.states, "sun.sun": { entity_id: "sun.sun", state: "below_horizon", attributes: {} } } };
-    const sun = el.shadowRoot.querySelector(".banner").classList.contains("night");
+    el.hass = { ...el.hass, themes: { ...el.hass.themes, darkMode: true } };
+    const dark = el.shadowRoot.querySelector(".banner").classList.contains("night");
     el.setConfig({ type: "custom:internet-box-mini-card", illustration_theme: "day" });
     const forced = el.shadowRoot.querySelector(".banner").classList.contains("night");
     window.click(el.shadowRoot.querySelector(".zoom"));
-    return { sun, forced, zoomed: el.shadowRoot.querySelectorAll(".banner").length };
+    return { dark, forced, zoomed: el.shadowRoot.querySelectorAll(".banner").length };
   });
-  assert.deepEqual(night, { sun: true, forced: false, zoomed: 1 });
+  assert.deepEqual(night, { dark: true, forced: false, zoomed: 1 });
   // Offline: the broken fibre and the red network strip; `illustration: false` brings the classic header back.
   const offline = await page.evaluate(() => {
     const el = window.card;
