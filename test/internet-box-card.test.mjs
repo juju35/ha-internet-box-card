@@ -893,6 +893,10 @@ test("illustrated header: the scene follows the link and the Wi-Fi, night from i
   assert.equal(isNight(sun("above_horizon"), { illustration_theme: "night" }), true);
   assert.equal(isNight(sun("below_horizon"), { illustration_theme: "day" }), false);
   assert.equal(isNight({ states: {}, themes: { darkMode: true } }, {}), true);
+  // The dark theme shows the night picture even while the sun is up; a light theme keeps the day one.
+  assert.equal(isNight({ ...sun("above_horizon"), themes: { darkMode: true } }, {}), true);
+  assert.equal(isNight({ ...sun("above_horizon"), themes: { darkMode: false } }, {}), false);
+  assert.equal(isNight({ ...sun("above_horizon"), themes: { darkMode: true } }, { illustration_theme: "day" }), false);
   assert.equal(isNight({ states: {} }, {}), false);
 });
 

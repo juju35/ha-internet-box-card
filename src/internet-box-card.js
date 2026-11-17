@@ -3846,13 +3846,13 @@ const BANNER_STYLE = `
   @container (max-width: 200px) { .banner .scene { display: none; } .banner { --text-r: var(--btns-w); } }
 `;
 
-// Night picture: forced by `illustration_theme`, else the sun below the horizon, else Home Assistant's dark mode.
+// Night picture: forced by `illustration_theme`, else the sun below the horizon or Home Assistant's dark theme (dark mode alone without a valid sun.sun).
 const isNight = (hass, config) => {
   const theme = config?.illustration_theme;
   if (theme === "night") return true;
   if (theme === "day") return false;
   const sun = hass?.states?.["sun.sun"];
-  if (sun && !noValue(sun)) return sun.state === "below_horizon";
+  if (sun && !noValue(sun)) return sun.state === "below_horizon" || !!hass?.themes?.darkMode;
   return !!hass?.themes?.darkMode;
 };
 

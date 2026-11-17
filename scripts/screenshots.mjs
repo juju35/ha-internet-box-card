@@ -102,7 +102,7 @@ async function openCard(browser, s) {
           ])
         );
       el.hass = { states, entities, devices, language: "en", locale: { language: "en" }, config: { time_zone: "UTC" }, callWS,
-        // The dark twins show the night picture of the illustrated header (it follows the dark mode without sun.sun).
+        // The dark twins show the night picture of the illustrated header (a dark theme means night).
         themes: { darkMode: dark } };
       document.getElementById("root").appendChild(el);
       // A mouse click (click count 1), not .click(): no focus ring on the button.

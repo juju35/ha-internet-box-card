@@ -250,7 +250,7 @@ language: fr
 | `show_image` | both | `true` | Show the box picture |
 | `show_logo` | both | `true` | Show the header icon of the connection, coloured with the link state, with the operator logo (opens the operator website when clicked) |
 | `illustration` | both | `true` | Illustrated header: the internet scene (fibre, Wi-Fi waves, connected devices, the box drawn big, the link state) on a 90 px banner; `false` keeps the classic header |
-| `illustration_theme` | both | `auto` | Picture of the illustrated header: `auto` (night when `sun.sun` is below the horizon, else Home Assistant's dark mode), `day` or `night` |
+| `illustration_theme` | both | `auto` | Picture of the illustrated header: `auto` (night when `sun.sun` is below the horizon or Home Assistant's theme is dark), `day` or `night` |
 | `show_network` | both | `true` | Download / upload rates (and IPv4, uptime on the full card) |
 | `show_history` | both | `true` | 24 h curve behind the download / upload tiles, from the recorder's 5-minute statistics (rate sensors with a `state_class`), on a time axis: the curve breaks where the recorder has no data |
 | `show_system` | both | `true` | Temperatures and fans (hottest temperature on the mini card) |

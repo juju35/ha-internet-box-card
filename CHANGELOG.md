@@ -4,8 +4,9 @@
 
 ### Features
 - Animated illustrated header on the full card and the mini card: a 90 px banner with the title and its link status pill (dot and label in the icon's state colour, on its own line under the device / firmware when the title row is too narrow, its dot alone on the narrowest cards) and the device / firmware on its sky, and an internet scene at its right: the fibre arriving into the box with its light pulses, the Wi-Fi waves and packets to the connected devices (laptop, phone, TV), the box model drawn big (the card's own drawing, clickable to the admin interface) and a 10 px network strip under the whole banner. Offline, the fibre is cut (red cross), the Wi-Fi is off and the strip turns red and grey; while the DSL line syncs the flow slows down in orange; with the Wi-Fi switched off the waves go grey. The header icon keeps the state colour and the operator logo badge.
-- Night picture after sunset (`sun.sun`), else in Home Assistant's dark mode; `illustration_theme: day | night` forces it. `illustration: false` keeps the classic header. Both options are in the visual editor of both cards, translated in the 22 languages. The animations stop with the system's reduced motion setting.
+- Night picture after sunset (`sun.sun`) or in Home Assistant's dark mode; `illustration_theme: day | night` forces it. `illustration: false` keeps the classic header. Both options are in the visual editor of both cards, translated in the 22 languages. The animations stop with the system's reduced motion setting.
 - The restart and expand / collapse buttons sit in the banner's top-right corner as 24 px frosted round buttons, the scene keeping clear of them.
+- Night picture with the dark theme even while the sun is up.
 
 ## 3.5.4 - 2026-11-15
 
