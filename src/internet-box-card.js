@@ -3745,6 +3745,17 @@ const BASE_STYLE = `
 // Illustrated header (the default; `illustration: false` keeps the classic one): a 90 px banner, the icon, title,
 // status and subtitle on the sky at its left, the internet scene at its right (at most 200 px wide, 62 % of the
 // card), and a 10 px network strip under the whole banner, edge to edge. Day and night colours.
+// The width of an element's whole text in its own font, in fractional pixels (scrollWidth is rounded).
+let textCtx;
+const textWidth = (el) => {
+  const cs = getComputedStyle(el);
+  textCtx ??= document.createElement("canvas").getContext?.("2d");
+  if (!textCtx) return el.scrollWidth;
+  textCtx.font = `${cs.fontStyle} ${cs.fontWeight} ${cs.fontSize} ${cs.fontFamily}`;
+  const pad = (parseFloat(cs.paddingLeft) || 0) + (parseFloat(cs.paddingRight) || 0);
+  return Math.max(el.scrollWidth, textCtx.measureText(el.textContent.trim()).width + pad);
+};
+
 const BANNER_STYLE = `
   .banner { position: relative; overflow: hidden; height: 90px; padding: 0; gap: 0; display: block;
             --g: 10px; --scene-w: min(200px, 62%); --sky-text: #0d2a45; --sky-muted: #3b5b78;
@@ -3756,27 +3767,24 @@ const BANNER_STYLE = `
   .banner .scene { position: absolute; right: 0; bottom: var(--g); height: calc(100% - var(--g)); width: var(--scene-w); }
   .banner .htext { position: absolute; left: 0; top: 0; bottom: var(--g); z-index: 1;
                    display: flex; align-items: center; gap: 10px; padding: 0 8px 0 14px; min-width: 0; }
-  .banner .titles { flex: 1 1 0; display: grid; grid-template-columns: minmax(0, 1fr); align-content: center; min-width: 48px;
-                    container: ibc-titles / inline-size; }
+  .banner .titles { flex: 1 1 0; display: grid; grid-template-columns: minmax(0, 1fr); align-content: center; min-width: 48px; }
   .banner .name { color: var(--sky-text); }
   /* One subtitle line: device and firmware side by side, or the device alone when both do not fit. */
   .banner .sub { color: var(--sky-muted); flex: none; height: 15px; line-height: 15px; }
-  /* The status pill on the title's row, in the state colour of the icon on frosted glass: the title ellipsises first
-     (4 characters kept); without room for both, the pill goes on a line of its own under the subtitle. */
+  /* The status pill on the title's row, in the state colour of the icon on frosted glass, when the whole title and the
+     pill's whole label fit there (measured, see _fitPill); otherwise the pill goes on a line of its own under the
+     subtitle; when that does not fit above the strip, or on a card of 200 px or less, its dot alone. */
   .banner .trow { display: flex; align-items: center; gap: 8px; min-width: 0; }
-  .banner .trow > .name { flex: 0 1 auto; min-width: 4.6ch; }
-  .banner .trow > .chip.status { flex: none; max-width: calc(100% - 56px); margin: 0; padding: 1px 8px; font-size: 11px; font-weight: 500; line-height: 16px;
+  .banner .trow > .name { flex: 0 1 auto; min-width: 0; }
+  .banner .trow > .chip.status { flex: none; max-width: none; margin: 0; padding: 1px 8px; font-size: 11px; font-weight: 500; line-height: 16px;
                                  white-space: nowrap; box-sizing: border-box;
                                  background: color-mix(in srgb, var(--c) 18%, rgba(255,255,255,.78)); color: color-mix(in srgb, var(--c) 45%, #0d2a45); }
   .banner.night .trow > .chip.status { background: color-mix(in srgb, var(--c) 30%, rgba(8,18,38,.55)); color: color-mix(in srgb, var(--c) 35%, #ffffff); }
   .banner .trow > .chip.status .dot { width: 7px; height: 7px; }
   .banner .trow > .chip.status .txt { display: block; }
-  @container ibc-titles (max-width: 210px) {
-    .banner .trow { display: contents; }
-    .banner .trow > .chip.status { grid-row: 3; justify-self: start; max-width: 100%; margin-top: 3px; white-space: normal; line-height: 14px; }
-    /* A long status on a narrow card wraps to a second line rather than lose its end. */
-    .banner .trow > .chip.status .txt { white-space: normal; }
-  }
+  .banner .titles.below .trow { display: contents; }
+  .banner .titles.below .trow > .chip.status { grid-row: 3; justify-self: start; max-width: 100%; margin-top: 3px; }
+  .banner .titles.dot-only .trow > .chip.status { padding: 4px; } .banner .titles.dot-only .trow > .chip.status .txt { display: none; }
   @container ibc-card (max-width: 200px) { .banner .trow > .chip.status { padding: 4px; } .banner .trow > .chip.status .txt { display: none; } }
   .banner + .content { padding-top: 12px; }
   /* Round icon on the sky: translucent white, the icon in the state colour (online, syncing, offline, unavailable). */
@@ -4026,12 +4034,16 @@ class InternetBoxBase extends HTMLElement {
     (this._onDialogOutsideWatch ??= watchOutside(this, (ev) => this._onDialogOutside(ev))).on();
     // Back on the page after leaving it: rendered again in its default state.
     this._update?.();
+    if (!this._fitObserver && typeof ResizeObserver === "function") this._fitObserver = new ResizeObserver(() => this._fitPill?.());
+    this._fitObserver?.observe(this);
+    document.fonts?.ready?.then(() => this._fitPill?.());
     // Reattached with the popup still open (view switch, editor): Escape keeps closing it.
     if (this._dialog) window.addEventListener("keydown", this._onKey);
   }
 
   disconnectedCallback() {
     this._onDialogOutsideWatch?.off();
+    this._fitObserver?.disconnect();
     // Left (another dashboard view, a conditional card hidden): back to the default state, so that the card does
     // not come back unfolded or with its popup open.
     this._dialog = null;
@@ -4331,6 +4343,43 @@ class InternetBoxBase extends HTMLElement {
     if (html !== this._html) {
       this._html = html;
       morph(this.shadowRoot, html);
+    }
+    this._fitPill();
+  }
+
+  // The banner's status pill, measured after each render and on a new width (in every language): it sits on the
+  // title's row, right after the title, only when the whole title and the pill's whole label fit there; otherwise it
+  // takes a line of its own under the subtitle (.below), the title whole on its row (cut only when it does not fit
+  // alone) and the subtitle on one line. When the three lines do not fit in the banner above the ground strip, or
+  // the label does not fit its line, the pill shows its dot alone (.dot-only): beside the title when the whole title
+  // leaves it room, else under the subtitle.
+  _fitPill() {
+    for (const t of this.shadowRoot?.querySelectorAll?.(".banner .titles") || []) {
+      const row = t.querySelector(".trow");
+      const chips = row ? [...row.querySelectorAll(":scope > .chip.status")] : [];
+      if (!chips[0]?.getBoundingClientRect) continue;
+      t.classList.remove("below", "dot-only");
+      const name = row.querySelector(".name");
+      const gap = parseFloat(getComputedStyle(row).columnGap) || 0;
+      const outer = (c) => c.getBoundingClientRect().width + (parseFloat(getComputedStyle(c).marginLeft) || 0) + (parseFloat(getComputedStyle(c).marginRight) || 0);
+      const others = [...row.children].filter((c) => c !== name && !chips.includes(c) && c.getClientRects().length);
+      const room = row.getBoundingClientRect().width - others.reduce((w, c) => w + outer(c) + gap, 0);
+      const title = name && getComputedStyle(name).display !== "none" ? textWidth(name) + gap : 0;
+      const pills = () => chips.reduce((w, c) => w + c.getBoundingClientRect().width, gap * (chips.length - 1));
+      if (title + pills() <= room) continue;
+      t.classList.add("below");
+      const banner = t.closest(".banner") || t;
+      const ground = banner.querySelector(".ground");
+      const floor = ground ? ground.getBoundingClientRect().top : banner.getBoundingClientRect().bottom;
+      const box = t.getBoundingClientRect();
+      // Whole: the label not cut and the pill not past the title block (into the picture).
+      const whole = chips.every((c) => {
+        const tx = c.querySelector(".txt");
+        return (!tx || tx.scrollWidth <= tx.clientWidth + 0.5) && c.getBoundingClientRect().right <= box.right + 0.5;
+      });
+      if (whole && box.bottom <= floor + 0.5 && box.top >= banner.getBoundingClientRect().top - 0.5) continue;
+      t.classList.add("dot-only");
+      if (title + pills() <= room) t.classList.remove("below");
     }
   }
 

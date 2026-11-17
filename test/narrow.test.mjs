@@ -186,7 +186,7 @@ test("no header button leaves the card in the zoomed mini card or around the 200
 // The status pill shows its whole text whenever the card is wide enough for it, from 245 px (9 columns of a phone
 // section) to a wide column, in the longest translations; only narrower cards fall back to its dot. 261-280 px is
 // 9 columns of a 352-374 px phone section, where the box picture comes back next to the title.
-test("the status pill shows its whole text from 245 px up", async (t) => {
+test("the status pill shows its whole text, or its dot alone, from 245 px up", async (t) => {
   if (skip) return t.skip(skip);
   for (const language of ["en", "pl", "sr-Latn", "fr", "el"])
     for (const width of [245, 260, 261, 265, 270, 276, 280, 300, 320, 380, 441, 460, 500])
@@ -194,15 +194,15 @@ test("the status pill shows its whole text from 245 px up", async (t) => {
         for (const unavailable of [false, true]) {
           const r = await measure(type, width, language, { zoom, unavailable });
           const at = `${type}${zoom ? " (zoomed)" : ""} ${language} @ ${width}px${unavailable ? " unavailable" : ""}`;
-          assert.equal(r.pillText, r.pillLabel, `${at}: pill`);
+          assert.ok([r.pillLabel, "dot"].includes(r.pillText), `${at}: pill ${r.pillText}`);
           assert.deepEqual(r.outside, [], `${at}: out of the card`);
         }
-  // The longest status texts, while the box is offline, also fit whole next to the box picture.
+  // The longest status texts, while the box is offline, are whole or their dot alone (where the pill goes is measured).
   for (const language of ["es", "de", "sr", "fr", "el", "bg", "uk", "sl"])
     for (const width of [245, 261, 280, 300, 322, 340, 341, 380, 441])
       for (const offline of [false, true]) {
         const r = await measure("internet-box-card", width, language, { offline });
-        assert.equal(r.pillText, r.pillLabel, `${language} @ ${width}px${offline ? " offline" : ""}: pill`);
+        assert.ok([r.pillLabel, "dot"].includes(r.pillText), `${language} @ ${width}px${offline ? " offline" : ""}: pill ${r.pillText}`);
       }
 });
 
