@@ -3691,6 +3691,9 @@ const BASE_STYLE = `
   .trow { display: flex; align-items: center; gap: 8px; min-width: 0; }
   .trow > .name { flex: 0 1 auto; min-width: 0; }
   .trow > .chip.status { flex: none; max-width: none; margin: 0; white-space: nowrap; }
+  /* The box picture giving way to the title and its pill (measured, see _fitPill). */
+  .header.pic-small .box { height: 26px; }
+  .header.pic-none .box-link { display: none; }
   .header:not(.banner) .titles.below .trow { display: contents; }
   .header:not(.banner) .titles.below .trow > .chip.status { grid-row: 3; justify-self: start; max-width: 100%; margin-top: 4px; }
   .header:not(.banner) .titles.below .sub { max-height: 15px; line-height: 15px; }
@@ -4373,10 +4376,24 @@ class InternetBoxBase extends HTMLElement {
       const gap = parseFloat(getComputedStyle(row).columnGap) || 0;
       const outer = (c) => c.getBoundingClientRect().width + (parseFloat(getComputedStyle(c).marginLeft) || 0) + (parseFloat(getComputedStyle(c).marginRight) || 0);
       const others = [...row.children].filter((c) => c !== name && !chips.includes(c) && c.getClientRects().length);
-      const room = row.getBoundingClientRect().width - others.reduce((w, c) => w + outer(c) + gap, 0);
+      const roomOf = () => row.getBoundingClientRect().width - others.reduce((w, c) => w + outer(c) + gap, 0);
       const title = name && getComputedStyle(name).display !== "none" ? textWidth(name) + gap : 0;
       const pills = () => chips.reduce((w, c) => w + c.getBoundingClientRect().width, gap * (chips.length - 1));
-      if (title + pills() <= room) continue;
+      // The classic header's box picture gives way to the title and its pill: smaller (.pic-small), then hidden
+      // (.pic-none), the first step that leaves the whole title and the pill's whole label on one row. When none does,
+      // the first step that leaves the whole title and the whole pill each on its own line, else no picture.
+      const header = t.closest(".header");
+      const pic = !header.classList.contains("banner") && header.querySelector(":scope > .box-link");
+      header.classList.remove("pic-small", "pic-none");
+      const steps = pic && pic.getClientRects().length ? ["", "pic-small", "pic-none"] : [""];
+      const set = (step) => {
+        header.classList.remove("pic-small", "pic-none");
+        if (step) header.classList.add(step);
+      };
+      const beside = steps.find((step) => (set(step), title + pills() <= roomOf()));
+      if (beside !== undefined) continue;
+      set(steps.find((step) => (set(step), title - gap <= row.getBoundingClientRect().width && pills() <= t.getBoundingClientRect().width + 0.5)) ?? steps.at(-1));
+      const room = roomOf();
       t.classList.add("below");
       const banner = t.closest(".banner") || t;
       const ground = banner.querySelector(".ground");

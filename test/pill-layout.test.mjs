@@ -73,6 +73,8 @@ test("the banner's status pill: beside the whole title or under the subtitle, wh
             beside: p ? p.top < name.bottom - 2 : false,
             titleCut: nameEl.scrollWidth - nameEl.clientWidth,
             nameW: name.width,
+            // The classic header's box picture, still shown next to the title block.
+            pic: !inBanner && !!t.closest(".header").querySelector(":scope > .box-link")?.getClientRects().length,
             past: p ? p.right - tb.right : 0,
             low: Math.max(...parts.map((r) => r.bottom)) - floor,
             out: Math.max(banner.top - Math.min(...parts.map((r) => r.top)), Math.max(...parts.map((r) => r.right)) - banner.right,
@@ -94,6 +96,9 @@ test("the banner's status pill: beside the whole title or under the subtitle, wh
     if (!r.dot) assert.ok(r.cut <= 0.5, `pill "${r.label}" cut by ${r.cut}px: ${at}`);
     if (r.beside) assert.ok(r.titleCut <= 0, `title cut beside the pill: ${at}`);
     assert.ok(r.nameW >= 24, `title ${r.nameW}px wide: ${at}`);
+    // The picture gives way first: never shown beside a cut title or a pill reduced to its dot (above 200 px).
+    if (r.pic) assert.ok(r.titleCut <= 0, `title cut beside the box picture: ${at}`);
+    if (r.pic && r.width > 200) assert.ok(!r.dot, `pill reduced to its dot beside the box picture: ${at}`);
     assert.ok(r.past <= 0.5, `pill ${r.past}px past the title block: ${at}`);
     assert.ok(r.low <= 0.5, `header text ${r.low}px into the ground strip: ${at}`);
     assert.ok(r.out <= 0.5, `header text ${r.out}px out of the banner: ${at}`);
