@@ -3686,6 +3686,16 @@ const BASE_STYLE = `
   :host([hide-title]) .titles > .name, :host([hide-subtitle]) .titles > .sub { display: none; }
   .titles > * { grid-column: 1; }
   .titles > .chip { grid-column: 2; grid-row: 1; align-self: center; margin-left: 10px; white-space: nowrap; min-width: 0; max-width: 100%; }
+  /* The status pill right after the title, when the whole title and the pill's whole label fit on that row (measured,
+     see _fitPill); otherwise on a line of its own under the subtitle (which keeps one line), else its dot alone. */
+  .trow { display: flex; align-items: center; gap: 8px; min-width: 0; }
+  .trow > .name { flex: 0 1 auto; min-width: 0; }
+  .trow > .chip.status { flex: none; max-width: none; margin: 0; white-space: nowrap; }
+  .header:not(.banner) .titles.below .trow { display: contents; }
+  .header:not(.banner) .titles.below .trow > .chip.status { grid-row: 3; justify-self: start; max-width: 100%; margin-top: 4px; }
+  .header:not(.banner) .titles.below .sub { max-height: 15px; line-height: 15px; }
+  .header:not(.banner) .titles.dot-only .trow > .chip.status { padding: 5px; } .header:not(.banner) .titles.dot-only .chip.status .txt { display: none; }
+  @container ibc-card (max-width: 200px) { .header:not(.banner) .trow > .chip.status { padding: 5px; } .header:not(.banner) .chip.status .txt { display: none; } }
   .chip.status { overflow: hidden; }
   .chip.status .txt { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
   .titles .chips { margin-top: 4px; }
@@ -4354,7 +4364,7 @@ class InternetBoxBase extends HTMLElement {
   // the label does not fit its line, the pill shows its dot alone (.dot-only): beside the title when the whole title
   // leaves it room, else under the subtitle.
   _fitPill() {
-    for (const t of this.shadowRoot?.querySelectorAll?.(".banner .titles") || []) {
+    for (const t of this.shadowRoot?.querySelectorAll?.(".header .titles") || []) {
       const row = t.querySelector(".trow");
       const chips = row ? [...row.querySelectorAll(":scope > .chip.status")] : [];
       if (!chips[0]?.getBoundingClientRect) continue;
@@ -4510,9 +4520,8 @@ class InternetBoxBase extends HTMLElement {
       <div class="header">
         ${c.show_logo !== false ? brand : ""}
         <div class="titles">
-          <div class="name">${esc(name)}</div>
-          ${withChips ? this._statusPill(box) : ""}
-          <div class="sub"><div class="parts">${sub.map((x) => `<span>${esc(x)}</span>`).join("")}</div></div>
+          <div class="trow"><div class="name">${esc(name)}</div>${this._statusPill(box)}</div>
+          <div class="sub" title="${esc(sub.join(" · "))}"><div class="parts">${sub.map((x) => `<span>${esc(x)}</span>`).join("")}</div></div>
           ${withChips ? this._chips(box) : ""}
         </div>
         ${
@@ -4619,17 +4628,6 @@ const FULL_STYLE = `
      need the whole header: with the picture the title block would be narrower than the whole pill text (up to
      135 px, "Fuera de línea · FTTH"). */
   @container (max-width: 340px) { .box-link { display: none; } }
-  /* On a narrow full card the status pill would squeeze the title on its line; move it below the title (in the
-     first column, under the name) so the title keeps the full width. */
-  @container (max-width: 440px) {
-    .titles > .chip.status { grid-column: 1; grid-row: auto; align-self: start; justify-self: start; margin: 4px 0 0; }
-  }
-  /* Narrower still (below 9 columns of a phone section): only the pill's coloured dot, back on the title line (its
-     text stays its tooltip and label). */
-  @container (max-width: 244px) {
-    .titles > .chip.status { grid-column: 2; grid-row: 1; align-self: center; justify-self: end; margin: 0 0 0 6px; padding: 5px; }
-    .chip.status .txt { display: none; }
-  }
   /* At 6 columns of a narrow section: the dot goes to the subtitle line, the title takes the whole first line. */
   @container (max-width: 200px) {
     .titles > .name { grid-column: 1 / -1; }

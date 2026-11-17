@@ -1,4 +1,4 @@
-// Browser test (Chromium through Playwright) of the illustrated header's status pill, on the full card and the mini
+// Browser test (Chromium through Playwright) of the status pill of the illustrated and the classic header, on the full card and the mini
 // card (compact and zoomed), light and dark, in en, fr, de, hu, el and ru, from 245 to 500 px: the pill sits on the
 // title's row only beside the whole title (no ellipsis); otherwise on a line of its own under the subtitle. Its label
 // is whole, or its dot alone (always at 190 px). Nothing runs into the ground strip or out of the banner.
@@ -33,7 +33,7 @@ test("the banner's status pill: beside the whole title or under the subtitle, wh
   for (const [type, zoom] of [["internet-box-card", false], ["internet-box-mini-card", false], ["internet-box-mini-card", true]])
     for (const language of ["en", "fr", "de", "hu", "el", "ru"])
       for (const dark of [false, true])
-        for (const variant of ["online", "offline"]) for (const width of [190, 245, 300, 400, 460, 500]) cases.push({ type, zoom, language, dark, variant, width });
+        for (const variant of ["online", "offline", "classic", "classic offline"]) for (const width of [190, 245, 300, 400, 460, 500]) cases.push({ type, zoom, language, dark, variant, width });
   const results = await page.evaluate(
     async ({ cases, data }) => {
       const frame = () => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
@@ -43,8 +43,8 @@ test("the banner's status pill: beside the whole title or under the subtitle, wh
         const box = document.body.appendChild(document.createElement("div"));
         box.style.width = `${c.width}px`;
         const el = document.createElement(c.type);
-        const st = c.variant === "offline" ? data.offline : data.states;
-        el.setConfig({ type: `custom:${c.type}`, language: c.language });
+        const st = c.variant.endsWith("offline") ? data.offline : data.states;
+        el.setConfig({ type: `custom:${c.type}`, language: c.language, ...(c.variant.startsWith("classic") ? { illustration: false } : {}) });
         el.hass = { states: st, entities: data.entities, devices: data.devices, language: c.language, locale: { language: c.language }, themes: { darkMode: c.dark },
                     config: { time_zone: "UTC" }, callService: async () => {} };
         box.appendChild(el);
@@ -53,9 +53,11 @@ test("the banner's status pill: beside the whole title or under the subtitle, wh
           el.shadowRoot.querySelector(".zoom").dispatchEvent(new MouseEvent("click", { bubbles: true, composed: true, detail: 1 }));
           await frame();
         }
-        for (const t of el.shadowRoot.querySelectorAll(".banner .titles")) {
-          const banner = t.closest(".banner").getBoundingClientRect();
-          const floor = t.closest(".banner").querySelector(".ground").getBoundingClientRect().top;
+        // The banner, or the classic header (illustration: false) inside the card.
+        for (const t of el.shadowRoot.querySelectorAll(".header .titles")) {
+          const inBanner = t.closest(".banner");
+          const banner = (inBanner || t.closest("ha-card")).getBoundingClientRect();
+          const floor = inBanner ? inBanner.querySelector(".ground").getBoundingClientRect().top : Infinity;
           const pill = t.querySelector(".chip.status");
           const tx = pill?.querySelector(".txt");
           const nameEl = t.querySelector(".name");

@@ -182,24 +182,28 @@ test("zoom: false removes the detail button", async (t) => {
   await page.close();
 });
 
-test("classic header: the status pill sits right of the title, centred on its line, and the Wi-Fi state is not duplicated under it (the Services section shows it)", async (t) => {
+test("classic header: the status pill sits right after the title, centred on its line, and the Wi-Fi state is not duplicated under it (the Services section shows it)", async (t) => {
   if (skip) return t.skip(skip);
   const { page, errors } = await open({ illustration: false });
   const res = await page.evaluate(() => {
     const root = window.card.shadowRoot;
     window.click(root.querySelector(".zoom"));
     const header = root.querySelector(".header");
-    const status = root.querySelector(".titles > .chip.status");
+    const status = root.querySelector(".titles .trow > .chip.status");
     const centre = (n) => n.getBoundingClientRect().top + n.getBoundingClientRect().height / 2;
     return {
       row: [...header.children].map((n) => n.className.split(" ")[0]),
       status: status.textContent,
       dy: Math.abs(centre(status) - centre(root.querySelector(".name"))) <= 1,
-      right: status.getBoundingClientRect().left > root.querySelector(".sub").getBoundingClientRect().right,
+      // Right after the whole title (4 to 12 px gap), not at the far right of the title block.
+      after: (() => {
+        const gap = status.getBoundingClientRect().left - root.querySelector(".name").getBoundingClientRect().right;
+        return gap >= 4 && gap <= 12;
+      })(),
       under: [...root.querySelectorAll(".titles .chips .chip")].map((n) => n.textContent),
     };
   });
-  assert.deepEqual(res, { row: ["logo-link", "titles", "box-link", "action", "zoom"], status: "Online · FTTH", dy: true, right: true, under: [] });
+  assert.deepEqual(res, { row: ["logo-link", "titles", "box-link", "action", "zoom"], status: "Online · FTTH", dy: true, after: true, under: [] });
   assert.deepEqual(errors, []);
   await page.close();
 });
