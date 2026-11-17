@@ -859,7 +859,7 @@ test("illustrated header: both editors offer it and its day / night theme, left 
     assert.equal(ed._form.data.illustration, true);
     assert.equal(ed._form.data.illustration_theme, "auto");
     const theme = ed._form.schema.find((f) => f.name === "illustration_theme");
-    assert.equal(theme.selector.select.options.map((o) => o.label).join(" / "), "Automatic (sun, dark mode) / Day / Night");
+    assert.equal(theme.selector.select.options.map((o) => o.label).join(" / "), "Automatic (sun or dark theme) / Day / Night");
     assert.equal(ed._form.computeLabel({ name: "illustration" }), "Illustrated header (internet scene)");
     ed._form.listeners["value-changed"]({ stopPropagation() {}, detail: { value: { ...ed._form.data } } });
     assert.equal("illustration" in emitted.at(-1), false);
