@@ -870,6 +870,24 @@ test("illustrated header: both editors offer it and its day / night theme, left 
   }
 });
 
+test("mini editor: the full card's sections it shows unfolded; the form data kept across state changes", () => {
+  const { InternetBoxMiniCardEditor } = load("internet-box-card.js", ["InternetBoxMiniCardEditor"]);
+  const ed = new InternetBoxMiniCardEditor();
+  ed.appendChild = () => {};
+  ed.dispatchEvent = () => {};
+  ed.setConfig({ box: "router" });
+  ed.hass = { states: baseStates(), entities, devices, language: "en" };
+  const names = JSON.stringify(ed._form.schema);
+  for (const k of ["show_speedtest", "show_storage", "show_services", "zoom"]) assert.match(names, new RegExp(`"${k}"`), k);
+  for (const k of ["show_speedtest", "show_storage", "show_services"]) assert.equal(ed._form.data[k], true, k);
+  // A state change only: the same data object, ha-form does not re-render.
+  const data = ed._form.data;
+  ed.hass = { states: baseStates(), entities, devices, language: "en" };
+  assert.equal(ed._form.data, data);
+  ed.setConfig({ box: "router", show_storage: false });
+  assert.equal(ed._form.data.show_storage, false);
+});
+
 test("illustrated header: the scene follows the link and the Wi-Fi, night from illustration_theme or the dark mode", () => {
   const { sceneSvg, isNight, IMG_BOX, PIC_FIT } = load("internet-box-card.js", ["sceneSvg", "isNight", "IMG_BOX", "PIC_FIT"]);
   // Every drawn model has its drawn part, inside its picture.

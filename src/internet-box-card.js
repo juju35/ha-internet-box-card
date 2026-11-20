@@ -5218,7 +5218,8 @@ class InternetBoxCardEditor extends InternetBoxEditorBase {
 
 class InternetBoxMiniCardEditor extends InternetBoxEditorBase {
   static get toggles() {
-    return ["show_network", "show_history", "show_system", "zoom"];
+    // The detail view is the full card: its sections' options too (README: "both").
+    return ["show_network", "show_history", "show_speedtest", "show_system", "show_storage", "show_services", "zoom"];
   }
 }
 

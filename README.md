@@ -254,15 +254,15 @@ language: fr
 | `show_network` | both | `true` | Download / upload rates (and IPv4, uptime on the full card) |
 | `show_history` | both | `true` | 24 h curve behind the download / upload tiles, from the recorder's 5-minute statistics (rate sensors with a `state_class`), on a time axis: the curve breaks where the recorder has no data |
 | `show_system` | both | `true` | Temperatures and fans (hottest temperature on the mini card) |
-| `show_storage` | full | `true` | Disk partitions and RAID status |
-| `show_speedtest` | full | `true` | The last speed test in the network section (download, upload and ping, in the rate unit chosen; its time on hover), with a button that runs a new one: Speedtest.net's and Fast.com's sensors are refreshed (their integration runs a test), another speed test's needs `entities.speedtest.run`; its icon turns until the new results, 3 minutes at most: the [Speedtest.net](https://www.home-assistant.io/integrations/speedtestdotnet/) integration's, else [Fast.com](https://www.home-assistant.io/integrations/fastdotcom/)'s (download only), or the sensors of `entities.speedtest` |
+| `show_storage` | both | `true` | Disk partitions and RAID status |
+| `show_speedtest` | both | `true` | The last speed test in the network section (download, upload and ping, in the rate unit chosen; its time on hover), with a button that runs a new one: Speedtest.net's and Fast.com's sensors are refreshed (their integration runs a test), another speed test's needs `entities.speedtest.run`; its icon turns until the new results, 3 minutes at most: the [Speedtest.net](https://www.home-assistant.io/integrations/speedtestdotnet/) integration's, else [Fast.com](https://www.home-assistant.io/integrations/fastdotcom/)'s (download only), or the sensors of `entities.speedtest` |
 | `entities` | both | — | Sensors of your choice (see below) |
-| `show_services` | full | `true` | Wi-Fi, missed calls and connected devices |
+| `show_services` | both | `true` | Wi-Fi, missed calls and connected devices |
 | `temp_warning` | both | `75` | Temperature (in °C, whatever the sensor's unit) from which a temperature turns orange |
 | `temp_critical` | both | `90` | Temperature (in °C) from which a temperature turns red |
 | `disk_warning` | both | `80` | Disk usage (in % used) from which a partition turns orange (full card); `storage_warning` before 2.8.0, still read |
 | `disk_critical` | both | `90` | Disk usage (in % used) from which a partition turns red (full card); `storage_critical` before 2.8.0, still read |
-| `zoom` | mini | `true` | Detail button at the top right: shows the full card (every section) in place of the mini card, and back |
+| `zoom` | mini | `true` | Detail button at the top right: shows the full card in place of the mini card, with the same options (so the full card's `show_*` options can be set on the mini card too, in its visual editor as well), and back |
 | `rate_unit` | both | `bytes` | Rates unit: `bytes` (kB/s, MB/s) or `bits` (kb/s, Mb/s) |
 | `language` | both | Auto | Force language: `en`, `fr`, `de`, `es`, `sr`, `sr-Latn`, `it`, `nl`, `pt`, `pl`, `ro`, `da`, `sv`, `bg`, `ru`, `uk`, `hu`, `sk`, `cs`, `sl`, `lv` or `el` (auto-detects from HA settings) |
 
