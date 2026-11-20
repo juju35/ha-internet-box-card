@@ -8,6 +8,9 @@
 ### Performance
 - Visual editors: the form gets new data only when the configuration changes, no longer on every state change of Home Assistant (ha-form re-rendered every field each time).
 
+### Maintenance
+- Tests: a browser test checks that the cards never move the dashboard: a state change of another entity writes nothing in the card, a change of its own entities patches it in place (no node replaced, pictures kept) and its height stays the same on every frame.
+
 ## 3.6.1 - 2026-11-18
 
 ### Fixes
