@@ -5198,7 +5198,11 @@ class InternetBoxEditorBase extends HTMLElement {
     const data = { rate_unit: "bytes", model: "", illustration_theme: "auto", ...THRESHOLDS, ...this._config };
     for (const name of ["show_title", "show_subtitle", "show_image", "show_logo", "illustration", ...this.constructor.toggles]) if (data[name] === undefined) data[name] = true;
     this._form.hass = this._hass;
-    this._form.data = data;
+    // A new data object re-renders the whole form: handed over only when the config changed, not on every state change.
+    if (this._dataFor !== this._config) {
+      this._dataFor = this._config;
+      this._form.data = data;
+    }
     // The schema is rebuilt on every hass update (every state change) but only handed to the form when its
     // options (boxes, models, detected model, language) changed, so ha-form does not re-render for nothing.
     const schema = this._schema();
