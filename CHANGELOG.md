@@ -13,6 +13,7 @@
 
 ### Maintenance
 - Tests: a browser test checks that the cards never move the dashboard: a state change of another entity writes nothing in the card, a change of its own entities patches it in place (no node replaced, pictures kept) and its height stays the same on every frame.
+- CI: the branch cleanup recognises the commits of the `juju35-screenshots` app, so a branch whose only leftover is the bot's screenshots commit is deleted after the merge.
 
 ## 3.6.1 - 2026-11-18
 
