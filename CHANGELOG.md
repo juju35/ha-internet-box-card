@@ -1,5 +1,20 @@
 # Changelog
 
+## 3.7.0 - 2026-11-20
+
+### Features
+- Mini card visual editor: the full card's `show_speedtest`, `show_storage` and `show_services` toggles, which its detail view (the full card) follows; the README marks them "both".
+
+### Fixes
+- The status pill is placed from the card's first frame: it was measured before Home Assistant's `<ha-card>` had laid out its content (0 px wide), so for a frame it showed on the wrong line (under the title, or beside it when it belongs under it), sometimes changing the card's height, before jumping to its place. It is now fitted once the card is drawn.
+
+### Performance
+- Visual editors: the form gets new data only when the configuration changes, no longer on every state change of Home Assistant (ha-form re-rendered every field each time).
+
+### Maintenance
+- Tests: a browser test checks that the cards never move the dashboard: a state change of another entity writes nothing in the card, a change of its own entities patches it in place (no node replaced, pictures kept) and its height stays the same on every frame.
+- CI: the branch cleanup recognises the commits of the `juju35-screenshots` app, so a branch whose only leftover is the bot's screenshots commit is deleted after the merge.
+
 ## 3.6.1 - 2026-11-18
 
 ### Fixes

@@ -4366,6 +4366,16 @@ class InternetBoxBase extends HTMLElement {
   // the label does not fit its line, the pill shows its dot alone (.dot-only): beside the title when the whole title
   // leaves it room, else under the subtitle.
   _fitPill() {
+    // Home Assistant's <ha-card> (a Lit element) shows its content only from its first update, a microtask after it
+    // is connected: measured before, everything is 0 px wide and the pill lands on the wrong line. Fitted then.
+    const haCard = this.shadowRoot?.querySelector?.("ha-card");
+    if (haCard && haCard.hasUpdated === false) {
+      this._pillWait ??= (haCard.updateComplete?.then ? haCard.updateComplete : new Promise((r) => requestAnimationFrame(r))).then(() => {
+        this._pillWait = null;
+        this._fitPill();
+      });
+      return;
+    }
     for (const t of this.shadowRoot?.querySelectorAll?.(".header .titles") || []) {
       const row = t.querySelector(".trow");
       const chips = row ? [...row.querySelectorAll(":scope > .chip.status")] : [];
@@ -5198,7 +5208,11 @@ class InternetBoxEditorBase extends HTMLElement {
     const data = { rate_unit: "bytes", model: "", illustration_theme: "auto", ...THRESHOLDS, ...this._config };
     for (const name of ["show_title", "show_subtitle", "show_image", "show_logo", "illustration", ...this.constructor.toggles]) if (data[name] === undefined) data[name] = true;
     this._form.hass = this._hass;
-    this._form.data = data;
+    // A new data object re-renders the whole form: handed over only when the config changed, not on every state change.
+    if (this._dataFor !== this._config) {
+      this._dataFor = this._config;
+      this._form.data = data;
+    }
     // The schema is rebuilt on every hass update (every state change) but only handed to the form when its
     // options (boxes, models, detected model, language) changed, so ha-form does not re-render for nothing.
     const schema = this._schema();
@@ -5218,7 +5232,8 @@ class InternetBoxCardEditor extends InternetBoxEditorBase {
 
 class InternetBoxMiniCardEditor extends InternetBoxEditorBase {
   static get toggles() {
-    return ["show_network", "show_history", "show_system", "zoom"];
+    // The detail view is the full card: its sections' options too (README: "both").
+    return ["show_network", "show_history", "show_speedtest", "show_system", "show_storage", "show_services", "zoom"];
   }
 }
 
