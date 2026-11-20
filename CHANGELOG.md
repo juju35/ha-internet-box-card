@@ -5,6 +5,9 @@
 ### Features
 - Mini card visual editor: the full card's `show_speedtest`, `show_storage` and `show_services` toggles, which its detail view (the full card) follows; the README marks them "both".
 
+### Fixes
+- The status pill is placed from the card's first frame: it was measured before Home Assistant's `<ha-card>` had laid out its content (0 px wide), so for a frame it showed on the wrong line (under the title, or beside it when it belongs under it), sometimes changing the card's height, before jumping to its place. It is now fitted once the card is drawn.
+
 ### Performance
 - Visual editors: the form gets new data only when the configuration changes, no longer on every state change of Home Assistant (ha-form re-rendered every field each time).
 
