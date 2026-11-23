@@ -81,60 +81,60 @@ Each section shows only what the integration exposes. Built-in integrations ship
 
 | Integration | Boxes | Discovered |
 |---|---|---|
-| [Freebox](https://www.home-assistant.io/integrations/freebox/) (built in) | Free: Freebox Ultra, Pop, Delta, Revolution, mini 4K | Rates, connection, IP, uptime, temperatures, fans, storage, RAID, Wi-Fi, missed calls (mark as read), connected devices, reboot |
-| [Livebox](https://github.com/cyr-ius/hass-livebox-component) (custom) | Orange: Livebox 4 to 7, Livebox S, Livebox Fibre | Line rates (xDSL) or WAN GPON / SFP / Optical ONT / fiber interface rates (fibre, including the Arcadyan and Sagemcom Livebox Fibre and the Livebox 4 behind an external ONT), WAN status and link type (the fibre line is also recognised from the `fiber_*` sensors), Wi-Fi, missed calls (clear), connected devices, reboot |
-| [SFR Box](https://www.home-assistant.io/integrations/sfr_box/) (built in) | SFR: SFR Box 7, 8, NB6VAC | DSL line sync rates, shown as "Line rate" (the integration has no throughput sensor, so no download / upload traffic nor 24 h curve), WAN / DSL / FTTH status (plus the DSL training, line status and access network sensors when enabled, they are disabled by default), temperature, reboot |
-| [Bbox](https://www.home-assistant.io/integrations/bbox/) (built in, YAML) or its fork [custom_bbox](https://github.com/earion68/hass_custom_bbox) (custom, YAML) | Bouygues Telecom: Bbox Fibre, Ultym, Miami | Download / upload bandwidth, uptime. The fork reaches the firmwares the built-in one can no longer connect to since Home Assistant 2022.7 (SSL `DH_KEY_TOO_SMALL`); both create the same sensors |
-| [Bouygues Bbox](https://github.com/cyr-ius/hass-bbox2) (custom, config flow) | Bouygues Telecom: Bbox Wi-Fi 7, Fibre, Ultym, Miami | Download / upload rates, link status, public IPv4 / IPv6, uptime, Wi-Fi switch, connected devices, reboot. Its sensors have no translation key: they are recognised by their default entity id (`_download_speed`, `_upload_speed`, `_uptime`, `_ip_address`, `_ipv6_address`, `_link_status`, `button…_restart`), so keep those suffixes when renaming them |
+| <img src="https://raw.githubusercontent.com/juju35/ha-internet-box-card/main/images/freebox.png" alt="" width="16"> [Freebox](https://www.home-assistant.io/integrations/freebox/) (built in) | Free: Freebox Ultra, Pop, Delta, Revolution, mini 4K | Rates, connection, IP, uptime, temperatures, fans, storage, RAID, Wi-Fi, missed calls (mark as read), connected devices, reboot |
+| <img src="https://raw.githubusercontent.com/juju35/ha-internet-box-card/main/images/livebox.png" alt="" width="16"> [Livebox](https://github.com/cyr-ius/hass-livebox-component) (custom) | Orange: Livebox 4 to 7, Livebox S, Livebox Fibre | Line rates (xDSL) or WAN GPON / SFP / Optical ONT / fiber interface rates (fibre, including the Arcadyan and Sagemcom Livebox Fibre and the Livebox 4 behind an external ONT), WAN status and link type (the fibre line is also recognised from the `fiber_*` sensors), Wi-Fi, missed calls (clear), connected devices, reboot |
+| <img src="https://raw.githubusercontent.com/juju35/ha-internet-box-card/main/images/sfr.svg" alt="" width="16"> [SFR Box](https://www.home-assistant.io/integrations/sfr_box/) (built in) | SFR: SFR Box 7, 8, NB6VAC | DSL line sync rates, shown as "Line rate" (the integration has no throughput sensor, so no download / upload traffic nor 24 h curve), WAN / DSL / FTTH status (plus the DSL training, line status and access network sensors when enabled, they are disabled by default), temperature, reboot |
+| <img src="https://raw.githubusercontent.com/juju35/ha-internet-box-card/main/images/bbox.svg" alt="" width="16"> [Bbox](https://www.home-assistant.io/integrations/bbox/) (built in, YAML) or its fork <img src="https://raw.githubusercontent.com/juju35/ha-internet-box-card/main/images/bbox.svg" alt="" width="16"> [custom_bbox](https://github.com/earion68/hass_custom_bbox) (custom, YAML) | Bouygues Telecom: Bbox Fibre, Ultym, Miami | Download / upload bandwidth, uptime. The fork reaches the firmwares the built-in one can no longer connect to since Home Assistant 2022.7 (SSL `DH_KEY_TOO_SMALL`); both create the same sensors |
+| <img src="https://raw.githubusercontent.com/juju35/ha-internet-box-card/main/images/bbox.svg" alt="" width="16"> [Bouygues Bbox](https://github.com/cyr-ius/hass-bbox2) (custom, config flow) | Bouygues Telecom: Bbox Wi-Fi 7, Fibre, Ultym, Miami | Download / upload rates, link status, public IPv4 / IPv6, uptime, Wi-Fi switch, connected devices, reboot. Its sensors have no translation key: they are recognised by their default entity id (`_download_speed`, `_upload_speed`, `_uptime`, `_ip_address`, `_ipv6_address`, `_link_status`, `button…_restart`), so keep those suffixes when renaming them |
 
 ### Germany
 
 | Integration | Boxes | Discovered |
 |---|---|---|
-| [FRITZ!Box Tools](https://www.home-assistant.io/integrations/fritz/) (built in) | AVM / FRITZ!: every FRITZ!Box (DSL, cable, fibre, LTE), from 1&1, O2, Telekom and the shops; also sold in Austria, Switzerland and the Netherlands | Download / upload rates, WAN connection, external IPv4 / IPv6, uptime, CPU temperature, main Wi-Fi switch, connected devices, reboot (not the reconnect button); the DSL line sync rates when there is no traffic sensor |
-| [Vodafone Station](https://www.home-assistant.io/integrations/vodafone_station/) (built in) | Vodafone: WiFi 6 Station (CGA6444VF) | Download / upload rates, active connection (DSL, fibre…), external IPv4 / IPv6, uptime, main Wi-Fi switch, connected devices, reboot (not the reconnect buttons) |
-| [Sagemcom F@st](https://github.com/imicknl/ha-sagemcom-fast) (custom) | Telekom: Speedport Pro | Connected devices, reboot |
+| <img src="https://raw.githubusercontent.com/juju35/ha-internet-box-card/main/images/fritz.svg" alt="" width="16"> [FRITZ!Box Tools](https://www.home-assistant.io/integrations/fritz/) (built in) | AVM / FRITZ!: every FRITZ!Box (DSL, cable, fibre, LTE), from 1&1, O2, Telekom and the shops; also sold in Austria, Switzerland and the Netherlands | Download / upload rates, WAN connection, external IPv4 / IPv6, uptime, CPU temperature, main Wi-Fi switch, connected devices, reboot (not the reconnect button); the DSL line sync rates when there is no traffic sensor |
+| <img src="https://raw.githubusercontent.com/juju35/ha-internet-box-card/main/images/vodafone.svg" alt="" width="16"> [Vodafone Station](https://www.home-assistant.io/integrations/vodafone_station/) (built in) | Vodafone: WiFi 6 Station (CGA6444VF) | Download / upload rates, active connection (DSL, fibre…), external IPv4 / IPv6, uptime, main Wi-Fi switch, connected devices, reboot (not the reconnect buttons) |
+| <img src="https://raw.githubusercontent.com/juju35/ha-internet-box-card/main/images/sagemcom.svg" alt="" width="16"> [Sagemcom F@st](https://github.com/imicknl/ha-sagemcom-fast) (custom) | Telekom: Speedport Pro | Connected devices, reboot |
 
 ### Italy, United Kingdom, Ireland
 
 | Integration | Boxes | Discovered |
 |---|---|---|
-| [Vodafone Station](https://www.home-assistant.io/integrations/vodafone_station/) (built in) | Vodafone Italy: Power Station (SHG3000), Power Station WiFi 6 (SHG3060), WiFi 6 Station (RHG3006), H300S; Vodafone UK: Ultra Hub, Vox 3.0 (THG3000); Vodafone Ireland: Gigabox | As in Germany above |
-| [Sagemcom F@st](https://github.com/imicknl/ha-sagemcom-fast) (custom) | BT (UK): Smart Hub (F@st 5364); eir (Ireland): F3000 (F@st 5366SD) | Connected devices, reboot |
+| <img src="https://raw.githubusercontent.com/juju35/ha-internet-box-card/main/images/vodafone.svg" alt="" width="16"> [Vodafone Station](https://www.home-assistant.io/integrations/vodafone_station/) (built in) | Vodafone Italy: Power Station (SHG3000), Power Station WiFi 6 (SHG3060), WiFi 6 Station (RHG3006), H300S; Vodafone UK: Ultra Hub, Vox 3.0 (THG3000); Vodafone Ireland: Gigabox | As in Germany above |
+| <img src="https://raw.githubusercontent.com/juju35/ha-internet-box-card/main/images/sagemcom.svg" alt="" width="16"> [Sagemcom F@st](https://github.com/imicknl/ha-sagemcom-fast) (custom) | BT (UK): Smart Hub (F@st 5364); eir (Ireland): F3000 (F@st 5366SD) | Connected devices, reboot |
 
 ### Switzerland
 
 | Integration | Boxes | Discovered |
 |---|---|---|
-| [Swisscom Internet-Box](https://www.home-assistant.io/integrations/swisscom/) (built in) | Swisscom: Internet-Box light, standard, plus | Connected devices only (the integration does presence detection and has no entity for the box itself): the box is the integration, its picture is the Internet-Box one |
-| [Sagemcom F@st](https://github.com/imicknl/ha-sagemcom-fast) (custom) | Salt: FibreBox X6 (F@st 5688T) | Connected devices, reboot |
+| <img src="https://raw.githubusercontent.com/juju35/ha-internet-box-card/main/images/swisscom.svg" alt="" width="16"> [Swisscom Internet-Box](https://www.home-assistant.io/integrations/swisscom/) (built in) | Swisscom: Internet-Box light, standard, plus | Connected devices only (the integration does presence detection and has no entity for the box itself): the box is the integration, its picture is the Internet-Box one |
+| <img src="https://raw.githubusercontent.com/juju35/ha-internet-box-card/main/images/sagemcom.svg" alt="" width="16"> [Sagemcom F@st](https://github.com/imicknl/ha-sagemcom-fast) (custom) | Salt: FibreBox X6 (F@st 5688T) | Connected devices, reboot |
 
 ### Netherlands, Belgium
 
 | Integration | Boxes | Discovered |
 |---|---|---|
-| [Livebox](https://github.com/cyr-ius/hass-livebox-component) (custom) | KPN: Box 12 (Livebox OS) | As for the Livebox, with the KPN colour and links |
-| [Sagemcom F@st](https://github.com/imicknl/ha-sagemcom-fast) (custom) | KPN: Experia Box 12 (F@st 5359), F@st 4360Air; DELTA Fiber / Zeelandnet: F@st 3890V3; Proximus (Belgium): b-box 3 (F@st 3865b) | Connected devices, reboot |
+| <img src="https://raw.githubusercontent.com/juju35/ha-internet-box-card/main/images/livebox.png" alt="" width="16"> [Livebox](https://github.com/cyr-ius/hass-livebox-component) (custom) | KPN: Box 12 (Livebox OS) | As for the Livebox, with the KPN colour and links |
+| <img src="https://raw.githubusercontent.com/juju35/ha-internet-box-card/main/images/sagemcom.svg" alt="" width="16"> [Sagemcom F@st](https://github.com/imicknl/ha-sagemcom-fast) (custom) | KPN: Experia Box 12 (F@st 5359), F@st 4360Air; DELTA Fiber / Zeelandnet: F@st 3890V3; Proximus (Belgium): b-box 3 (F@st 3865b) | Connected devices, reboot |
 
 ### Spain, Nordics
 
 | Integration | Boxes | Discovered |
 |---|---|---|
-| [Sagemcom F@st](https://github.com/imicknl/ha-sagemcom-fast) (custom) | MásMóvil (Spain): F@st 5655V2; Telia (Sweden): F@st 5370e; TDC (Denmark): F@st 5380 | Connected devices, reboot |
+| <img src="https://raw.githubusercontent.com/juju35/ha-internet-box-card/main/images/sagemcom.svg" alt="" width="16"> [Sagemcom F@st](https://github.com/imicknl/ha-sagemcom-fast) (custom) | MásMóvil (Spain): F@st 5655V2; Telia (Sweden): F@st 5370e; TDC (Denmark): F@st 5380 | Connected devices, reboot |
 
 ### Canada, Australia
 
 | Integration | Boxes | Discovered |
 |---|---|---|
-| [Sagemcom F@st](https://github.com/imicknl/ha-sagemcom-fast) (custom) | Bell (Canada): Home Hub 3000 (F@st 5566), Home Hub 4000 (F@st 5689); Optus (Australia): F@st 3864 | Connected devices, reboot |
+| <img src="https://raw.githubusercontent.com/juju35/ha-internet-box-card/main/images/sagemcom.svg" alt="" width="16"> [Sagemcom F@st](https://github.com/imicknl/ha-sagemcom-fast) (custom) | Bell (Canada): Home Hub 3000 (F@st 5566), Home Hub 4000 (F@st 5689); Optus (Australia): F@st 3864 | Connected devices, reboot |
 
 ### Any country: 4G / 5G and satellite
 
 | Integration | Boxes | Discovered |
 |---|---|---|
-| [Huawei LTE](https://www.home-assistant.io/integrations/huawei_lte/) (built in) | Huawei 4G / 5G routers (B535, B818, H122…), whatever the mobile operator | Download / upload rates, mobile connection, WAN IPv4 / IPv6, uptime, Wi-Fi state (read only), connected devices, reboot |
-| [ZTE Hyperbox](https://github.com/timniklas/hass-zte_hyperbox) (custom) | ZTE MC8810 Hyperbox 5G Lite | Download / upload rates, connection and reboot, recognised by their kind (data rate, connectivity, restart) as the card does not know the integration's own keys |
-| [Starlink](https://www.home-assistant.io/integrations/starlink/) (built in) | Starlink dish | Download / upload throughput, connectivity, uptime (last restart), reboot |
+| <img src="https://raw.githubusercontent.com/juju35/ha-internet-box-card/main/images/generic-mobile.svg" alt="" width="16"> [Huawei LTE](https://www.home-assistant.io/integrations/huawei_lte/) (built in) | Huawei 4G / 5G routers (B535, B818, H122…), whatever the mobile operator | Download / upload rates, mobile connection, WAN IPv4 / IPv6, uptime, Wi-Fi state (read only), connected devices, reboot |
+| <img src="https://raw.githubusercontent.com/juju35/ha-internet-box-card/main/images/zte.svg" alt="" width="16"> [ZTE Hyperbox](https://github.com/timniklas/hass-zte_hyperbox) (custom) | ZTE MC8810 Hyperbox 5G Lite | Download / upload rates, connection and reboot, recognised by their kind (data rate, connectivity, restart) as the card does not know the integration's own keys |
+| <img src="https://raw.githubusercontent.com/juju35/ha-internet-box-card/main/images/starlink.svg" alt="" width="16"> [Starlink](https://www.home-assistant.io/integrations/starlink/) (built in) | Starlink dish | Download / upload throughput, connectivity, uptime (last restart), reboot |
 
 ## Prerequisites
 
