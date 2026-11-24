@@ -3,11 +3,11 @@
 // title keeps a few characters, no button, pill or picture covers it and nothing leaves the card. In English and
 // in the longest translations. Skipped when Playwright or Chromium is not installed, except in CI, where it must run.
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
 import { after, before, test } from "node:test";
 import { devices, entities, states } from "../scripts/mock-states.mjs";
+import { source } from "./source.mjs";
 
-const src = readFileSync(new URL("../src/internet-box-card.js", import.meta.url), "utf8");
+const src = source;
 const LANGS = ["en", "pl", "sr-Latn", "sr", "el", "sl", "uk"];
 // Width of n columns of a 320 px section (12 columns, 8 px gaps).
 const cols = (n) => Math.floor(((320 + 8) * n) / 12 - 8);
