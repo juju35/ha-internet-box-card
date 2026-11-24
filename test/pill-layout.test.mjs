@@ -4,11 +4,11 @@
 // is whole, or its dot alone (always at 190 px). Nothing runs into the ground strip or out of the banner.
 // Skipped when Playwright or Chromium is not installed.
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
 import { after, before, test } from "node:test";
 import { devices, entities, states } from "../scripts/mock-states.mjs";
+import { source } from "./source.mjs";
 
-const src = readFileSync(new URL("../src/internet-box-card.js", import.meta.url), "utf8");
+const src = source;
 const HA_CARD = `customElements.define("ha-card", class extends HTMLElement { constructor() { super();
   this.attachShadow({ mode: "open" }).innerHTML = "<style>:host{display:block;overflow:hidden}</style><slot></slot>"; } });`;
 let browser;

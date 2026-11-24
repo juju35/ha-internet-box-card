@@ -3,12 +3,12 @@
 // are read from the rendered card and flattened on a canvas, so color-mix() and translucent backgrounds count as
 // the browser paints them. Skipped when Playwright or Chromium is not installed, except in CI, where it must run.
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
 import { after, before, test } from "node:test";
 import { operators } from "../scripts/mock-operators.mjs";
 import { devices, entities, states } from "../scripts/mock-states.mjs";
+import { source } from "./source.mjs";
 
-const src = readFileSync(new URL("../src/internet-box-card.js", import.meta.url), "utf8");
+const src = source;
 
 // Home Assistant's default theme colours (frontend src/resources/theme).
 const THEMES = {
